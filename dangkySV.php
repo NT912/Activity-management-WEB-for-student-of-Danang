@@ -62,8 +62,12 @@
                                 <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
-                            <div class="form-group icon-input mb-1">
+                            <div class="form-group icon-input mb-3">
                                 <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp sinh hoạt">
+                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                            </div>
+                            <div class="form-group icon-input mb-1">
+                                <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Khoa">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
                             <div class="form-check text-left mb-3">
