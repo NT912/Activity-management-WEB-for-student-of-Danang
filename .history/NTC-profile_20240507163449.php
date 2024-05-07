@@ -317,7 +317,7 @@ $conn->close();
 
                                                 <?php
                                                 $counter++; // Tăng biến đếm
-                                                ?>
+                                                }
                                                 <script>
                                                     function showMore(postId) {
                                                         // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
@@ -350,11 +350,11 @@ $conn->close();
                                                 <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"></i> <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss"></i><!-- So luong tha tym --></a>
                                             </div>
                                         </div>
+
                             <!-- Ket thuc mot hoat dong -->
                             <?php
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         echo "No results found.";
                                     }
                                 } else {
