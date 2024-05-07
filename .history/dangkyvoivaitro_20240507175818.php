@@ -23,12 +23,6 @@
         <div class="nav-header bg-transparent shadow-none border-0">
             <div class="nav-top w-100">
                 <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
-                <button class="nav-menu me-0 ms-2"></button>
-                <!-- btn danng nhap header -->
-                <a href="login.html" class="header-btn d-none d-lg-block bg-dark fw-500 text-white font-xsss p-3 ms-auto w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modallogin">Đăng nhập</a>
-                <!-- btn dang ky header -->
-                <a href="dangkyvoivaitro.html" class="header-btn d-none d-lg-block bg-current fw-500 text-white font-xsss p-3 ms-2 w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modalregister">Đăng ký</a>
-
             </div>
         </div>
         <!-- end header  -->

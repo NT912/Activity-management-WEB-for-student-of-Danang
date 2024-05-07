@@ -71,7 +71,7 @@
                         </form>
                         <div class="col-sm-12 p-0 text-left">
                             <div class="form-group mb-1"><a href="#" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0 ">Đăng ký</a></div>
-                            <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.php" class="fw-700 ms-1">Đăng nhập</a></h6>
+                            <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.html" class="fw-700 ms-1">Đăng nhập</a></h6>
                         </div>
 
                     </div>

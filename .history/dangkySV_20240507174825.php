@@ -52,6 +52,7 @@
                             <div class="form-group icon-input mb-3">
                                 <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="validateInput('nhaplaimatkhau')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errorHoten" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" onblur="validateInput('lopsinhoat')">

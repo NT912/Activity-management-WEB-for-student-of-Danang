@@ -277,90 +277,71 @@ $conn->close();
                                             ?>
                                             <!-- Khuc ni la mot cai hoat dong ni -->
                                             <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
-                                            <div class="card-body p-0 d-flex">
-                                                <figure class="avatar me-3"><img src="<?php echo $NTC_avatar ?>" alt="image" class="shadow-sm rounded-circle w45"></figure> <!-- src = anj avartar cua  nha to chuc -->
-                                                <h4 class="fw-700 text-grey-900 font-xssss mt-1"> <?php echo $NTC_name ?><!-- Ten cua NTC --><span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"><?php $HD_mota ?></span></h4>
+                                                <div class="card-body p-0 d-flex">
+                                                    <figure class="avatar me-3"><img src="<?php echo $NTC_avatar ?>" alt="image" class="shadow-sm rounded-circle w45"></figure> <!-- src = anj avartar cua  nha to chuc -->
+                                                    <h4 class="fw-700 text-grey-900 font-xssss mt-1"> <?php echo $NTC_name ?><!-- Ten cua NTC --><span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"><?php $HD_mota ?></span></h4>
+                                                    <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4"></div>
+                                                    <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
+                                                        <div class="card-body p-0 d-flex">
+                                                            <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
+                                                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Lưu hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Lưu hoạt động</span></h4> <!-- Luu hoat dong cho NTC -->
+                                                        </div>
+                                                        <div class="card-body p-0 d-flex mt-2">
+                                                            <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
+                                                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Ẩn hoạt động <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Ẩn hoạt động</span></h4> <!-- An hoat dong nay voi NTC -->
+                                                        </div>
+                                                        <div class="card-body p-0 d-flex mt-2">
+                                                            <i class="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
+                                                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Quản lý hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Quản lý hoạt động của bạn</span></h4> <!-- Mo ra trang quan ly hoat dong cho hoat dong nay -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body p-0 me-lg-5">
+                                                    <h5><?php echo $HD_name ?></h5> <br>
+                                                    <h6>Thời gian diễn ra hoạt động: <?php echo($HD_date_start . " - " . $HD_date_end) ?></h6> <br>
+                                                    <h6>Thơi gian đăng ký hoạt động: <?php echo($HD_date_start_regis . " - " . $HD_date_end_regis) ?></h6> <br>
+                                                    <!-- Nội dung ban đầu -->
+                                                    <div id="initialContent_<?php echo $post_id; ?>">
+                                                        <button class="see-more-btn" onclick="showMore('<?php echo $post_id; ?>')">See More</button>
+                                                    </div>
+
+                                                    <!-- Nội dung được ẩn -->
+                                                    <div id="additionalContent_<?php echo $post_id; ?>" style="display: none;">
+                                                        <?php echo $HD_mota; ?>
+                                                        <br>
+                                                        <button class="see-less-btn" onclick="showLess('<?php echo $post_id; ?>')">See Less</button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body d-block p-0 mb-3">
+                                                    <div class="row ps-2 pe-2">
+                                                        <div class="col-sm-12 p-1"><a href="" data-lightbox="roadtr"><!-- href = link anh--><img src="" class="rounded-3 w-100" alt="image"></a></div> <!-- src = link anh-->
+                                                    </div>
+                                                </div>
                                                 <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
+                                                    <!-- Click Hien thi ra trang danh sach sinh vien dang ky -->
+                                                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
+                                                    <!-- Click Hien thi ra trang quan ly hoat dong -->
+                                                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Quan ly</a>
                                                 </div>
-                                                <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
-                                                    <div class="card-body p-0 d-flex">
-                                                        <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
-                                                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Lưu hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Lưu hoạt động</span></h4> <!-- Luu hoat dong cho NTC -->
-                                                    </div>
-                                                    <div class="card-body p-0 d-flex mt-2">
-                                                        <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                                                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Ẩn hoạt động <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Ẩn hoạt động</span></h4> <!-- An hoat dong nay voi NTC -->
-                                                    </div>
-                                                    <div class="card-body p-0 d-flex mt-2">
-                                                        <i class="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
-                                                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Quản lý hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Quản lý hoạt động của bạn</span></h4> <!-- Mo ra trang quan ly hoat dong cho hoat dong nay -->
-                                                    </div>
+                                                <div class="card-body d-flex p-0 mt-3">
+                                                    <!-- like -->
+                                                    <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"></i> <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss"></i><!-- So luong tha tym --></a>
                                                 </div>
                                             </div>
-
-                                            <div class="card-body p-0 me-lg-5">
-                                                <h5><?php echo $HD_name ?></h5> <br>
-                                                <h6>Thời gian diễn ra hoạt động: <?php echo($HD_date_start . " - " . $HD_date_end) ?></h6> <br>
-                                                <h6>Thơi gian đăng ký hoạt động: <?php echo($HD_date_start_regis . " - " . $HD_date_end_regis) ?></h6> <br>
-                                                <!-- Nội dung ban đầu -->
-                                                <div id="initialContent_<?php echo $post_id; ?>">
-                                                <button class="see-more-btn" onclick="showMore('<?php echo $post_id; ?>')">See More</button>
-                                                </div>
-
-                                                <!-- Nội dung được ẩn -->
-                                                <div id="additionalContent_<?php echo $post_id; ?>" style="display: none;">
-                                                    <?php echo $HD_mota; ?>
-                                                    <br>
-                                                    <button class="see-less-btn" onclick="showLess('<?php echo $post_id; ?>')">See Less</button>
-                                                </div>
-
-                                                <?php
-                                                $counter++; // Tăng biến đếm
-                                                ?>
-                                                <script>
-                                                    function showMore(postId) {
-                                                        // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
-                                                        document.getElementById("additionalContent_" + postId).style.display = "block";
-                                                        // Ẩn nút "See More"
-                                                        document.getElementById("initialContent_" + postId).style.display = "none";
-                                                    }
-
-                                                    function showLess(postId) {
-                                                        // Ẩn nội dung bổ sung khi nhấp vào nút "See Less"
-                                                        document.getElementById("additionalContent_" + postId).style.display = "none";
-                                                        // Hiển thị nút "See More"
-                                                        document.getElementById("initialContent_" + postId).style.display = "block";
-                                                    }
-                                                </script>
-                                            </div>
-                                            <div class="card-body d-block p-0 mb-3">
-                                                <div class="row ps-2 pe-2">
-                                                    <div class="col-sm-12 p-1"><a href="" data-lightbox="roadtr"><!-- href = link anh--><img src="" class="rounded-3 w-100" alt="image"></a></div> <!-- src = link anh-->
-                                                </div>
-                                            </div>
-                                            <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
-                                                <!-- Click Hien thi ra trang danh sach sinh vien dang ky -->
-                                                <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
-                                                <!-- Click Hien thi ra trang quan ly hoat dong -->
-                                                <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Quan ly</a>
-                                            </div>
-                                            <div class="card-body d-flex p-0 mt-3">
-                                                <!-- like -->
-                                                <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"></i> <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss"></i><!-- So luong tha tym --></a>
-                                            </div>
-                                        </div>
-                            <!-- Ket thuc mot hoat dong -->
-                            <?php
+                                            <!-- Ket thuc mot hoat dong -->
+                                            <?php
+                                            $counter++; // Tăng biến đếm
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         echo "No results found.";
                                     }
                                 } else {
                                     echo "Error executing the query: " . $conn->error;
                                 }
-                            ?>
+                                ?>
+
                         </div>
                     </div>
                 </div>

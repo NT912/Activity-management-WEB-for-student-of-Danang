@@ -52,14 +52,17 @@
                             <div class="form-group icon-input mb-3">
                                 <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="validateInput('nhaplaimatkhau')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errornhaplaimatkhau" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" onblur="validateInput('lopsinhoat')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errorlopsinhoat" style="color: red; display: none;">Vui lòng nhập lớp.</span>
                             </div>
                             <div class="form-group icon-input mb-1">
                                 <input type="text" name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" onblur="validateInput('major')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errormajor" style="color: red; display: none;">Vui lòng nhập khoa.</span>
                             </div>
                             <div class="form-check text-left mb-3">
                                 <input type="checkbox" name="agree" class="form-check-input mt-2" id="exampleCheck2">

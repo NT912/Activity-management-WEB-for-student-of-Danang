@@ -41,9 +41,9 @@
                     <div class="card-body rounded-0 text-left">
                         <h2 class="fw-700 display1-size display2-md-size mb-4">Đăng kí với tư cách</h2>
                         <!-- Tùy chọn đăng ký mới: Đăng ký với nhà tổ chức -->
-                        <a href="dangkyNTC.php" class="mb-4 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với nhà tổ chức</a>
+                        <a href="dangkyNTC.html" class="mb-4 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với nhà tổ chức</a>
                         <!-- Tùy chọn đăng ký mới: Đăng ký với tư cách sinh viên -->
-                        <a href="dangkySV.php" class="mb-0 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với tư cách sinh viên</a>
+                        <a href="dangkySV.html" class="mb-0 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với tư cách sinh viên</a>
                     </div>
                 </div>
             </div>
