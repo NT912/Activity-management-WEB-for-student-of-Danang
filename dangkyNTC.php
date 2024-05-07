@@ -25,17 +25,10 @@
     <div class="main-wrap">
 
         <div class="nav-header bg-transparent shadow-none border-0">
-            <div class="nav-top w-100">
-                <!-- logo link toi index -->
-            <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
-            <button class="nav-menu me-0 ms-2"></button>
-                    <!-- btn dang nhap header -->
-                <a href="login.html" class="header-btn d-none d-lg-block bg-dark fw-500 text-white font-xsss p-3 ms-auto w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modallogin">Đăng nhập</a>
-            <!-- btn dang ky tren header -->
-                <a href="dangkyvoivaitro.html" class="header-btn d-none d-lg-block bg-current fw-500 text-white font-xsss p-3 ms-2 w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modalregister">Đăng ký</a>
-
-            </div>
-
+            <div class="nav-top w350">
+                <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>                         
+            </div>           
+        </div>
 
         </div>
         <!-- end header -->

@@ -28,12 +28,9 @@
 
         <!-- navigation top-->
         <div class="nav-header bg-white shadow-xs border-0">
-            <!-- Logo -->
             <div class="nav-top">
-                <a href="index.html"><i class="feather-zap text-success display1-size me-2 ms-0"></i><span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">Volunteer. </span> </a>
-                <button class="nav-menu me-0 ms-2"></button>
+                <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a> 
             </div>
-
             <!-- Search -->
             <form action="#" class="float-left header-search">
                 <div class="form-group mb-0 icon-input">
