@@ -93,21 +93,38 @@
         <!-- main content -->
         <div class="main-content ">
             <div style="padding: 100px 20px 20px 20px; max-width: 50%; min-width: 500px;">
-                <form style="max-width: 100%;">
+                <!-- ### là file xử lý lấy dữ liệu từ form lưu vào database -->
+                <form style="max-width: 100%;" action="###" method="post">
                     <div class="form-group icon-input mb-3">
-                        <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="vd:1232000126" require>                        
+                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Họ và tên" >
+
+                    </div>
+                    <div class="form-group icon-input mb-3">
+                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Mã sinh viên" >
+
+                    </div>
+                    <div class="form-group icon-input mb-3">
+                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Trường" >
+
+                    </div>
+                    <div class="form-group icon-input mb-3">
+                        
+                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" require>                        
                     </div>
                     <div class="form-group icon-input mb-1">
-                        <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Password" require>
-                        <i class="font-sm ti-lock text-grey-500 pe-0"></i>
-                        </button>
+                        <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp" require>
+                        
+                       
                     </div>
                     <div class="form-check text-left mb-3">
                         <input type="checkbox" class="form-check-input mt-2" id="exampleCheck5">
-                        <label class="form-check-label font-xsss text-grey-500" for="exampleCheck5">Ghi nhớ đăng nhập</label>
-                        <a href="forgot.html" class="fw-600 font-xsss text-grey-700 mt-1 float-right">Quên mật khẩu</a>
+                        <label class="form-check-label font-xsss text-grey-500" for="exampleCheck5">Điều khoản và điều kiện</label>
+
+                        
                     </div>
+                    <!-- khi ấn đăng ký thì dữ liệu đc lưu vào trong database -->
+                    <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
+
                 </form>
             </div>
         </div>
