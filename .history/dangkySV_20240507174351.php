@@ -8,14 +8,49 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
     <script>
-        function validateInput(inputName) {
-            var inputValue = document.forms["registerForm"][inputName].value;
-            var errorElement = document.getElementById("error" + inputName.charAt(0).toUpperCase() + inputName.slice(1));
+        function validateForm() {
+            var hoten = document.forms["registerForm"]["hoten"].value;
+            var masv = document.forms["registerForm"]["masv"].value;
+            var matkhau = document.forms["registerForm"]["Password"].value;
+            var nhaplaimatkhau = document.forms["registerForm"]["nhaplaimatkhau"].value;
+            var lop = document.forms["registerForm"]["lopsinhoat"].value;
+            var khoa = document.forms["registerForm"]["major"].value;
+            var agree = document.forms["registerForm"]["agree"].checked;
 
-            if (inputValue.trim() === "") {
-                errorElement.style.display = "block";
+            if (hoten == "") {
+                document.getElementById("errorHoten").innerHTML = "Vui lòng nhập họ và tên.";
             } else {
-                errorElement.style.display = "none";
+                document.getElementById("errorHoten").innerHTML = "";
+            }
+
+            if (masv == "") {
+                document.getElementById("errorMasv").innerHTML = "Vui lòng nhập mã sinh viên.";
+            } else {
+                document.getElementById("errorMasv").innerHTML = "";
+            }
+
+            if (matkhau == "") {
+                document.getElementById("errorMatkhau").innerHTML = "Vui lòng nhập mật khẩu.";
+            } else {
+                document.getElementById("errorMatkhau").innerHTML = "";
+            }
+
+            if (nhaplaimatkhau == "") {
+                document.getElementById("errorMatkhau").innerHTML = "Vui lòng nhập lại mật khẩu.";
+            } else {
+                document.getElementById("errorMatkhau").innerHTML = "";
+            }
+
+            if (lop == "") {
+                document.getElementById("errorMatkhau").innerHTML = "Vui lòng nhập lại lớp.";
+            } else {
+                document.getElementById("errorMatkhau").innerHTML = "";
+            }
+
+            if (khoa == "") {
+                document.getElementById("errorMatkhau").innerHTML = "Vui lòng nhập lại khoa.";
+            } else {
+                document.getElementById("errorMatkhau").innerHTML = "";
             }
         }
     </script>
@@ -23,13 +58,7 @@
 <body class="color-theme-blue">
     <div class="preloader"></div>
     <div class="main-wrap">
-    <div class="nav-header bg-transparent shadow-none border-0">
-            <div class="nav-top w350">
-            <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>        
-                 
-            </div>
-            
-        </div>
+        <div class="nav-header bg-transparent shadow-none border-0">
             <!-- Header -->
         </div>
         <!-- Form đăng ký sinh viên -->
@@ -39,33 +68,37 @@
                 <div class="card shadow-none border-0 ms-auto me-auto login-card">
                     <div class="card-body rounded-0 text-left">
                         <h2 class="fw-700 display1-size display2-md-size mb-4">Tạo Tài Khoản <br> Sinh Viên</h2>
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" name="registerForm">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" name="registerForm" onsubmit="return validateForm()">
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-user text-grey-500 pe-0"></i>
-                                <input type="text" name="hoten" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Họ và tên" onblur="validateInput('hoten')">
-                                <span id="errorHoten" style="color: red; display: none;">Vui lòng nhập họ và tên.</span>
+                                <input type="text" name="hoten" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Họ và tên">
+                                <span id="errorHoten" style="color: red;"></span>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                                <input type="text" name="masv" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mã sinh viên" onblur="validateInput('masv')">
-                                <span id="errorMasv" style="color: red; display: none;">Vui lòng nhập mã sinh viên.</span>
+                                <input type="text" name="masv" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mã sinh viên">
+                                <span id="errorMasv" style="color: red;"></span>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                                <input type="password" name="Password" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mật khẩu" onblur="validateInput('Password')">
-                                <span id="errorPassword" style="color: red; display: none;">Vui lòng nhập mật khẩu.</span>
+                                <input type="password" name="Password" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mật khẩu">
+                                <span id="errorMatkhau" style="color: red;"></span>
                             </div>
                             <div class="form-group icon-input mb-3">
-                                <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="validateInput('nhaplaimatkhau')">
+                                <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
                             <div class="form-group icon-input mb-3">
-                                <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" onblur="validateInput('lopsinhoat')">
+                                <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
-                            <div class="form-group icon-input mb-3">
-                                <input type="text" name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" onblur="validateInput('major')">
+                            <div class="form-group icon-input mb-1">
+                                <input type="text" name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                            </div>
+                            <div class="form-check text-left mb-3">
+                                <input type="checkbox" name="agree" class="form-check-input mt-2" id="exampleCheck2">
+                                <label class="form-check-label font-xsss text-grey-500" for="exampleCheck2">Chấp nhận điều khoản</label>
                             </div>
                             <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
                         </form>
@@ -80,7 +113,6 @@
     <script src="js/scripts.js"></script>
 </body>
 </html>
-
 
 <?php
 require("./DB/database.php");

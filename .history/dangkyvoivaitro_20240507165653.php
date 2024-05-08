@@ -21,10 +21,16 @@
 
     <div class="main-wrap">
         <div class="nav-header bg-transparent shadow-none border-0">
-                <div class="nav-top w350">
-                    <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
-                </div>           
+            <div class="nav-top w-100">
+                <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
+                <button class="nav-menu me-0 ms-2"></button>
+                <!-- btn danng nhap header -->
+                <a href="login.html" class="header-btn d-none d-lg-block bg-dark fw-500 text-white font-xsss p-3 ms-auto w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modallogin">Đăng nhập</a>
+                <!-- btn dang ky header -->
+                <a href="dangkyvoivaitro.html" class="header-btn d-none d-lg-block bg-current fw-500 text-white font-xsss p-3 ms-2 w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modalregister">Đăng ký</a>
+
             </div>
+        </div>
         <!-- end header  -->
 
  <!-- Đăng ký với vai trò: -->
@@ -35,9 +41,9 @@
                     <div class="card-body rounded-0 text-left">
                         <h2 class="fw-700 display1-size display2-md-size mb-4">Đăng kí với tư cách</h2>
                         <!-- Tùy chọn đăng ký mới: Đăng ký với nhà tổ chức -->
-                        <a href="dangkyNTC.php" class="mb-4 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với nhà tổ chức</a>
+                        <a href="dangkyNTC.html" class="mb-4 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với nhà tổ chức</a>
                         <!-- Tùy chọn đăng ký mới: Đăng ký với tư cách sinh viên -->
-                        <a href="dangkySV.php" class="mb-0 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với tư cách sinh viên</a>
+                        <a href="dangkySV.html" class="mb-0 bg-current fw-700 text-white font-sm p-3 ms-2 text-center lh-20 rounded-xl d-block">Đăng ký với tư cách sinh viên</a>
                     </div>
                 </div>
             </div>

@@ -21,10 +21,10 @@
 
     <div class="main-wrap">
         <div class="nav-header bg-transparent shadow-none border-0">
-                <div class="nav-top w350">
-                    <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
-                </div>           
+            <div class="nav-top w-100">
+                <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
             </div>
+        </div>
         <!-- end header  -->
 
  <!-- Đăng ký với vai trò: -->

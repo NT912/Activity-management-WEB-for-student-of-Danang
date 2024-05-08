@@ -21,14 +21,14 @@
 
     <div class="preloader"></div>
 
-        <div class="main-wrap">
+    <div class="main-wrap">
 
-            <div class="nav-header bg-transparent shadow-none border-0">
-                <div class="nav-top w350">
-                    <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
-                </div>           
+        <div class="nav-header bg-transparent shadow-none border-0">
+            <div class="nav-top w-100">
+                <a href="index.php"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> <style></style></a>
+
             </div>
-        </div>  
+        </div>
 
         <div class="row">
             <div class="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat" style="background-image: url(images/login-bg.jpg);"></div>
