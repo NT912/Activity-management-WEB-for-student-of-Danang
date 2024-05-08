@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
 </head>
-<body>
+<body >
 <div class="container">
     <!-- navigation top-->
     <div class="nav-header bg-white shadow-xs border-0">
@@ -65,30 +65,16 @@
     <!-- navigation top -->
 
 </div>
-<div class="form-create">
-    <div class="avatar-dangky">
-        <form action="###" method="post" id="myForm">
-       
-            <input type="text" id="fullname" name="fullname" class ="fullname" placeholder="Họ và tên"><br>
+    <div class="form-create">
+        <div class="avatar-dangky">
+        <!-- Lấy ảnh user, khi ấn vào sẽ chuyển đến trang thông tin cá nhân của user, ### là link trang thông tin cá nhân-->
+        <img src="###" alt="profile-picture" class="profile-picture"><a href="###"></a>
         
-            <input type="text" id="student_id" name="student_id" class = "MSV"placeholder= "Mã sinh viên"><br>
-            <input type="text" id="School" name="School" class = "School"placeholder= "Trường"><br>
-            <input type="text" id="Khoa" name="Khoa" class = "Khoa"placeholder= "Khoa"><br>
-            <input type="text" id="class" name="class" class = "class"placeholder= "Lớp"><br>
-            <div class="mycheckbox">
-                <input type="checkbox" id="checkbox" name="checkbox" class="checkbox" >
-            
-                <label for="checkbox" class="label">Điều khoản và điều kiện</label>
-                
-            </div>
-                <!-- Sau khi ấn đăng ký thì dữ liệu trong form sẽ được xử lý bằng file ###.php và sẽ được lưu vào database -->
-                
-            <button type="submit" name="register" class="register">ĐĂNG KÝ</button>
-            <!-- Sau khi ấn thì sẽ thoát form và trở lại trang trước đó -->
-            <button type="button" name="exit" class="exit" onclick="closeForm()">Thoát</button>
-                
-            </form>
-</div>
+        <!-- Lấy tên user,khi ấn vào sẽ chuyển đến trang thông tin cá nhân của user,### là link trang thông tin cá nhân -->
+        <span class="first-initial"><a href="###">###</a></span>
+        
+        </div>
+    </div>
     
 </body>
 </html>
