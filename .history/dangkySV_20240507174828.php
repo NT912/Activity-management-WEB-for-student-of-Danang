@@ -23,13 +23,7 @@
 <body class="color-theme-blue">
     <div class="preloader"></div>
     <div class="main-wrap">
-    <div class="nav-header bg-transparent shadow-none border-0">
-            <div class="nav-top w350">
-            <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>        
-                 
-            </div>
-            
-        </div>
+        <div class="nav-header bg-transparent shadow-none border-0">
             <!-- Header -->
         </div>
         <!-- Form đăng ký sinh viên -->
@@ -58,14 +52,20 @@
                             <div class="form-group icon-input mb-3">
                                 <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="validateInput('nhaplaimatkhau')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errorHoten" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" onblur="validateInput('lopsinhoat')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
-                            <div class="form-group icon-input mb-3">
+                            <div class="form-group icon-input mb-1">
                                 <input type="text" name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" onblur="validateInput('major')">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <span id="errorHoten" style="color: red; display: none;">Vui lòng nhập họ và tên.</span>
+                            </div>
+                            <div class="form-check text-left mb-3">
+                                <input type="checkbox" name="agree" class="form-check-input mt-2" id="exampleCheck2">
+                                <label class="form-check-label font-xsss text-grey-500" for="exampleCheck2">Chấp nhận điều khoản</label>
                             </div>
                             <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
                         </form>

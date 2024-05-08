@@ -25,10 +25,17 @@
     <div class="main-wrap">
 
         <div class="nav-header bg-transparent shadow-none border-0">
-            <div class="nav-top w350">
-                <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>                         
-            </div>           
-        </div>
+            <div class="nav-top w-100">
+                <!-- logo link toi index -->
+            <a href="index.html"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
+            <button class="nav-menu me-0 ms-2"></button>
+                    <!-- btn dang nhap header -->
+                <a href="login.html" class="header-btn d-none d-lg-block bg-dark fw-500 text-white font-xsss p-3 ms-auto w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modallogin">Đăng nhập</a>
+            <!-- btn dang ky tren header -->
+                <a href="dangkyvoivaitro.html" class="header-btn d-none d-lg-block bg-current fw-500 text-white font-xsss p-3 ms-2 w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modalregister">Đăng ký</a>
+
+            </div>
+
 
         </div>
         <!-- end header -->
@@ -64,7 +71,7 @@
                         </form>
                         <div class="col-sm-12 p-0 text-left">
                             <div class="form-group mb-1"><a href="#" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0 ">Đăng ký</a></div>
-                            <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.php" class="fw-700 ms-1">Đăng nhập</a></h6>
+                            <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.html" class="fw-700 ms-1">Đăng nhập</a></h6>
                         </div>
 
                     </div>

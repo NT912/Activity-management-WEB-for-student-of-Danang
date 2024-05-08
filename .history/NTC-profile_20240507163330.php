@@ -317,20 +317,21 @@ $conn->close();
 
                                                 <?php
                                                 $counter++; // Tăng biến đếm
+                                                }
                                                 ?>
                                                 <script>
-                                                    function showMore(postId) {
+                                                    function showMore() {
                                                         // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
-                                                        document.getElementById("additionalContent_" + postId).style.display = "block";
+                                                        document.getElementById("additionalContent").style.display = "block";
                                                         // Ẩn nút "See More"
-                                                        document.getElementById("initialContent_" + postId).style.display = "none";
+                                                        document.getElementById("initialContent").style.display = "none";
                                                     }
 
-                                                    function showLess(postId) {
+                                                    function showLess() {
                                                         // Ẩn nội dung bổ sung khi nhấp vào nút "See Less"
-                                                        document.getElementById("additionalContent_" + postId).style.display = "none";
+                                                        document.getElementById("additionalContent").style.display = "none";
                                                         // Hiển thị nút "See More"
-                                                        document.getElementById("initialContent_" + postId).style.display = "block";
+                                                        document.getElementById("initialContent").style.display = "block";
                                                     }
                                                 </script>
                                             </div>
@@ -350,11 +351,11 @@ $conn->close();
                                                 <a href="#" class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"></i> <i class="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss"></i><!-- So luong tha tym --></a>
                                             </div>
                                         </div>
+
                             <!-- Ket thuc mot hoat dong -->
                             <?php
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         echo "No results found.";
                                     }
                                 } else {

@@ -21,14 +21,16 @@
 
     <div class="preloader"></div>
 
-        <div class="main-wrap">
+    <div class="main-wrap">
 
-            <div class="nav-header bg-transparent shadow-none border-0">
-                <div class="nav-top w350">
-                    <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
-                </div>           
+        <div class="nav-header bg-transparent shadow-none border-0">
+            <div class="nav-top w-100">
+                <a href="index.php"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>
+                <a href="login.php" class="header-btn d-none d-lg-block bg-dark fw-500 text-white font-xsss p-3 ms-auto w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modallogin">Đăng nhập</a>
+                <a href="dangkyvoivaitro.php" class="header-btn d-none d-lg-block bg-current fw-500 text-white font-xsss p-3 ms-2 w100 text-center lh-20 rounded-xl"  data-bs-toggle="modal" data-bs-target="#Modalregister">Đăng ký</a>
+
             </div>
-        </div>  
+        </div>
 
         <div class="row">
             <div class="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat" style="background-image: url(images/login-bg.jpg);"></div>
