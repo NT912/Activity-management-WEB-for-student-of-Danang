@@ -211,7 +211,7 @@ Leader: Phó Bí Thư- Huỳnh Thị Kiều Trinh - sđt: 0935350245<br>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
-                                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
+                                    <a href="list-member.php" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
                                     <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Đăng ký</a>
                                     <a href="#" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Hủy đăng ký</a>
                                     <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Sửa </a>

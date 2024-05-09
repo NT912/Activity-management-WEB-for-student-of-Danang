@@ -113,14 +113,10 @@
                     </div>
                     <div class="form-group icon-input mb-1">
                         <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp" require>
-                        
-                       
                     </div>
-                    <div class="form-check text-left mb-3">
-                        <input type="checkbox" class="form-check-input mt-2" id="exampleCheck5">
-                        <label class="form-check-label font-xsss text-grey-500" for="exampleCheck5">Điều khoản và điều kiện</label>
 
-                        
+                    <div class="form-group icon-input mb-1">
+                        <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Mong muon cua ban" require>
                     </div>
                     <!-- khi ấn đăng ký thì dữ liệu đc lưu vào trong database -->
                     <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
