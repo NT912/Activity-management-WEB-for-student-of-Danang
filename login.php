@@ -25,7 +25,7 @@
 
             <div class="nav-header bg-transparent shadow-none border-0">
                 <div class="nav-top w350">
-                    <a href="#"> <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
+                    <img src="./images/LOGO.png" alt="Logopage" class="logo-img"> </a>            
                 </div>           
             </div>
         </div>  
