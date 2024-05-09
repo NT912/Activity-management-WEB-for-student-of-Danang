@@ -77,25 +77,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function checkInputPasswordAgain() {
-            var password = document.forms["registerForm"]["Password"].value;
-            var confirmPassword = document.forms["registerForm"]["nhaplaimatkhau"].value;
-            var confirmPasswordError = document.getElementById("errorNhaplaimatkhau");
-            var submitButton = document.querySelector('button[type="submit"]');
+        var password = document.forms["registerForm"]["Password"].value;
+        var confirmPassword = document.forms["registerForm"]["nhaplaimatkhau"].value;
+        var confirmPasswordError = document.getElementById("errorNhaplaimatkhau");
 
-            if (confirmPassword.trim() === "") {
-                confirmPasswordError.innerText = "Vui lòng nhập lại mật khẩu.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else if (password !== confirmPassword) {
-                confirmPasswordError.innerText = "Mật khẩu nhập lại không khớp với mật khẩu đã nhập.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else {
-                confirmPasswordError.style.display = "none";
-                submitButton.disabled = false;
-            }
+        if (confirmPassword.trim() === "") {
+            confirmPasswordError.innerText = "Vui lòng nhập lại mật khẩu.";
+            confirmPasswordError.style.display = "block";
+        } else if (password !== confirmPassword) {
+            confirmPasswordError.innerText = "Mật khẩu nhập lại không khớp với mật khẩu đã nhập.";
+            confirmPasswordError.style.display = "block";
+        } else {
+            confirmPasswordError.style.display = "none";
         }
-
+    }
     </script>
 </head>
 <body class="color-theme-blue">
@@ -135,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
-                                <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="checkInputPasswordAgain()" required>
+                                <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="validateInput('nhaplaimatkhau')"; checkInputPasswordAgain()>
                                 <span id="errorNhaplaimatkhau" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
                             </div>
                             <div class="form-group icon-input mb-3">
@@ -148,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                                 <span id="errorMajor" style="color: red; display: none;">Vui lòng nhập khoa.</span>
                             </div>
-                            <button type="submit" id="registerButton" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0" disabled>Đăng ký</button>
+                            <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
                         </form>
                         <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.php" class="fw-700 ms-1">Đăng nhập</a></h6>
                     </div>

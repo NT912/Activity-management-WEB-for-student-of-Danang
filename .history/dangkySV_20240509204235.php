@@ -77,24 +77,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function checkInputPasswordAgain() {
-            var password = document.forms["registerForm"]["Password"].value;
-            var confirmPassword = document.forms["registerForm"]["nhaplaimatkhau"].value;
-            var confirmPasswordError = document.getElementById("errorNhaplaimatkhau");
-            var submitButton = document.querySelector('button[type="submit"]');
+    var password = document.forms["registerForm"]["Password"].value;
+    var confirmPassword = document.forms["registerForm"]["nhaplaimatkhau"].value;
+    var confirmPasswordError = document.getElementById("errorNhaplaimatkhau");
+    var submitButton = document.querySelector('button[type="submit"]');
 
-            if (confirmPassword.trim() === "") {
-                confirmPasswordError.innerText = "Vui lòng nhập lại mật khẩu.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else if (password !== confirmPassword) {
-                confirmPasswordError.innerText = "Mật khẩu nhập lại không khớp với mật khẩu đã nhập.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else {
-                confirmPasswordError.style.display = "none";
-                submitButton.disabled = false;
-            }
-        }
+    if (confirmPassword.trim() === "") {
+        confirmPasswordError.innerText = "Vui lòng nhập lại mật khẩu.";
+        confirmPasswordError.style.display = "block";
+        submitButton.disabled = true;
+    } else if (password !== confirmPassword) {
+        confirmPasswordError.innerText = "Mật khẩu nhập lại không khớp với mật khẩu đã nhập.";
+        confirmPasswordError.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        confirmPasswordError.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
 
     </script>
 </head>
