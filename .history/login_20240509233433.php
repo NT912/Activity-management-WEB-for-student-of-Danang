@@ -32,10 +32,10 @@
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="form-group icon-input mb-3">
                             <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                            <input type="text" name="username" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="MSSV hoặc ID hoặc Gmail" value="<?php echo isset($_POST['username']) ? $_POST['username'] : ''; ?>" required>
+                            <input type="text" name="username" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="MSSV hoặc ID hoặc Gmail" required>
                         </div>
                         <div class="form-group icon-input mb-1">
-                            <input type="password" name="password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Password" value="" required>
+                            <input type="password" name="password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Password" required>
                             <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                         </div>
                         <div class="form-check text-left mb-3">

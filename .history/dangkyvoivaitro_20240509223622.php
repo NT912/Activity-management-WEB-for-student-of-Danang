@@ -27,7 +27,7 @@
             </div>
         <!-- end header  -->
 
-        <!-- Đăng ký với vai trò: -->
+ <!-- Đăng ký với vai trò: -->
         <div class="row">
             <div class="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat" style="background-image: url(images/login-bg-2.jpg);"></div>
             <div class="col-xl-7 vh-100 align-items-center d-flex bg-white rounded-3 overflow-hidden">

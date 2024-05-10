@@ -122,33 +122,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card-body rounded-0 text-left">
                         <h2 class="fw-700 display1-size display2-md-size mb-4">Tạo Tài Khoản <br> Nhà Tổ Chức</h2>
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" name="registerForm">
-                            <div class="form-group icon-input mb-3">
-                                <i class="font-sm ti-user text-grey-500 pe-0"></i>
-                                <input type="text" name="Name_orginization" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Tên nhà tổ chức" onblur="validateInput('Name_orginization')">
-                                <span id="errorName_orginization" style="color: red; display: none;">Vui lòng nhập tên nhà tổ chức.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <i class="font-sm ti-user text-grey-500 pe-0"></i>
-                                <input type="text" name="Id_orginization" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="ID nhà tổ chức" onblur="validateInput('Id_orginization')">
-                                <span id="errorId_orginization" style="color: red; display: none;">Vui lòng nhập ID nhà tổ chức.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                                <input type="text" name="Email" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Gmail" onblur="validateInput('Email')">
-                                <span id="errorEmail" style="color: red; display: none;">Vui lòng nhập Gmail.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                                <input type="password" name="Password" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mật khẩu" onblur="validateInput('Password')">
-                                <span id="errorPassword" style="color: red; display: none;">Vui lòng nhập mật khẩu.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="checkInputPasswordAgain()" required>
-                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
-                                <span id="errorNhaplaimatkhau" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
-                            </div>
-                            <button type="submit" id="registerButton" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0" disabled>Đăng ký</button>
-                        </form>
+    <div class="form-group icon-input mb-3">
+        <i class="font-sm ti-user text-grey-500 pe-0"></i>
+        <input type="text" name="Name_orginization" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Tên nhà tổ chức" onblur="validateInput('Name_orginization')">
+        <span id="errorName_orginization" style="color: red; display: none;">Vui lòng nhập tên nhà tổ chức.</span>
+    </div>
+    <div class="form-group icon-input mb-3">
+        <i class="font-sm ti-user text-grey-500 pe-0"></i>
+        <input type="text" name="Id_orginization" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="ID nhà tổ chức" onblur="validateInput('Id_orginization')">
+        <span id="errorId_orginization" style="color: red; display: none;">Vui lòng nhập ID nhà tổ chức.</span>
+    </div>
+    <div class="form-group icon-input mb-3">
+        <i class="font-sm ti-email text-grey-500 pe-0"></i>
+        <input type="text" name="Email" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Gmail" onblur="validateInput('Email')">
+        <span id="errorEmail" style="color: red; display: none;">Vui lòng nhập Gmail.</span>
+    </div>
+    <div class="form-group icon-input mb-3">
+        <i class="font-sm ti-email text-grey-500 pe-0"></i>
+        <input type="password" name="Password" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mật khẩu" onblur="validateInput('Password')">
+        <span id="errorPassword" style="color: red; display: none;">Vui lòng nhập mật khẩu.</span>
+    </div>
+    <div class="form-group icon-input mb-3">
+        <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" onblur="checkInputPasswordAgain()" required>
+        <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+        <span id="errorNhaplaimatkhau" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
+    </div>
+    <button type="submit" id="registerButton" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0" disabled>Đăng ký</button>
+</form>
                             <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">Đã có tài khoản<a href="login.php" class="fw-700 ms-1">Đăng nhập</a></h6>
                         </div>
                     </div>
