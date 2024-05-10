@@ -1,52 +1,3 @@
-<?php
-// Kết nối và sử dụng PHP
-require("./DB/database.php");
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connect failed". $conn->connect_error);
-}
-
-// Đặt Id_orginization mặc định là 234
-$Id_orginization = '234';
-
-// Orginization_information query
-$sql_Orginization_information = "SELECT * FROM Orginization_information WHERE Id_orginization = '$Id_orginization'";
-// Thực thi truy vấn
-$result = $conn->query($sql_Orginization_information);
-
-// Kiểm tra kết quả truy vấn
-if ($result) {
-    // Kiểm tra xem có bất kỳ hàng nào được trả về không
-    if ($result->num_rows > 0) {
-        // Lặp qua từng hàng và lấy dữ liệu
-        while ($row = $result->fetch_assoc()) {
-            $NTC_avatar = $row["avatar"];
-            $NTC_id = $row["Id_orginization"];
-            $NTC_name = $row["Name_orginization"];
-            $NTC_gmail = $row["Email"];
-            $NTC_mota = $row["Description"];
-            $NTC_diachi = $row["Address"];
-            $NTC_sdt = $row["Sdt"];
-        }
-    } else {
-        echo "No results found.";
-    }
-} else {
-    echo "Error executing the query: " . $conn->error;
-}
-
-// Activity query để lấy tất cả bài viết theo Id_orginization, sắp xếp theo thời gian từ mới nhất đến cũ nhất
-$sql_Activity = "SELECT * FROM Activity WHERE Id_orginization = '$Id_orginization' ORDER BY created_at DESC";
-
-// Thực thi truy vấn
-$result2 = $conn->query($sql_Activity);
-
-// Đóng kết nối
-$conn->close();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,48 +16,6 @@ $conn->close();
     <link rel="stylesheet" href="css/emoji.css">
 
     <link rel="stylesheet" href="css/lightbox.css">
-    <style>
-         /* Style cho nút "See More" */
-        .see-more-btn {
-            height: 30px;
-            width: 105px;
-            padding: 0px 0px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Style khi di chuột vào nút "See More" */
-        .see-more-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Style cho nút "See Less" */
-        .see-less-btn {
-            height: 30px;
-            width: 105px;
-            padding: 0px 0px;
-            background-color: #6c757d;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Style khi di chuột vào nút "See Less" */
-        .see-less-btn:hover {
-            background-color: #5a6268;
-        }
-
-        /* Ẩn nội dung ban đầu */
-        #additionalContent {
-            display: none;
-        }
-    </style>
 
 </head>
 
@@ -219,9 +128,9 @@ $conn->close();
                     <div class="row feed-body">
                         <div class="col-xl-8 col-xxl-9 col-lg-8">
                             <!-- Create activity button -->
-                            <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3 mt-3">
+                            <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
                                 <div class="card-body p-0">
-                                    <a href="/create_post.php" class=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i class="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>Create Post</a>
+                                    <a href="#" class=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i class="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>Tạo hoạt động mới</a>
                                 </div>
                             </div>
 
@@ -331,6 +240,13 @@ $conn->close();
                                     echo "Error executing the query: " . $conn->error;
                                 }
                             ?>
+
+
+
+
+
+
+
 
     <script src="js/plugin.js"></script>
 

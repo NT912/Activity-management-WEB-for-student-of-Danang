@@ -65,48 +65,6 @@ $conn->close();
     <link rel="stylesheet" href="css/emoji.css">
 
     <link rel="stylesheet" href="css/lightbox.css">
-    <style>
-         /* Style cho nút "See More" */
-        .see-more-btn {
-            height: 30px;
-            width: 105px;
-            padding: 0px 0px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Style khi di chuột vào nút "See More" */
-        .see-more-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Style cho nút "See Less" */
-        .see-less-btn {
-            height: 30px;
-            width: 105px;
-            padding: 0px 0px;
-            background-color: #6c757d;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Style khi di chuột vào nút "See Less" */
-        .see-less-btn:hover {
-            background-color: #5a6268;
-        }
-
-        /* Ẩn nội dung ban đầu */
-        #additionalContent {
-            display: none;
-        }
-    </style>
 
 </head>
 
@@ -223,7 +181,6 @@ $conn->close();
                                 <div class="card-body p-0">
                                     <a href="/create_post.php" class=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i class="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>Create Post</a>
                                 </div>
-                            </div>
 
                             <?php
                                 // Kiểm tra kết quả truy vấn
