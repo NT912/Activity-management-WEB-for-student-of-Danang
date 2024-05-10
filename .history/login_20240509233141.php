@@ -32,10 +32,10 @@
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="form-group icon-input mb-3">
                             <i class="font-sm ti-email text-grey-500 pe-0"></i>
-                            <input type="text" name="username" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="MSSV hoặc ID hoặc Gmail" value="<?php echo isset($_POST['username']) ? $_POST['username'] : ''; ?>" required>
+                            <input type="text" name="username" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="vd:1232000126" required>
                         </div>
                         <div class="form-group icon-input mb-1">
-                            <input type="password" name="password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Password" value="" required>
+                            <input type="password" name="password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Password" required>
                             <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                         </div>
                         <div class="form-check text-left mb-3">
@@ -62,42 +62,33 @@
                         $password = $_POST["password"];
 
                         // Kiểm tra trong bảng Student
-                        $sql_student = "SELECT * FROM Student WHERE MaSV='$username'";
+                        $sql_student = "SELECT * FROM Student WHERE MaSV='$username' AND Password='$password'";
                         $result_student = $conn->query($sql_student);
 
                         // Kiểm tra trong bảng Orginization_information
-                        $sql_org = "SELECT * FROM Orginization_information WHERE (Id_orginization='$username' OR Email='$username')";
+                        $sql_org = "SELECT * FROM Orginization_information WHERE (Id_orginization='$username' OR Email='$username') AND Password='$password'";
                         $result_org = $conn->query($sql_org);
 
                         // Kiểm tra kết quả
                         if ($result_student->num_rows > 0) {
-                            $row_student = $result_student->fetch_assoc();
-                            if ($row_student["Password"] == $password) {
-                                // Đăng nhập thành công với tài khoản sinh viên
-                                header("Location: index.php");
-                                exit();
-                            } else {
-                                // Sai mật khẩu
-                                echo "<p style='color: red;'>Sai mật khẩu.</p>";
-                            }
+                            // Đăng nhập thành công với tài khoản sinh viên
+                            header("Location: index.php");
+                            exit();
                         } elseif ($result_org->num_rows > 0) {
-                            $row_org = $result_org->fetch_assoc();
-                            if ($row_org["Password"] == $password) {
-                                // Đăng nhập thành công với tài khoản tổ chức
-                                header("Location: index.php");
-                                exit();
-                            } else {
-                                // Sai mật khẩu
-                                echo "<p style='color: red;'>Sai mật khẩu.</p>";
-                            }
-                        } else {
+                            // Đăng nhập thành công với tài khoản tổ chức
+                            header("Location: index.php");
+                            exit();
+                        } elseif ($result_student->num_rows == 0 && $result_org->num_rows == 0) {
                             // Không tìm thấy tài khoản
                             echo "<p style='color: red;'>Tài khoản không tồn tại.</p>";
+                        } else {
+                            // Sai mật khẩu
+                            echo "<p style='color: red;'>Sai mật khẩu.</p>";
                         }
                     }
 
-                    $conn->close();
-                    ?>
+$conn->close();
+?>
 
                     <div class="col-sm-12 p-0 text-left">
                         <h6 class="text-grey-500 font-xsss fw-500 mt-3 mb-0 lh-32">Chưa có tài khoản <a href="dangkyvoivaitro.php" class="fw-700 ms-1">Đăng ký</a></h6>
