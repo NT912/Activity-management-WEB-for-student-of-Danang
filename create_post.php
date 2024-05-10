@@ -20,19 +20,20 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
         }
-
-        #popupForm {
-            display: block; /* Hiển thị form ngay khi trang được mở ra */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            top: 600px;
+        #popupForm form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Số cột tự động thay đổi */
+            grid-gap: 10px;
         }
+    
+        /* Định dạng label cuối cùng */
+        #popupForm label:last-child {
+            grid-column: span 2; /* Chiếm 2 cột */
+            font-size: 16px; /* Kích thước lớn hơn */
+            font-weight: bold;
+        }
+
+       
 
         #popupForm form {
             max-width: 400px;
@@ -41,7 +42,7 @@
 
         #popupForm label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         #popupForm input[type="text"],
@@ -74,6 +75,7 @@
 
         #popupForm textarea {
             resize: vertical;
+            
             min-height: 100px;
             max-height: 200px;
         }
@@ -153,35 +155,32 @@
 
 <!-- Form Popup -->
 <div id="popupForm">
-    <form action="process.php" method="post">
+    <form action="process.php" method="post" style="padding-top: 100px">
         <!-- Add your form fields here -->
-        <label for="Id_orginization">Organization ID:</label>
-        <input type="text" id="Id_orginization" name="Id_orginization" value="234">
-
-        <label for="activityID">Activity ID:</label>
-        <input type="text" id="activityID" name="activityID">
-
-        <label for="activityName">Activity Name:</label>
+        
+        <label for="activityName">Tên hoạt động:</label> 
         <input type="text" id="activityName" name="activityName">
 
-        <label for="dateStart">Date Start:</label>
+       
+        <label for="dateStart">Ngày bắt đầu:</label>
         <input type="date" id="dateStart" name="dateStart">
 
-        <label for="dateEnd">Date End:</label>
+        <label for="dateEnd">Ngày kết thúc:</label>
         <input type="date" id="dateEnd" name="dateEnd">
 
-        <label for="dateStartReg">Date Start Register:</label>
+        <label for="dateStartReg">Ngày bắt đầu đăng ký:</label>
         <input type="date" id="dateStartReg" name="dateStartReg">
 
-        <label for="dateEndReg">Date End Register:</label>
+        <label for="dateEndReg">Ngày kết thúc đăng ký:</label>
         <input type="date" id="dateEndReg" name="dateEndReg">
 
-        <label for="activityContent">Activity Content:</label>
+        <label for="activityContent">Nội dung hoạt động:</label>
         <textarea id="activityContent" name="activityContent"></textarea>
-
         <label for="image">Upload Image:</label>
         <input type="file" id="image" name="image">
 
+
+        
         <input type="submit" value="Create Post">
     </form>
 </div>
