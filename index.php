@@ -1,5 +1,5 @@
+
 <?php
-// Kết nối và sử dụng PHP
 require("./DB/database.php");
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -46,7 +46,6 @@ $result2 = $conn->query($sql_Activity);
 // Đóng kết nối
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -244,20 +243,16 @@ $conn->close();
                                                 </div>
 
                                                 <?php
-                                                $counter++; // Tăng biến đếm
+                                                $counter++; 
                                                 ?>
                                                 <script>
                                                     function showMore(postId) {
-                                                        // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
                                                         document.getElementById("additionalContent_" + postId).style.display = "block";
-                                                        // Ẩn nút "See More"
                                                         document.getElementById("initialContent_" + postId).style.display = "none";
                                                     }
 
                                                     function showLess(postId) {
-                                                        // Ẩn nội dung bổ sung khi nhấp vào nút "See Less"
                                                         document.getElementById("additionalContent_" + postId).style.display = "none";
-                                                        // Hiển thị nút "See More"
                                                         document.getElementById("initialContent_" + postId).style.display = "block";
                                                     }
                                                 </script>
@@ -270,7 +265,7 @@ $conn->close();
                                             <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
                                                 <!-- Click Hien thi ra trang danh sach sinh vien dang ky -->
                                                 <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
-                                                <!-- Click Hien thi ra trang quan ly hoat dong -->
+                                                <!-- Click Hien thi ra trang quan ly hoat dong, chi co nha to chuc ma chu hoat dong moi thay-->
                                                 <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Quan ly</a>
                                             </div>
                                             <div class="card-body d-flex p-0 mt-3">
