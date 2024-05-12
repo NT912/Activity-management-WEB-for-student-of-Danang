@@ -1,13 +1,13 @@
 <?php
-require("./DB/database.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connect failed" . $conn->connect_error);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require("./DB/database.php");
+    $conn = new mysqli($servername, $username, $password, $dbname);
     $hoten = $_POST["hoten"];
     $masv = $_POST["masv"];
     $matkhau = $_POST["Password"];
@@ -132,6 +132,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" name="masv" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mã sinh viên" oninput="validateInput()">
                                 <span id="errorMasv" style="color: red; display: none;">Vui lòng nhập mã sinh viên.</span>
                             </div>
+                           
+                            <div class="form-group icon-input mb-3">
+                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" oninput="validateInput()">
+                                <span id="errorLopsinhoat" style="color: red; display: none;">Vui lòng nhập lớp sinh hoạt.</span>
+                            </div>
+                            <div class="form-group icon-input mb-3">
+                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+                                <select name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" onchange="validateInput()">
+                                    <option value="" selected disabled hidden>Khoa</option>
+                                    <option value="<!-- id cua khoa -->"><!-- ten khoa--></option>
+                                    
+                                </select>
+                                <span id="errorMajor" style="color: red; display: none;">Vui lòng chọn khoa.</span>
+                            </div>
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-email text-grey-500 pe-0"></i>
                                 <input type="password" name="Password" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Mật khẩu" oninput="validateInput()">
@@ -141,16 +156,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                                 <input type="password" name="nhaplaimatkhau" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Nhập lại mật khẩu" oninput="checkInputPasswordAgain()" required>
                                 <span id="errorNhaplaimatkhau" style="color: red; display: none;">Vui lòng nhập lại mật khẩu.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
-                                <input type="text" name="lopsinhoat" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Lớp sinh hoạt" oninput="validateInput()">
-                                <span id="errorLopsinhoat" style="color: red; display: none;">Vui lòng nhập lớp sinh hoạt.</span>
-                            </div>
-                            <div class="form-group icon-input mb-3">
-                                <input type="text" name="major" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" oninput="validateInput()">
-                                <i class="font-sm ti-lock text-grey-500 pe-0"></i>
-                                <span id="errorMajor" style="color: red; display: none;">Vui lòng nhập khoa.</span>
                             </div>
                             <button type="submit" id="registerButton" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0" disabled>Đăng ký</button>
                         </form>
