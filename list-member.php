@@ -101,14 +101,13 @@
                     <h6>Thời gian diễn ra hoạt động: <?php echo($HD_date_start . " - " . $HD_date_end) ?></h6> <br>
                     <h6>Thơi gian đăng ký hoạt động: <?php echo($HD_date_start_regis . " - " . $HD_date_end_regis) ?></h6> <br>
                     <h6>Dia diem dien ra hoat: <!--Dia diem dien ra hoat dong--></h6> <br>
-                    <!-- Nội dung ban đầu -->
                     <div id="initialContent_<?php echo $post_id; ?>">
                     
                         <button class="see-more-btn" onclick="showMore('<?php echo $post_id; ?>')">See More</button>
                     </div>
 
-                    <!-- Nội dung được ẩn -->
                     <div id="additionalContent_<?php echo $post_id; ?>" style="display: none;">
+                        <!-- mo ta cua hoat dong -->
                         <?php echo $HD_mota; ?>
                         <br>
                         <button class="see-less-btn" onclick="showLess('<?php echo $post_id; ?>')">See Less</button>
@@ -119,23 +118,18 @@
                     ?>
                     <script>
                         function showMore(postId) {
-                            // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
                             document.getElementById("additionalContent_" + postId).style.display = "block";
-                            // Ẩn nút "See More"
                             document.getElementById("initialContent_" + postId).style.display = "none";
                         }
 
                         function showLess(postId) {
-                            // Ẩn nội dung bổ sung khi nhấp vào nút "See Less"
                             document.getElementById("additionalContent_" + postId).style.display = "none";
-                            // Hiển thị nút "See More"
                             document.getElementById("initialContent_" + postId).style.display = "block";
                         }
                     </script>
                 </div>
             </div>
             <div style="padding: 20px 0px 20px 0px; max-width: 95%; min-width: 600px;">
-                <!-- ### là file xử lý lấy dữ liệu từ form lưu vào database -->
                 <div class="middle-sidebar-left pe-0 ms-0 me-0" style="max-width: 100%;">
                     <div class="col-lg-12">
                             <div class="chat-wrapper w-100 position-relative scroll-bar bg-white theme-dark-bg">
@@ -170,238 +164,53 @@
                                             <div class="email-time text-grey-500 fw-600">12:48PM</div>
                                         </a>
                                     </li>
+                                    <!-- Bat dau thong tin cu mot sinh vien -->
                                     <li>
                                         <a href="" class="rounded-3 bg-lightblue theme-light-bg">
                                             
                                             <div class="email-user">
-                                                <span class="btn-round-xss ms-0 me-2 bg-success"></span> <!-- neu ma sv huy dasng ky thi thay bg-success thanh bg-warning -->
-                                                <h6 class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Phan Duc Lam nhieu ten</h6>
+                                                <!-- neu sinh vien huy dang ky thi la bg-warning, khong thi la bg-success -->
+                                                <span class="btn-round-xss ms-0 me-2 <!-- -->"></span> 
+                                                <h6 class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">
+                                                    <!--ten sinh vien-->
+                                                </h6>
                                             </div>
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
-                                                123200066
+                                                <!--ma sinh vien-->
                                             </div>
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
-                                                FAST
+                                                <!--ten khoa viet tat -->
                                             </div>
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
-                                                20PFIEV3
+                                                <!--lop-->
                                             </div>
                                             <div class="email-text text-grey-500 fw-600 font-xssss">
-                                                phanduclam02@gmail.com
+                                                <!--email-->
                                             </div>
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
-                                                0932536332
+                                                <!--so dien thoai-->
                                             </div>
                                             <div class="col-member-100">
+                                                <!--tich vo la cho phep sinh vien tham gia, cap nhat tren database-->
                                                 <input class="form-check-input" type="checkbox" id="blankCheckbox1" value="option1" aria-label="">
                                             </div>
                                             <div class="col-member-100">
+                                                <!--tich vo la sinh vien da diem danh, cap nhat tren database-->
                                                 <input class="form-check-input" type="checkbox" id="blankCheckbox1" value="option1" aria-label="">
                                             </div>
                                             <div class="email-time text-grey-500 fw-600">12:48PM</div>
                                         </a>
                                     </li>
-                    </div>
-                </div>
-        </div>
-
-            </div>
-            
-        </div>
-
-        <div class="middle-sidebar-bottom">
-        
-        <!-- <div class="main-content right-chat-active">
-            
-            <div class="middle-sidebar-bottom">
-                <div class="middle-sidebar-left pe-0 ps-lg-3 ms-0 me-0" style="max-width: 100%;">
-                    <div class="row">
-                       
-                        <div class="email-subject text-grey-900 text-dark fw-600 font-xl">
-                            <div style="display: flex;">
-                                <div style="margin-right: 10px;">Tên Hoạt Động </div>
-                            </div>
-                        </div>   
-                       
-                        <div class="col-lg-12">
-                            <div class="chat-wrapper p-3 w-100 position-relative scroll-bar bg-white theme-dark-bg">
-                                <ul class="email-message">
-                                     <li>
-                                        <a href="#" class="rounded-3 bg-lightblue theme-light-bg">
-                                            <div class="email-user">
-                                                <h6 class="font-sm text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Họ và tên</h6>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-sm">
-                                                <i class=" font-sm text-warning me-2"></i>
-                                                Trường học
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-sm">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Mã sinh viên</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-sm">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Số điện thoại</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-sm">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Email</div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-sm">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Xác Nhận </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>  
-                                    <li>
-                                        <a href="#" class="rounded-3  theme-light-bg">
-                                            <div class="email-user">
-                                                <h class="mont-font text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Trần Bão</h>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <i class=" font-xss text-warning me-2"></i>
-                                                Bách Khoa Đà Nẵng
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">12321321</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">123213213</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Bao1221@gmail.com </div>
-                                                </div>
-                                            </div> 
-                                            <div class="form-check mt-1">
-                                                <input class="form-check-input" type="checkbox" id="confirmCheckbox1" value="option1" aria-label="Xác nhận">
-                                                <label class="form-check-label text-grey-500 font-xssss" for="confirmCheckbox1"></label>
-                                            </div>
-                                        </a>
-                                    </li>   
-                                    <li>
-                                        <a href="#" class="rounded-3  theme-light-bg">
-                                            <div class="email-user">
-                                                <h class="mont-font text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Trần Bão</h>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <i class=" font-xss text-warning me-2"></i>
-                                                Bách Khoa Đà Nẵng
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">12321321</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">123213213</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Bao1221@gmail.com </div>
-                                                </div>
-                                            </div> 
-                                            <div class="form-check mt-1">
-                                                <input class="form-check-input" type="checkbox" id="confirmCheckbox1" value="option1" aria-label="Xác nhận">
-                                                <label class="form-check-label text-grey-500 font-xssss" for="confirmCheckbox1"></label>
-                                            </div>
-                                        </a>
-                                    </li>         
-                                    <li>
-                                        <a href="#" class="rounded-3  theme-light-bg">
-                                            <div class="email-user">
-                                                <h class="mont-font text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Trần Bão</h>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <i class=" font-xss text-warning me-2"></i>
-                                                Bách Khoa Đà Nẵng
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">12321321</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">123213213</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Bao1221@gmail.com </div>
-                                                </div>
-                                            </div> 
-                                            <div class="form-check mt-1">
-                                                <input class="form-check-input" type="checkbox" id="confirmCheckbox1" value="option1" aria-label="Xác nhận">
-                                                <label class="form-check-label text-grey-500 font-xssss" for="confirmCheckbox1"></label>
-                                            </div>
-                                        </a>
-                                    </li>         
-                                    <li>
-                                        <a href="#" class="rounded-3  theme-light-bg">
-                                            <div class="email-user">
-                                                <h class="mont-font text-grey-900 text-grey-900 mb-0 mt-0 fw-700">Trần Bão</h>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <i class=" font-xss text-warning me-2"></i>
-                                                Bách Khoa Đà Nẵng
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">12321321</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">123213213</div>
-                                                </div>
-                                            </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 mont-font">
-                                                <div style="display: flex;">
-                                                    <div style="margin-right: 10px;">Bao1221@gmail.com </div>
-                                                </div>
-                                            </div> 
-                                            <div class="form-check mt-1">
-                                                <input class="form-check-input" type="checkbox" id="confirmCheckbox1" value="option1" aria-label="Xác nhận">
-                                                <label class="form-check-label text-grey-500 font-xssss" for="confirmCheckbox1"></label>
-                                            </div>
-                                        </a>
-                                    </li>                                           
-                                </ul>                                 
-                          </div>
-                        </div>
+                                    <!-- ket thuc thong tin cu mot sinh vien -->
 
                     </div>
                 </div>
             </div>
-        </div>             -->
-        <!-- <div class="text-center mt-3">
-            <button class="btn btn-primary text-grey-900 text-dark fw-600 mont-font">Gửi Email</button> -->
-       
+
+            
+        </div>
+
         <style>
-            
-            /* .email-message li {
-                align-items: center;
-                border-bottom: 1px solid #f0f0f0;
-            }
-            .email-user, .email-subject, .email-subject div {
-                flex: 1;
-                text-align: center;
-            }
-            .email-subject div:last-child {
-                margin-right: 0;
-            } */
             .form-check .form-check-input {
             float: left;
             margin-left: 1em;
