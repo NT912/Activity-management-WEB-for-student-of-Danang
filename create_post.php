@@ -152,44 +152,56 @@
                 </div>
             </div>
         </nav>
+        <div class="main-content ">
+            <div style="padding: 100px 20px 20px 20px; max-width: 50%; min-width: 500px;">
+                <!-- ### là file xử lý lấy dữ liệu từ form lưu vào database -->
+                <form style="max-width: 100%;" action="###" method="post">
+                    <div class="form-group icon-input mb-3">
+                        <label for="name" class="font-xss fw-60">Ten hoat dong</label>
+                        <input type="text" id="name" name="name" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ten hoat dong" require maxlength="60">
 
-<!-- Form Popup -->
-<div id="popupForm">
-    <form action="process.php" method="post">
-        <!-- Add your form fields here -->
-        <label for="Id_orginization">Organization ID:</label>
-        <input type="text" id="Id_orginization" name="Id_orginization" value="234">
+                    </div>
+                    <div>
+                        <label for="date_start" class="font-xss fw-60">Thoi gian dien ra su kien</label>
+                        <div style="display:flex;">
+                            <div class="form-group icon-input mb-3">
+                                <label for="date_start" class="font-xsss fw-60">Ngày bắt đầu</label>
+                                <input type="date" id="date_start" name="date_start" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
+                                placeholder="Ngày bắt đầu" require>
+                            </div>
+                            <div class="form-group icon-input mb-3">
+                                <label for="date_end"  class="font-xsss fw-60">Ngày kết thúc</label>
+                                <input type="date" id="date_end" name="date_end" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ngày kết thúc" require>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="date_start_regis" class="font-xss fw-60">Thoi gian cho phep sinh vien dang ky tham gia</label>
+                        <div style="display:flex;">
+                            <div class="form-group icon-input mb-3">
+                                <label for="date_start_regis" class="font-xsss fw-60">Ngày bắt đầu</label>
+                                <input type="date" id="date_start_regis" name="date_start_regis"class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ngày bắt đầu" require>
+                            </div>
+                            <div class="form-group icon-input mb-3">
+                                <label for="date_end_regis" class="font-xsss fw-60">Ngày kết thúc</label>
+                                <input type="date" id="date_end_regis" name="date_end_regis" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ngày kết thúc" require>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group icon-input mb-3">
+                        <label for="location" class="font-xsss fw-60">Dia diem</label>
+                        <input type="text" id="location" name="location" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Dia diem" require>
+                    </div>
+                    <div class="form-group icon-input mb-3">
+                        <label for="location" class="font-xsss fw-60">Dia diem</label>
+                        <textarea id="location" name="location" class="style2-input ps-5 form-control-textarea text-grey-900 fw-60" style="height: 400px" placeholder="Nội dung hoạt động" required></textarea>
+                    </div>
+                    <!-- khi ấn đăng ký thì dữ liệu đc lưu vào trong database -->
+                    <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
 
-        <label for="activityID">Activity ID:</label>
-        <input type="text" id="activityID" name="activityID">
-
-        <label for="activityName">Activity Name:</label>
-        <input type="text" id="activityName" name="activityName">
-
-       
-        <label for="dateStart">Ngày bắt đầu:</label>
-        <input type="date" id="dateStart" name="dateStart">
-
-        <label for="dateEnd">Ngày kết thúc:</label>
-        <input type="date" id="dateEnd" name="dateEnd">
-
-        <label for="dateStartReg">Ngày bắt đầu đăng ký:</label>
-        <input type="date" id="dateStartReg" name="dateStartReg">
-
-        <label for="dateEndReg">Ngày kết thúc đăng ký:</label>
-        <input type="date" id="dateEndReg" name="dateEndReg">
-
-        <label for="activityContent">Nội dung hoạt động:</label>
-        <textarea id="activityContent" name="activityContent"></textarea>
-        <label for="image">Upload Image:</label>
-        <input type="file" id="image" name="image">
-
-
-        
-        <input type="submit" value="Create Post">
-    </form>
-</div>
-
+                </form>
+            </div>
+        </div>
 <script>
     // JavaScript để xử lý sự kiện gửi biểu mẫu
     document.addEventListener("DOMContentLoaded", function() {

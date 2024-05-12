@@ -3786,6 +3786,10 @@ textarea.form-control {
     min-height: calc(1.5em + .75rem + 2px)
 }
 
+textarea.form-control-textarea {
+    min-height: calc(1.5em + .75rem + 2px)
+}
+
 textarea.form-control-sm {
     min-height: calc(1.5em + .5rem + 2px)
 }
@@ -14803,7 +14807,7 @@ body:not(.theme-full) .main-content .middle-sidebar-bottom.header-padding {
 }
 
 .form-group .style2-input {
-    height: 60px;
+    height: 50px;
     line-height: 60px;
     display: block;
     border: 2px #eee solid;
@@ -14898,6 +14902,12 @@ body:not(.theme-full) .main-content .middle-sidebar-bottom.header-padding {
     font-size: 14px;
     display: inline-block;
     border: 2px #eee solid
+}
+.form-control-textarea{
+    font-size: 14px;
+    display: inline-block;
+    border: 2px #eee solid;
+    width: 100%;
 }
 
 .form-control:focus {
