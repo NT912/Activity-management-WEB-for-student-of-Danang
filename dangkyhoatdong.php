@@ -25,7 +25,7 @@
         <!-- navigation top-->
         <div class="nav-header bg-white shadow-xs border-0">
             <div class="nav-top">
-                <a href="index.html"><i class="feather-zap text-success display1-size me-2 ms-0"></i><span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">Sociala. </span> </a>
+                <a href="index.html"><i class="feather-zap text-success display1-size me-2 ms-0"></i><span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">DHBK. </span> </a>
             </div>
             
             <form action="#" class="float-left header-search">
@@ -141,30 +141,33 @@
                 <form style="max-width: 100%;" action="###" method="post">
                     <div class="form-group icon-input mb-3">
                         <label for="full-name" class="font-xsss fw-60">Họ và tên</label>
-                        <input type="text" id="full-name" name="full-name" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Họ và tên" readonly>
+                        <!-- value = ten sinh vien-->
+                        <input type="text" id="full-name" name="full-name" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" value="" Họ và tên" readonly>
                     </div>
                     <div class="form-group icon-input mb-3">
                         <label for="student-id" class="font-xsss fw-60">Mã sinh viên</label>
-                        <input type="text" id="student-id" name="student-id" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Mã sinh viên" readonly>
+                        <!-- value = ma sinh vien-->
+                        <input type="text" id="student-id" name="student-id" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" value="" readonly>
                     </div>
-                    <div class="form-group icon-input mb-3">
-                        <label for="university" class="font-xsss fw-60">Trường</label>
-                        <input type="text" id="university" name="university" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Trường" readonly>
-                    </div>
+                   
                     <div class="form-group icon-input mb-3">
                         <label for="faculty" class="font-xsss fw-60">Khoa</label>
-                        <input type="text" id="faculty" name="faculty" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" readonly>
+                        <!-- value = Khoa-->
+                        <input type="text" id="faculty" name="faculty" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" value="" readonly>
                     </div>
                     <div class="form-group icon-input mb-1">
                         <label for="class" class="font-xsss fw-60">Lớp</label>
-                        <input type="text" id="class" name="class" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp" readonly>
+                        <!-- value = lop-->
+                        <input type="text" id="class" name="class" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" value="" readonly>
                     </div>
                     <div class="form-group icon-input mb-1">
                         <label for="email" class="font-xsss fw-60">email</label>
-                        <input type="text" id="email" name="email" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Email cua ban" required>
+                        <!-- value = email-->
+                        <input type="text" id="email" name="email" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" value="" placeholder="Email cua ban" required>
                     </div><div class="form-group icon-input mb-1">
                         <label for="phone_number" class="font-xsss fw-60">so dien thoai</label>
-                        <input type="text" id="phone_number" name="phone_number" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="so dien thoai" required>
+                        <!-- value = so dien thoai-->
+                        <input type="text" id="phone_number" name="phone_number" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" value="" placeholder="so dien thoai" required>
                     </div>
                     <div class="form-group icon-input mb-1">
                         <label for="wish" class="font-xsss fw-60">Mong muốn của bạn</label>
