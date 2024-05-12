@@ -14,6 +14,49 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/lightbox.css">
 </head>
+<style>
+    /* Style cho nút "See More" */
+   .see-more-btn {
+       height: 30px;
+       width: 105px;
+       padding: 0px 0px;
+       background-color: #007bff;
+       color: #fff;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       transition: background-color 0.3s ease;
+   }
+
+   /* Style khi di chuột vào nút "See More" */
+   .see-more-btn:hover {
+       background-color: #0056b3;
+   }
+
+   /* Style cho nút "See Less" */
+   .see-less-btn {
+       height: 30px;
+       width: 105px;
+       padding: 0px 0px;
+       background-color: #6c757d;
+       color: #fff;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       transition: background-color 0.3s ease;
+   }
+
+   /* Style khi di chuột vào nút "See Less" */
+   .see-less-btn:hover {
+       background-color: #5a6268;
+   }
+
+   /* Ẩn nội dung ban đầu */
+   #additionalContent {
+       display: none;
+   }
+</style>
+
 
 <body class="color-theme-blue mont-font">
 
@@ -92,37 +135,114 @@
         <!-- navigation left -->
         <!-- main content -->
         <div class="main-content ">
-            <div style="padding: 100px 20px 20px 20px; max-width: 50%; min-width: 500px;">
+            <!-- Khuc ni la mot cai hoat dong ni -->
+            <div class="card w-50 shadow-xss rounded-xxl border-0 p-4 mb-3" style="min-width: 600px;">
+                <div class="card-body p-0 d-flex">
+                    <figure class="avatar me-3"><img src="<?php echo $NTC_avatar ?>" alt="image" class="shadow-sm rounded-circle w45"></figure> <!-- src = anj avartar cua  nha to chuc -->
+                    <h4 class="fw-700 text-grey-900 font-xssss mt-1"> <?php echo $NTC_name ?><!-- Ten cua NTC --><span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"><?php $HD_mota ?></span></h4>
+                    <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
+                    </div>
+                    <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
+                        <div class="card-body p-0 d-flex">
+                            <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Lưu hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Lưu hoạt động</span></h4> <!-- Luu hoat dong cho NTC -->
+                        </div>
+                        <div class="card-body p-0 d-flex mt-2">
+                            <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Ẩn hoạt động <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Ẩn hoạt động</span></h4> <!-- An hoat dong nay voi NTC -->
+                        </div>
+                        <div class="card-body p-0 d-flex mt-2">
+                            <i class="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Quản lý hoạt động<span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Quản lý hoạt động của bạn</span></h4> <!-- Mo ra trang quan ly hoat dong cho hoat dong nay -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 me-lg-5">
+                    <h5><?php echo $HD_name ?></h5> <br>
+                    <h6>Thời gian diễn ra hoạt động: <?php echo($HD_date_start . " - " . $HD_date_end) ?></h6> <br>
+                    <h6>Thơi gian đăng ký hoạt động: <?php echo($HD_date_start_regis . " - " . $HD_date_end_regis) ?></h6> <br>
+                    <!-- Nội dung ban đầu -->
+                    <div id="initialContent_<?php echo $post_id; ?>">
+                    <button class="see-more-btn" onclick="showMore('<?php echo $post_id; ?>')">See More</button>
+                    </div>
+
+                    <!-- Nội dung được ẩn -->
+                    <div id="additionalContent_<?php echo $post_id; ?>" style="display: none;">
+                        <?php echo $HD_mota; ?>
+                        <br>
+                        <button class="see-less-btn" onclick="showLess('<?php echo $post_id; ?>')">See Less</button>
+                    </div>
+
+                    <?php
+                    $counter++; // Tăng biến đếm
+                    ?>
+                    <script>
+                        function showMore(postId) {
+                            // Hiển thị nội dung bổ sung khi nhấp vào nút "See More"
+                            document.getElementById("additionalContent_" + postId).style.display = "block";
+                            // Ẩn nút "See More"
+                            document.getElementById("initialContent_" + postId).style.display = "none";
+                        }
+
+                        function showLess(postId) {
+                            // Ẩn nội dung bổ sung khi nhấp vào nút "See Less"
+                            document.getElementById("additionalContent_" + postId).style.display = "none";
+                            // Hiển thị nút "See More"
+                            document.getElementById("initialContent_" + postId).style.display = "block";
+                        }
+                    </script>
+                </div>
+                <div class="card-body d-block p-0 mb-3">
+                    <div class="row ps-2 pe-2">
+                        <div class="col-sm-12 p-1"><a href="" data-lightbox="roadtr"><!-- href = link anh--><img src="" class="rounded-3 w-100" alt="image"></a></div> <!-- src = link anh-->
+                    </div>
+                </div>
+                <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
+                    <!-- Click Hien thi ra trang danh sach sinh vien dang ky -->
+                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Danh sách</a>
+                    <!-- Click Hien thi ra trang quan ly hoat dong -->
+                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Quan ly</a>
+                </div>
+                
+            </div>
+            <div style="padding: 100px 20px 20px 20px; max-width: 50%; min-width: 600px;">
                 <!-- ### là file xử lý lấy dữ liệu từ form lưu vào database -->
                 <form style="max-width: 100%;" action="###" method="post">
                     <div class="form-group icon-input mb-3">
-                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Họ và tên" >
-
+                        <label for="full-name" class="font-xsss fw-60">Họ và tên</label>
+                        <input type="text" id="full-name" name="full-name" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Họ và tên" readonly>
                     </div>
                     <div class="form-group icon-input mb-3">
-                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Mã sinh viên" >
-
+                        <label for="student-id" class="font-xsss fw-60">Mã sinh viên</label>
+                        <input type="text" id="student-id" name="student-id" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Mã sinh viên" readonly>
                     </div>
                     <div class="form-group icon-input mb-3">
-                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Trường" >
-
+                        <label for="university" class="font-xsss fw-60">Trường</label>
+                        <input type="text" id="university" name="university" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Trường" readonly>
                     </div>
                     <div class="form-group icon-input mb-3">
-                        
-                        <input type="text" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" require>                        
+                        <label for="faculty" class="font-xsss fw-60">Khoa</label>
+                        <input type="text" id="faculty" name="faculty" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600" placeholder="Khoa" readonly>
                     </div>
                     <div class="form-group icon-input mb-1">
-                        <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp" require>
+                        <label for="class" class="font-xsss fw-60">Lớp</label>
+                        <input type="text" id="class" name="class" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Lớp" readonly>
                     </div>
-
                     <div class="form-group icon-input mb-1">
-                        <input type="Password" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Mong muon cua ban" require>
+                        <label for="wish" class="font-xsss fw-60">Mong muốn của bạn</label>
+                        <input type="text" id="wish" name="wish" class="style2-input ps-5 form-control text-grey-900 font-xss ls-3" placeholder="Mong muốn của bạn" required>
                     </div>
+                </form>
+                
                     <!-- khi ấn đăng ký thì dữ liệu đc lưu vào trong database -->
                     <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
 
                 </form>
+
             </div>
+            
         </div>
         <!-- main content -->
 
