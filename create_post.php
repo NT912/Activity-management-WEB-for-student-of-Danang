@@ -154,7 +154,6 @@
 <!-- Form Popup -->
 <div id="popupForm">
     <form action="process.php" method="post">
-        <!-- Add your form fields here -->
         <label for="Id_orginization">Organization ID:</label>
         <input type="text" id="Id_orginization" name="Id_orginization" value="234">
 
