@@ -50,7 +50,7 @@ exports.POST_RegisterSV = async (req, res, next) => {
         const countEmailResult = await authModel.CountMasv(masv);
         if (countEmailResult[0].countMasv > 0) {
           return {
-            error: "Ma sinh vien '" + email + "'da duoc dang ky tai khoan"
+            error: "Ma sinh vien '" + masv+ "'da duoc dang ky tai khoan"
           };
         } 
         if (password != confirmpassword)
@@ -84,7 +84,7 @@ exports.POST_RegisterSV = async (req, res, next) => {
     registerUser()
       .then((result) => {
         if (result.error) {
-          res.render('home/registerSV', {
+          res.render('home/registerStudent', {
             error: result.error
           });
         }

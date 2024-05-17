@@ -13,8 +13,6 @@ const firebase = require('./util/firebase');
 
 
 const dotenv = require('dotenv');
-// const bcrypt = require('bcrypt'); // hash password
-
 /*
     service
 */
@@ -50,22 +48,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public'))); // path join asset
-const port = 3000;
+const port = 5100;
 
 /*
     Config Redis to storage session
 */
-app.use(session({
-    store: new RedisStore({ client: getRedis()}), // RedisStore
-    secret: process.env.SECRET_SESSION,
-    saveUninitialized : false,
-    resave: false,
-    cookie: {
-        secure: false, // if true: only transmit cookie over https
-        httpOnly: true, // if true: prevent client side js from reding the cookie
-        maxAge: 1*10*1000, // 60 second
-    }
-})); // configure session
+
 
 // route
 app.use('/admin', adminRoutes);

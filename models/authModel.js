@@ -19,7 +19,7 @@ exports.GetAllFaculty = () => {
 
 exports.CountMasv = (masv) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT COUNT(MaSV) AS countMasv FROM student WHERE MaSV = '"+masv+"'";
+    const query = "SELECT COUNT(Masv) AS countMasv FROM student WHERE Masv = '"+masv+"'";
     db.query(query,  (err, res) => {
       if (err) {
         reject(err);
@@ -30,11 +30,9 @@ exports.CountMasv = (masv) => {
   });
 };
 
-exports.AddNewStudent = (name, masv,falcuty,classs, password, callback) =>
+exports.AddNewStudent = (masv, name,falcuty,classs, password, callback) =>
 {
-    // que = "INSERT INTO user VALUES(null, '"+name+"', '"+email+"','"+password+"',null,null,null,CURRENT_DATE())";
-    que = `insert into student values ('${name}', '${masv}', ${falcuty} ,null,null,null,'${classs}','${password}')`;	
-    // console.log(que);
+    que = `insert into student values ( '${masv}','${name}',null,'${classs}','${password}', ${falcuty})`;	
     db.query(que, (err, res) =>
     {
         if (err)
@@ -50,7 +48,7 @@ exports.AddNewStudent = (name, masv,falcuty,classs, password, callback) =>
 exports.AddNewOrganization = (name, email, password, callback) =>
 {
     // que = "INSERT INTO user VALUES(null, '"+name+"', '"+email+"','"+password+"',null,null,null,CURRENT_DATE())";
-    que = `insert into organization values (null, null, '${name}', '${email}', '${password}',null, null, null)`;	
+    que = `insert into organization values (null, null, '${name}', '${email}', '${password}')`;	
     // console.log(que);
     db.query(que, (err, res) =>
     {
@@ -92,7 +90,8 @@ exports.CountName = (name) => {
 
 exports.CheckLoginStudent = (mavs) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT hashpassword FROM student WHERE MaSV = '"+mavs+"'";
+    const query = "SELECT hashpassword FROM student WHERE Masv = '"+mavs+"'";
+    console.log(query);
     db.query(query,  (err, res) => {
       if (err) {
         reject(err);
