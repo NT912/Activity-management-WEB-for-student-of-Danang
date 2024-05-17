@@ -50,6 +50,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public'))); // path join asset
+const port = 3000;
 
 /*
     Config Redis to storage session
@@ -73,7 +74,7 @@ app.use('/activity', activityRoute);
 app.use('/account', authRoutes);
 app.use(errorController.get404);
 
-app.listen(4000, () =>
+app.listen(port, () =>
 {
-    console.log("running server on 3000")
+    console.log(`running server on ${port}`);
 });
