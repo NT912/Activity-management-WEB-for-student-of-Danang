@@ -27,5 +27,3 @@ exports.initialFirebaseApp = () =>
 }
 exports.getStorage = () => app;
 
-// const app = initializeApp(firebaseConfig);
-// const storage = getStorage(app);
