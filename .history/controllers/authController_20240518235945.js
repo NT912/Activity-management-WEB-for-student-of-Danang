@@ -18,11 +18,15 @@ exports.GET_RegisterRole = (req, res, next) => {
 };
 
 exports.GET_RegisterSV = async (req, res, next) => {
+  async function GetAllFaculty() {
+    return authModel.GetAllFaculty();
+  }
+
   try {
-    const Facultys = await authModel.GetAllFaculty();
+    const Facultys = await GetAllFaculty();
     res.render("home/registerStudent", {
       error: "",
-      Facultys: Facultys,
+      Facultys: Facultys, // Truyền biến Facultys vào view
     });
   } catch (err) {
     console.error(err);

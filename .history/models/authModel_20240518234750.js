@@ -19,9 +19,10 @@ exports.GetAllFaculty = () => {
 };
 
 exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
-  const que = `insert into student (masv, name, class, hashpassword, falcuty) values ('${masv}','${name}','${classs}','${password}', ${falcuty})`;
-  const params = [masv, name, classs, password, falcuty];
-  db.query(que, params, (err, res) => {
+  const que = `insert into organization (Name, Email, 	hashpassword) values ('${masv}','${name}',null,'${classs}','${password}', ${falcuty})`;
+  const params = [name, email, password];
+  que = `insert into student values ( '${masv}','${name}',null,'${classs}','${password}', ${falcuty})`;
+  db.query(que, (err, res) => {
     if (err) {
       callback(err, null);
     } else {
