@@ -18,19 +18,14 @@ exports.GET_RegisterRole = (req, res, next) => {
 };
 
 exports.GET_RegisterSV = async (req, res, next) => {
-  try {
-    const Facultys = await authModel.GetAllFaculty();
-    res.render("home/registerStudent", {
-      error: "",
-      Facultys: Facultys,
-    });
-  } catch (err) {
-    console.error(err);
-    res.render("home/registerStudent", {
-      error: "An error occurred while fetching faculties",
-      Facultys: [],
-    });
+  async function GetAllFaculty() {
+    return authModel.GetAllFaculty();
   }
+  const Facultys = await GetAllFaculty();
+  res.render("home/registerStudent", {
+    error: "",
+    Facultys: facultys,
+  });
 };
 
 exports.GET_RegisterNTC = (req, res, next) => {

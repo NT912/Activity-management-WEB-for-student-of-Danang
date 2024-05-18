@@ -19,9 +19,8 @@ exports.GetAllFaculty = () => {
 };
 
 exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
-  const que = `insert into student (masv, name, class, hashpassword, falcuty) values ('${masv}','${name}','${classs}','${password}', ${falcuty})`;
-  const params = [masv, name, classs, password, falcuty];
-  db.query(que, params, (err, res) => {
+  que = `insert into student values ( '${masv}','${name}',null,'${classs}','${password}', ${falcuty})`;
+  db.query(que, (err, res) => {
     if (err) {
       callback(err, null);
     } else {
@@ -32,8 +31,8 @@ exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
 
 exports.AddNewOrganization = (name, email, password, callback) => {
   // que = "INSERT INTO user VALUES(null, '"+name+"', '"+email+"','"+password+"',null,null,null,CURRENT_DATE())";
-
-  const que = `insert into organization (Name, Email, 	hashpassword) values ('${name}', '${email}', '${password}')`;
+  const organizationId = uuid.v4();
+  const que = `insert into organization (Name, Email, Password) values ('${name}', '${email}', '${password}')`;
   const params = [name, email, password];
   // console.log(que);
   db.query(que, params, (err, res) => {

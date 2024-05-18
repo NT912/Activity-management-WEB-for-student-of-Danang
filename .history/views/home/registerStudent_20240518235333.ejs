@@ -94,10 +94,11 @@
                             <select name="falcuty" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
                                 onchange="validateInput('falcuty')">
                                 <option value="" selected disabled hidden>Khoa</option>
-                                <% Facultys.forEach(function(fat){ %>
+                                <% facultys.forEach(function(fat){ %>
                                     <option value="<%= fat.Id %>">
                                         <%= fat.name %>
                                     </option>
+
                                     <% }); %>
                             </select>
                             <span id="errorFalcuty" style="color: red; display: none;">Vui lòng chọn khoa.</span>
