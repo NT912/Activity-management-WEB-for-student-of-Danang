@@ -54,6 +54,9 @@ const port = 5100;
     Config Redis to storage session
 */
 
+app.get("/",(req,res) => {
+    res.redirect('/account/login')
+})
 
 // route
 app.use('/admin', adminRoutes);

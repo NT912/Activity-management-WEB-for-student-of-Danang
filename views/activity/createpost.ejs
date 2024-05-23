@@ -154,27 +154,27 @@
             </div>
         </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector("form").addEventListener("submit", function(event) {
-            event.preventDefault(); 
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     document.querySelector("form").addEventListener("submit", function(event) {
+    //         event.preventDefault(); 
 
-            fetch("process.php", {
-                method: "POST",
-                body: new FormData(this) // Gửi dữ liệu từ biểu mẫu
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert("Bài viết đã được tạo!");
-                    window.location.href = "NTC-profile.php";
-                } else {
-                    alert("Có lỗi xảy ra khi tạo bài viết.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        });
-    });
+    //         fetch("process.php", {
+    //             method: "POST",
+    //             body: new FormData(this) // Gửi dữ liệu từ biểu mẫu
+    //         })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 alert("Bài viết đã được tạo!");
+    //                 window.location.href = "NTC-profile.php";
+    //             } else {
+    //                 alert("Có lỗi xảy ra khi tạo bài viết.");
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error("Error:", error);
+    //         });
+    //     });
+    // });
 </script>
 
 </body>
