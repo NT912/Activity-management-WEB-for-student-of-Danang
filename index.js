@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const connectMysql = require('connect-mysql');
 
+const authMiddleware = require('./src/middlewares/auth');
+
 dotenv.config();
 
 const appPort = process.env.APP_PORT || 3000;
@@ -44,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/health_check', (req, res) => {
   res.send('OK');
 });
-app.use('', require('./src/routes/home'));
-app.use('/auth', require('./src/routes/auth'));
-app.use('/user', require('./src/routes/user'));
+app.use('/auth', authMiddleware.isLoggedOut, require('./src/routes/auth'));
+app.use('/user', authMiddleware.isLoggedIn, authMiddleware.isAdmin, require('./src/routes/user'));
+app.use('/', authMiddleware.isLoggedIn, require('./src/routes/home'));
 
 app.listen(appPort, () => {
   console.log(`Server is running on http://127.0.0.1:${appPort}`);
