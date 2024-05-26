@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Activity management WEB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <link rel="shortcut icon" type="images" href="/images/icon.png">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Activity management WEB</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link active" href="/organizations">Organizations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/organizations">Activities</a>
+                    </li> -->
+                </ul>
+                <form class="d-flex" role="search" action="/activities" method="get">
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm hoạt động" aria-label="Search" name="q">
+                    <button class="btn btn-outline-info" type="submit">Tìm kiếm</button>
+                </form>
+                &nbsp;
+                &nbsp;
+                <% if (!user) { %>
+                <div class="row row-cols-lg-auto g-3 align-items-center">
+                    <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
+                    &nbsp;
+                    <a href="/auth/register" class="btn btn-primary">Đăng ký tài khoản</a>
+                    &nbsp;
+                </div>
+                <% } else { %>
+                <div class="row row-cols-lg-auto g-3 align-items-center">
+                    <a href="/me" class="btn btn-primary">Cài đặt</a>
+                    &nbsp;
+                    <a href="/auth/logout" class="btn btn-primary">Đăng xuất</a>
+                    &nbsp;
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="alert-area">
+            <% if (success) { %>
+                <% success.forEach(message => { %>
+                    <div class="alert alert-success">
+                        <%= message %>
+                    </div>
+                <% }) %>
+            <% } %>
+            <% if (error) { %>
+                <% error.forEach(message => { %>
+                    <div class="alert alert-danger">
+                        <%= message %>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
