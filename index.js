@@ -46,8 +46,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/health_check', (req, res) => {
   res.send('OK');
 });
-app.use('/auth', authMiddleware.isLoggedOut, require('./src/routes/auth'));
+app.use('/auth', require('./src/routes/auth'));
 app.use('/user', authMiddleware.isLoggedIn, authMiddleware.isAdmin, require('./src/routes/user'));
+app.use('/activity', authMiddleware.isLoggedIn, require('./src/routes/activity'));
 app.use('/', authMiddleware.isLoggedIn, require('./src/routes/home'));
 
 app.listen(appPort, () => {

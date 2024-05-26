@@ -1,0 +1,103 @@
+<%- include('../components/header'); %>
+
+<div class="row justify-content-lg-center">
+    <div class="col-md-10">
+        <table class="table table-striped mt-5 align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hoạt động</th>
+                    <th scope="col">Đơn vị tổ chức</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Công cụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% activities.forEach(activity => { %>
+                    <tr>
+                        <th scope="row"><%- activity.id %></th>
+                        <td><%- activity.name %></td>
+                        <td><%- activity.organization_name %></td>
+                        <td>
+                            <% if (activity.admin_id) { %>
+                                <span class="badge bg-success">Đã duyệt</span>
+                            <% } else { %>
+                                <span class="badge bg-warning">Chưa duyệt</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <a href="/activity/<%- activity.id %>/view" class="btn btn-info">Xem</a>
+                            <a href="/activity/<%- activity.id %>/edit" class="btn btn-primary">Sửa</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal_activity_<%- activity.id %>">
+                                Xóa
+                            </button>
+                            <div class="modal fade" id="modal_activity_<%- activity.id %>" tabindex="-1" aria-labelledby="modal_activity_<%- activity.id %>_label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="modal_activity_<%- activity.id %>_label">Cảnh báo</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Xác nhận xóa hoạt động <strong><%- activity.name %></strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <a href="/activity/<%- activity.id %>/delete" class="btn btn-primary">Xác nhận</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% if (user.role == 'admin' && !activity.admin_id) { %>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_activity_verify_<%- activity.id %>">
+                                    Duyệt
+                                </button>
+                                <div class="modal fade" id="modal_activity_verify_<%- activity.id %>" tabindex="-1" aria-labelledby="modal_activity_verify_<%- activity.id %>_label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="modal_activity_verify_<%- activity.id %>_label">Cảnh báo</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Xác nhận <strong>DUYỆT</strong> hoạt động <strong><%- activity.name %></strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <a href="/activity/<%- activity.id %>/verify" class="btn btn-primary">Xác nhận</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <% if (user.role == 'admin' && activity.admin_id) { %>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal_activity_unverify_<%- activity.id %>">
+                                    Bỏ duyệt
+                                </button>
+                                <div class="modal fade" id="modal_activity_unverify_<%- activity.id %>" tabindex="-1" aria-labelledby="modal_activity_unverify_<%- activity.id %>_label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="modal_activity_unverify_<%- activity.id %>_label">Cảnh báo</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Xác nhận <strong>BỎ DUYỆT</strong> hoạt động <strong><%- activity.name %></strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <a href="/activity/<%- activity.id %>/unverify" class="btn btn-primary">Xác nhận</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../components/footer'); %>

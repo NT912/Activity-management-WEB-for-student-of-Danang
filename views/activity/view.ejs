@@ -1,0 +1,73 @@
+<%- include('../components/header'); %>
+
+<div class="row justify-content-lg-center">
+    <div class="col-md-12 mb-3">
+        <h2>Hoạt động <strong><%- activity.name %></strong> | ID: #<%- activity.id %></h2>
+    </div>
+    <div class="col-md-6">
+        <img src="/<%- activity.image %>" class="img-fluid rounded img-thumbnail">
+    </div>
+    <div class="col-md-6">
+        <form action="/activity/add" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <% if (user.role == 'admin') { %>
+                    <div class="row mb-3">
+                        <div class="col-lg-12">
+                            <label for="id_code">Đơn vị tổ chức</label>
+                            <select class="form-select" name="organization_id" disabled>
+                                <% organizations.forEach(organization => { %>
+                                    <option value="<%- organization.id %>" <% if (activity.organization_id == organization.id) { %>selected<% } %>><%- organization.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <input type="hidden" name="organization_id" value="<%- organization.id %>" readonly>
+                <% } %>
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <label for="id_name">Tên hoạt động</label>
+                        <input type="text" name="name" id="id_name" class="form-control" value="<%- activity.name %>" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <label for="id_description">Mô tả</label>
+                        <textarea name="description" id="id_description" class="form-control" readonly rows="3"><%- activity.description %></textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-6">
+                        <label for="id_start_date">Ngày bắt đầu</label>
+                        <input type="date" name="start_date" id="id_start_date" class="form-control" value="<%- datetimeUtils.formatDate(activity.start_date) %>" readonly>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="id_end_date">Ngày kết thúc</label>
+                        <input type="date" name="end_date" id="id_end_date" class="form-control" value="<%- datetimeUtils.formatDate(activity.end_date) %>" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-6">
+                        <label for="id_registration_start_date">Ngày mở đăng ký</label>
+                        <input type="date" name="registration_start_date" id="id_registration_start_date" class="form-control" value="<%- datetimeUtils.formatDate(activity.registration_start_date) %>" readonly>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="id_registration_end_date">Ngày kết thúc đăng ký</label>
+                        <input type="date" name="registration_end_date" id="id_registration_end_date" class="form-control" value="<%- datetimeUtils.formatDate(activity.registration_end_date) %>" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <label for="id_location">Địa điểm</label>
+                        <input type="text" name="location" id="id_location" class="form-control" value="<%- activity.location %>" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 col-12 mx-auto">
+                <button type="submit" class="btn btn-primary">Tạo hoạt động</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../components/footer'); %>
