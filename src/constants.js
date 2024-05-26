@@ -3,5 +3,8 @@ module.exports = {
     ADMIN: 'admin',
     STUDENT: 'student',
     ORGANIZATION: 'organization',
+  },
+  static_paths: {
+    IMAGES: 'public/images',
   }
 }

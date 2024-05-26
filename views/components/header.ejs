@@ -40,8 +40,8 @@
                                     Quản lý hoạt động
                                 </button>
                                 <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="#">Danh sách hoạt động</a></li>
-                                  <li><a class="dropdown-item" href="#">Thêm mới hoạt động</a></li>
+                                  <li><a class="dropdown-item" href="/activity/list">Danh sách hoạt động</a></li>
+                                  <li><a class="dropdown-item" href="/activity/add">Thêm mới hoạt động</a></li>
                                 </ul>
                               </div>
                         </li>
@@ -61,11 +61,31 @@
                     &nbsp;
                 </div>
                 <% } else { %>
-                <div class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="navbar-nav mb-2 mb-lg-0 me-0">
+                    <!-- &nbsp;
                     <a href="/me" class="btn btn-primary">Cài đặt</a>
                     &nbsp;
                     <a href="/auth/logout" class="btn btn-primary">Đăng xuất</a>
-                    &nbsp;
+                    &nbsp; -->
+                    <li class="nav-item me-3 align-middle">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <% if (user.role == 'admin') { %>
+                                    <span class="text-white me-3"><%= user.username %> (Quản trị viên)</span>
+                                <% } %>
+                                <% if (user.role == 'organization') { %>
+                                    <span class="text-white me-3"><%= user.username %> (Tổ chức)</span>
+                                <% } %>
+                                <% if (user.role == 'student') { %>
+                                    <span class="text-white me-3"><%= user.username %> (Sinh viên)</span>
+                                <% } %>
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="/me">Thông tin cá nhân</a></li>
+                              <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
+                            </ul>
+                          </div>
+                    </li>
                 </div>
                 <% } %>
             </div>

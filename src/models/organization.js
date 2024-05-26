@@ -75,3 +75,9 @@ organizationModel.delete = async (id) => {
 
   return false;
 }
+
+organizationModel.getAll = async () => {
+  const [rows] = await pool.query("SELECT * FROM organizations");
+
+  return rows;
+}
