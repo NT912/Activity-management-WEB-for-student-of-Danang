@@ -1,0 +1,115 @@
+<%- include('../components/header'); %>
+
+<div class="row justify-content-lg-center">
+    <div class="col-md-6">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#student">Tạo khoản sinh viên</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#organization">Tạo tài khoản tổ chức</button>
+            </li>
+        </ul>
+        <br>
+        <div class="tab-content">
+            <div class="tab-pane active" id="student">
+                <form action="/user/add/student" method="post">
+                    <div class="form-group mb-3">
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_username">Tài khoản</label>
+                                <input type="text" name="username" id="id_username" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_password">Mật khẩu</label>
+                                <input type="password" name="password" id="id_password" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_student_id">Mã sinh viên</label>
+                                <input type="text" name="student_id" id="id_student_id" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_fullname">Họ và tên</label>
+                                <input type="text" name="fullname" id="id_fullname" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_faculty">Khoa</label>
+                                <input type="text" name="faculty" id="id_faculty" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_class">Lớp</label>
+                                <input type="text" name="class" id="id_class" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_email">Email</label>
+                                <input type="email" name="email" id="id_email" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_phone">Số điện thoại</label>
+                                <input type="text" name="phone" id="id_phone" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                        <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane" id="organization">
+                <form action="/user/add/organization" method="post">
+                    <div class="form-group mb-3">
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_username">Tài khoản</label>
+                                <input type="text" name="username" id="id_username" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_password">Mật khẩu</label>
+                                <input type="password" name="password" id="id_password" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label for="id_name">Tên tổ chức</label>
+                                <input type="text" name="name" id="id_name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-6">
+                                <label for="id_email">Email</label>
+                                <input type="email" name="email" id="id_email" class="form-control" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_phone">Số điện thoại</label>
+                                <input type="text" name="phone" id="id_phone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label for="id_description">Mô tả tổ chức</label>
+                                <textarea class="form-control" name="description" id="id_description" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label for="id_address">Địa chỉ</label>
+                                <input type="text" name="address" id="id_address" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                        <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/footer'); %>

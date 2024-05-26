@@ -7,6 +7,11 @@ adminModel.getById = async (id) => {
     return rows[0] || null;
 }
 
+adminModel.getByUserId = async (user_id) => {
+  const [rows] = await pool.query('SELECT * FROM administrators WHERE user_id = ?', [user_id]);
+  return rows[0] || null;
+}
+
 adminModel.create = async (admin) => {
     const [result] = await pool.query(
       'INSERT INTO administrators (user_id, fullname, email, phone) VALUES (?, ?, ?, ?)',

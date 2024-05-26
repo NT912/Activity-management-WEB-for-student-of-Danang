@@ -1,0 +1,108 @@
+<%- include('../components/header'); %>
+
+<div class="row justify-content-lg-center">
+    <div class="col-md-8">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#student">Danh sách tài khoản sinh viên</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#organization">Danh sách tài khoản tổ chức</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="student">
+                <table class="table table-striped mt-5 align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tài khoản</th>
+                            <th scope="col">Tạo lúc</th>
+                            <th scope="col">Công cụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% student_users.forEach(user => { %>
+                            <tr>
+                                <th scope="row"><%- user.id %></th>
+                                <td><%- user.username %></td>
+                                <td><%- user.created_at %></td>
+                                <td>
+                                    <a href="/user/<%- user.id %>/view" class="btn btn-info">Xem</a>
+                                    <a href="/user/<%- user.id %>/edit" class="btn btn-primary">Sửa</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal_student_<%- user.id %>">
+                                        Xóa
+                                    </button>
+                                    <div class="modal fade" id="modal_student_<%- user.id %>" tabindex="-1" aria-labelledby="modal_student_<%- user.id %>_label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="modal_student_<%- user.id %>_label">Cảnh báo</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Xác nhận xóa tài khoản sinh viên <strong><%- user.username %></strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                    <a href="/user/<%- user.id %>/delete" class="btn btn-primary">Xác nhận</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="organization">
+                <table class="table table-striped mt-5 align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tài khoản</th>
+                            <th scope="col">Tạo lúc</th>
+                            <th scope="col">Công cụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% organization_users.forEach(user => { %>
+                            <tr>
+                                <th scope="row"><%- user.id %></th>
+                                <td><%- user.username %></td>
+                                <td><%- user.created_at %></td>
+                                <td>
+                                    <a href="/user/<%- user.id %>/view" class="btn btn-info">Xem</a>
+                                    <a href="/user/<%- user.id %>/edit" class="btn btn-primary">Sửa</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal_organization_<%- user.id %>">
+                                        Xóa
+                                    </button>
+                                    <div class="modal fade" id="modal_organization_<%- user.id %>" tabindex="-1" aria-labelledby="modal_organization_<%- user.id %>_label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="modal_organization_<%- user.id %>_label">Cảnh báo</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Xác nhận xóa tài khoản tổ chức <strong><%- user.username %></strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                    <a href="/user/<%- user.id %>/delete" class="btn btn-primary">Xác nhận</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/footer'); %>

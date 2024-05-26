@@ -8,6 +8,12 @@ organizationModel.getById = async (id) => {
   return rows[0] ? rows[0] : null;
 }
 
+organizationModel.getByUserId = async (user_id) => {
+  const [rows] = await pool.query("SELECT * FROM organizations WHERE user_id = ?", [user_id]);
+
+  return rows[0] ? rows[0] : null;
+}
+
 organizationModel.create = async (organization) => {
   const [result] = await pool.query(
     "INSERT INTO organizations (user_id, name, description, address, email, phone) VALUES (?, ?, ?, ?, ?, ?)",
@@ -19,4 +25,53 @@ organizationModel.create = async (organization) => {
   }
 
   return null;
+}
+
+organizationModel.update = async (organization_id, organization) => {
+  let query = 'UPDATE organizations SET ';
+  let setStatements = [];
+
+  if (organization.name) {
+    setStatements.push(`name = '${organization.name}'`);
+  }
+
+  if (organization.description) {
+    setStatements.push(`description = '${organization.description}'`);
+  }
+
+  if (organization.address) {
+    setStatements.push(`address = '${organization.address}'`);
+  }
+
+  if (organization.email) {
+    setStatements.push(`email = '${organization.email}'`);
+  }
+
+  if (organization.phone) {
+    setStatements.push(`phone = '${organization.phone}'`);
+  }
+
+  if (setStatements.length === 0) {
+    return null;
+  }
+
+  query += setStatements.join(', ') + ` WHERE id = ${organization_id}`;
+
+  const [result] = await pool.query(query);
+
+  if (result.affectedRows) {
+    return await organizationModel.getById(organization_id);
+  }
+
+  return null;
+}
+
+organizationModel.delete = async (id) => {
+  const [result] = await pool.query("DELETE FROM organizations WHERE id = ?", [id]);
+
+  if (result.affectedRows) {
+    return true;
+  }
+
+  return false;
 }
