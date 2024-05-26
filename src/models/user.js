@@ -40,3 +40,36 @@ userModel.delete = async (id) => {
 
   return false;
 }
+
+userModel.getByRole = async (role) => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE role = ?", [role]);
+
+  return rows;
+}
+
+userModel.update = async (user_id, user) => {
+  let query = 'UPDATE users SET ';
+  let setStatements = [];
+
+  if (user.username) {
+    setStatements.push(`username = '${user.username}'`);
+  }
+
+  if (user.password) {
+    setStatements.push(`hashed_password = '${md5(user.password)}'`);
+  }
+
+  if (setStatements.length === 0) {
+    return null;
+  }
+
+  query += setStatements.join(', ') + ` WHERE id = ${user_id}`;
+
+  const [result] = await pool.query(query);
+
+  if (result.affectedRows) {
+    return await userModel.getById(user_id);
+  }
+
+  return null;
+}

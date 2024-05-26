@@ -1,3 +1,5 @@
+const md5 = require('md5');
+
 const userModel = require('../models/user');
 const studentModel = require('../models/student');
 const organizationModel = require('../models/organization');
@@ -32,14 +34,14 @@ authController.login = async (req, res) => {
     req.session.user = user;
 
     if (user.role === roles.STUDENT) {
-      const student = await studentModel.getById(user.id);
+      const student = await studentModel.getByUserId(user.id);
 
       req.session.student = student;
       req.session.save();
 
       req.flash('success', `Chào mừng sinh viên ${student.fullname} | ${student.id}!`);
     } else if (user.role === roles.ORGANIZATION) {
-      const organization = await organizationModel.getById(user.id);
+      const organization = await organizationModel.getByUserId(user.id);
 
       if (!organization) {
         throw new Error('Tổ chức không tồn tại');
@@ -50,7 +52,7 @@ authController.login = async (req, res) => {
 
       req.flash('success', `Chào mừng tổ chức ${organization.name}!`);
     } else if (user.role === roles.ADMIN) {
-      const admin = await adminModel.getById(user.id);
+      const admin = await adminModel.getByUserId(user.id);
 
       req.session.admin = admin;
       req.session.save();
@@ -180,6 +182,6 @@ authController.registerOrganization = async (req, res) => {
 }
 
 authController.logout = async (req, res) => {
-  req.session.regenerate()
+  req.session.destroy();
   res.redirect('/auth/login');
 }

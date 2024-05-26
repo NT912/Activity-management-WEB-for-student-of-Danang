@@ -27,6 +27,7 @@
     "mysql2": "3.9.7",
     "qrcode": "1.5.3",
     "uuid": "9.0.1",
-    "readline-sync": "1.4.10"
+    "readline-sync": "1.4.10",
+    "connect-mysql": "4.0.0"
   }
 }
