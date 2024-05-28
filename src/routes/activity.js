@@ -44,4 +44,6 @@ router.get('/my_activity', authMiddleware.isStudent, controller.my_activity);
 router.get('/:activity_id/qrcode_attendance', authMiddleware.isOrganization, controller.qrcode_attendance);
 router.get('/:activity_id/attendance', authMiddleware.isStudent, controller.attendance);
 
+router.get('/:activity_id/delete', authMiddleware.isOrganizationOrAdmin, controller.delete);
+
 module.exports = router;

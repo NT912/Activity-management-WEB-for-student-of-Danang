@@ -172,6 +172,7 @@ activityController.edit = async (req, res) => {
       registration_end_date: req.body.registration_end_date,
       location: req.body.location,
       image: req.file ? req.file.path : activity.image,
+      comment: req.body.comment
     });
 
     if (!updatedActivity) {
@@ -357,6 +358,12 @@ activityController.attendance = async (req, res) => {
       throw new Error('Đã hết thời gian điểm danh');
     }
 
+    const registered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
+
+    if (!registered) {
+      throw new Error('Bạn chưa đăng ký hoạt động này');
+    }
+
     const attendanced = await activityModel.isAttendanced(req.params.activity_id, req.session.student.id);
 
     if (attendanced) {
@@ -389,4 +396,26 @@ activityController.my_activity = async (req, res) => {
     organization: req.session.organization,
     activities
   });
+}
+
+activityController.delete = async (req, res) => {
+  try {
+    const activity = await activityModel.getById(req.params.activity_id);
+
+    if (!activity) {
+      throw new Error('Hoạt động không tồn tại');
+    }
+
+    const result = await activityModel.delete(req.params.activity_id);
+
+    if (!result) {
+      throw new Error('Có lỗi xảy ra khi xóa hoạt động');
+    }
+
+    req.flash('success', `Xóa hoạt động ${activity.name} thành công`);
+  } catch (error) {
+    req.flash('error', error.message);
+  }
+
+  res.redirect('/activity/list');
 }
