@@ -73,7 +73,7 @@ activityModel.getAll = async (withOrganization = false, organization = null) => 
 activityModel.update = async (activity_id, activity) => {
   const queryText = `
     UPDATE activities
-    SET name = ?, organization_id = ?, description = ?, start_date = ?, end_date = ?, registration_start_date = ?, registration_end_date = ?, location = ?, image = ?
+    SET name = ?, organization_id = ?, description = ?, start_date = ?, end_date = ?, registration_start_date = ?, registration_end_date = ?, location = ?, image = ?, comment = ?
     WHERE id = ?
   `;
 
@@ -87,6 +87,7 @@ activityModel.update = async (activity_id, activity) => {
     datetimeUtils.formatEndDatetime(activity.registration_end_date),
     activity.location,
     activity.image,
+    activity.comment,
     activity_id,
   ]);
 
@@ -135,7 +136,7 @@ activityModel.register = async (activity_id, student_id) => {
     VALUES(?, ?)
   `;
 
-  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
 
   return result.affectedRows || null;
 }
@@ -146,7 +147,7 @@ activityModel.unregister = async (activity_id, student_id) => {
     WHERE activity_id = ? AND student_id = ?
   `;
 
-  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
 
   return result.affectedRows || null;
 }
@@ -157,7 +158,7 @@ activityModel.isRegistered = async (activity_id, student_id) => {
     WHERE activity_id = ? AND student_id = ?
   `;
 
-  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
 
   return result.length > 0;
 }
@@ -178,16 +179,17 @@ activityModel.getActivityRegistrationsAttendences = async (activity_id, student_
     SELECT students.*, registrations.id AS registration_id, attendances.id AS attendance_id
     FROM activities
     LEFT JOIN registrations ON registrations.activity_id = activities.id
-    LEFT JOIN attendances ON attendances.activity_id = activities.id
-    LEFT JOIN students ON students.id = registrations.student_id OR students.id = attendances.student_id
+    LEFT JOIN students ON students.id = registrations.student_id
+    LEFT JOIN attendances ON attendances.activity_id = activities.id AND attendances.student_id = students.id
     WHERE activities.id = ?
+    GROUP BY students.id
   `;
 
   const variables = [activity_id];
 
   if (student_id) {
     queryText += ' AND students.id != ?'
-    variables.push(student_id);
+    variables.push(student_id.toString());
   }
 
   const [rows] = await pool.query(queryText, variables);
@@ -201,7 +203,7 @@ activityModel.isAttendanced = async (activity_id, student_id) => {
     WHERE activity_id = ? AND student_id = ?
   `;
 
-  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
 
   return result[0] ? true : false;
 }
@@ -212,7 +214,7 @@ activityModel.attendance = async (activity_id, student_id) => {
     VALUES(?, ?)
   `;
 
-  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
 
   return result.affectedRows || null;
 }
@@ -227,7 +229,18 @@ activityModel.getStudentActivities = async (student_id) => {
     WHERE registrations.student_id = ?
   `;
 
-  const [activities] = await pool.query(queryText, [student_id]);
+  const [activities] = await pool.query(queryText, [student_id.toString()]);
 
   return activities;
+}
+
+activityModel.delete = async (activity_id) => {
+  const queryText = `
+    DELETE FROM activities
+    WHERE id = ?
+  `;
+
+  const [result] = await pool.query(queryText, [activity_id]);
+
+  return result.affectedRows || null;
 }

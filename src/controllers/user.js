@@ -234,6 +234,9 @@ userController.edit = async (req, res) => {
         class: req.body.class
       });
 
+      await registrationModel.updateStudent(_student.id, student.id);
+      await attendanceModel.updateStudent(_student.id, student.id);
+
       req.flash('success', `Sinh viên ${student.fullname} | ${student.id} đã được cập nhật`);
 
       res.redirect('/user/list');

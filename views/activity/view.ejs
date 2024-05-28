@@ -101,6 +101,14 @@
                         <input type="text" name="location" id="id_location" class="form-control" value="<%- activity.location %>" readonly>
                     </div>
                 </div>
+                <% if (user.role != 'student') { %>
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <label for="id_comment">Phản hồi của quản trị viên</label>
+                        <textarea name="comment" id="id_comment" class="form-control" rows="3" readonly><%- activity.comment %></textarea>
+                    </div>
+                </div>
+                <% } %>
                 <% if (user.role == 'student') { %>
                     <% if (allowRegister) { %>
                         <% if (activity.registered) { %>

@@ -3,7 +3,7 @@ const pool = require("../database");
 studentModel = module.exports;
 
 studentModel.getById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM students WHERE id = ?", [id]);
+  const [rows] = await pool.query("SELECT * FROM students WHERE id = ?", [id.toString()]);
 
   return rows[0] ? rows[0] : null;
 }
@@ -73,7 +73,7 @@ studentModel.update = async (student_id, student) => {
 }
 
 studentModel.delete = async (id) => {
-  const [result] = await pool.query("DELETE FROM students WHERE id = ?", [id]);
+  const [result] = await pool.query("DELETE FROM students WHERE id = ?", [id.toString()]);
 
   if (result.affectedRows) {
     return true;
