@@ -62,7 +62,7 @@ authController.login = async (req, res) => {
       throw new Error('Quyền truy cập không hợp lệ');
     }
 
-    return res.redirect('/');
+    return res.redirect(req.session.previous_url ?? '/');
   } catch (error) {
     req.flash('error', error.message);
 
@@ -88,7 +88,7 @@ authController.registerStudent = async (req, res) => {
       throw new Error('Tài khoản đã tồn tại');
     }
 
-    const _student = await studentModel.getById(req.body.studentId);
+    const _student = await studentModel.getById(req.body.student_id);
 
     if (_student) {
       throw new Error('Mã sinh viên đã tồn tại');

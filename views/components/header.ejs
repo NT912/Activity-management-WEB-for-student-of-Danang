@@ -85,8 +85,11 @@
                                 <% } %>
                             </button>
                             <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="/me">Thông tin cá nhân</a></li>
-                              <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
+                                <li><a class="dropdown-item" href="/user/me">Thông tin cá nhân</a></li>
+                                <% if (user.role == 'student') { %>
+                                    <li><a class="dropdown-item" href="/activity/my_activity">Hoạt động của tôi</a></li>
+                                <% } %>
+                                <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
                             </ul>
                           </div>
                     </li>

@@ -61,7 +61,7 @@ studentModel.update = async (student_id, student) => {
     return null;
   }
 
-  query += setStatements.join(', ') + ` WHERE id = ${student_id}`;
+  query += setStatements.join(', ') + ` WHERE id = '${student_id}'`;
 
   const [result] = await pool.query(query);
 

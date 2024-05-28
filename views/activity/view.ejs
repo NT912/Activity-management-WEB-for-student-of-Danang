@@ -9,10 +9,18 @@
     </div>
     <div class="col-md-6">
         <div class="col-md-12 justify-content-lg-right">
-            <% if (activity.admin_id) { %>
-                <span class="badge bg-success">Đã duyệt</span>
+            <% if (user.role == 'student') { %>
+                <% if (activity.attendanced) { %>
+                    <span class="badge bg-success">Đã điểm danh</span>
+                <% } else { %>
+                    <span class="badge bg-warning">Chưa điểm danh</span>
+                <% } %>
             <% } else { %>
-                <span class="badge bg-warning">Chưa duyệt</span>
+                <% if (activity.admin_id) { %>
+                    <span class="badge bg-success">Đã duyệt</span>
+                <% } else { %>
+                    <span class="badge bg-warning">Chưa duyệt</span>
+                <% } %>
             <% } %>
         </div>
         <form>
@@ -170,7 +178,7 @@
                         <td><%- registration.faculty %></td>
                         <td><%- registration.class %></td>
                         <td>
-                            <% if (registration.attendence_id) { %>
+                            <% if (registration.attendance_id) { %>
                                 <span class="badge bg-success">Đã điểm danh</span>
                             <% } %>
                         </td>

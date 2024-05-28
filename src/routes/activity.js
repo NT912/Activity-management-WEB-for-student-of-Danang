@@ -39,6 +39,8 @@ router.get('/:activity_id/register', authMiddleware.isStudent, controller.regist
 router.get('/:activity_id/unregister', authMiddleware.isStudent, controller.unregister);
 
 router.get('/search', controller.search);
+router.get('/my_activity', authMiddleware.isStudent, controller.my_activity);
+
 router.get('/:activity_id/qrcode_attendance', authMiddleware.isOrganization, controller.qrcode_attendance);
 router.get('/:activity_id/attendance', authMiddleware.isStudent, controller.attendance);
 

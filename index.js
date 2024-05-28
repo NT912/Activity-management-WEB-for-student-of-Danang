@@ -47,9 +47,16 @@ app.get('/health_check', (req, res) => {
   res.send('OK');
 });
 app.use('/auth', require('./src/routes/auth'));
-app.use('/user', authMiddleware.isLoggedIn, authMiddleware.isAdmin, require('./src/routes/user'));
-app.use('/activity', authMiddleware.isLoggedIn, require('./src/routes/activity'));
+app.use('/user', authMiddleware.isLoggedIn, require('./src/routes/user'));
+app.use('/activity', (req, res, next) => {
+  req.session.previous_url = req.originalUrl
+  req.session.save();
+  next();
+}, authMiddleware.isLoggedIn, require('./src/routes/activity'));
 app.use('/', authMiddleware.isLoggedIn, require('./src/routes/home'));
+app.use((req, res) => {
+  res.render('404');
+})
 
 app.listen(appPort, () => {
   console.log(`Server is running on http://127.0.0.1:${appPort}`);
