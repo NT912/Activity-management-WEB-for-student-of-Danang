@@ -1,6 +1,7 @@
 const userModel = require('../models/user');
 const studentModel = require('../models/student');
 const organizationModel = require('../models/organization');
+const adminModel = require('../models/admin');
 const registrationModel = require('../models/registration');
 const attendanceModel = require('../models/attendance');
 const { roles } = require('../constants');
@@ -188,6 +189,22 @@ userController.getEdit = async (req, res) => {
   }
 }
 
+userController.getMe = async (req, res) => {
+  try {
+    res.render('user/me', {
+      success: req.flash('success'),
+      error: req.flash('error'),
+      user: req.session.user,
+      student: req.session.student,
+      admin: req.session.admin,
+      organization: req.session.organization,
+    });
+  } catch (error) {
+    req.flash('error', error.message);
+    res.redirect('/');
+  }
+}
+
 userController.edit = async (req, res) => {
   try {
     const _user = await userModel.getById(req.params.user_id);
@@ -245,6 +262,64 @@ userController.edit = async (req, res) => {
     req.flash('error', error.message);
     res.redirect('/user/list');
   }
+}
+
+userController.editMe = async (req, res) => {
+  try {
+    const user = await userModel.update(req.session.user.id, {
+      username: req.body.username,
+      password: req.body.password
+    });
+
+    if (user.role === roles.STUDENT) {
+      const _student = await studentModel.getByUserId(user.id);
+
+      if (!_student) {
+        throw new Error(`Sinh viên với ID ${user.id} không tồn tại`);
+      }
+
+      await studentModel.update(_student.id, {
+        id: req.body.student_id,
+        fullname: req.body.fullname,
+        email: req.body.email,
+        phone: req.body.phone,
+        faculty: req.body.faculty,
+        class: req.body.class
+      });
+    } else if (user.role === roles.ORGANIZATION) {
+      const organization = await organizationModel.getByUserId(user.id);
+
+      if (!organization) {
+        throw new Error(`Tổ chức với ID ${user.id} không tồn tại`);
+      }
+
+      await organizationModel.update(organization.id, {
+        name: req.body.name,
+        description: req.body.description,
+        email: req.body.email,
+        phone: req.body.phone,
+        address: req.body.address
+      });
+    } else if (user.role === roles.ADMIN) {
+      const admin = await adminModel.getByUserId(user.id);
+
+      if (!admin) {
+        throw new Error(`Quản trị viên với ID ${user.id} không tồn tại`);
+      }
+
+      await adminModel.update(admin.id, {
+        fullname: req.body.fullname,
+        email: req.body.email,
+        phone: req.body.phone
+      });
+    }
+
+    req.flash('success', `Thông tin đã được cập nhật`);
+  } catch (error) {
+    req.flash('error', error.message);
+  }
+
+  res.redirect('/user/me');
 }
 
 userController.delete = async (req, res) => {

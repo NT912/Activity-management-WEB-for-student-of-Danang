@@ -34,13 +34,14 @@ activityController.getView = async (req, res) => {
   }
 
   activity.registered = false;
+  activity.attendanced = false;
 
   if (req.session.student) {
     const registered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
+    activity.registered = registered;
 
-    if (registered) {
-      activity.registered = true;
-    }
+    const attendanced = await activityModel.isAttendanced(req.params.activity_id, req.session.student.id);
+    activity.attendanced = attendanced;
   }
 
   let allowRegister = false;
@@ -102,7 +103,7 @@ activityController.add = async (req, res) => {
       registration_start_date: req.body.registration_start_date,
       registration_end_date: req.body.registration_end_date,
       location: req.body.location,
-      image: req.file.path,
+      image: req.file ? req.file.path : null,
     });
 
     if (!activity) {
@@ -237,6 +238,18 @@ activityController.register = async (req, res) => {
       throw new Error('Hoạt động không tồn tại');
     }
 
+    const now = new Date();
+
+    if (now < new Date(activity.registration_start_date) || now > new Date(activity.registration_end_date)) {
+      throw new Error('Đã hết thời gian đăng ký hoạt động');
+    }
+
+    const isRegistered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
+
+    if (isRegistered) {
+      throw new Error('Bạn đã đăng ký rồi');
+    }
+
     const result = await activityModel.register(req.params.activity_id, req.session.student.id);
 
     if (!result) {
@@ -257,6 +270,16 @@ activityController.unregister = async (req, res) => {
 
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
+    }
+
+    if (now < new Date(activity.registration_start_date) || now > new Date(activity.registration_end_date)) {
+      throw new Error('Đã hết thời gian hủy đăng ký hoạt động');
+    }
+
+    const isRegistered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
+
+    if (!isRegistered) {
+      throw new Error('Bạn không thể hủy đăng ký khi chưa đăng ký');
     }
 
     const result = await activityModel.unregister(req.params.activity_id, req.session.student.id);
@@ -321,22 +344,49 @@ activityController.qrcode_attendance = async (req, res) => {
 }
 
 activityController.attendance = async (req, res) => {
-  const activity = await activityModel.getById(req.params.activity_id);
+  try {
+    const activity = await activityModel.getById(req.params.activity_id);
 
-  if (!activity) {
-    req.flash('error', 'Hoạt động không tồn tại');
-    res.redirect('/activity/list');
-    return;
+    if (!activity) {
+      throw new Error('Hoạt động không tồn tại');
+    }
+
+    const now = new Date();
+
+    if (now < new Date(activity.start_date) || now > new Date(activity.end_date)) {
+      throw new Error('Đã hết thời gian điểm danh');
+    }
+
+    const attendanced = await activityModel.isAttendanced(req.params.activity_id, req.session.student.id);
+
+    if (attendanced) {
+      throw new Error('Bạn đã điểm danh rồi');
+    }
+
+    const result = await activityModel.attendance(req.params.activity_id, req.session.student.id);
+
+    if (!result) {
+      throw new Error('Có lỗi xảy ra khi điểm danh');
+    }
+
+    req.flash('success', `Điểm danh hoạt động ${activity.name} thành công`);
+  } catch (error) {
+    req.flash('error', error.message);
   }
 
-  const result = await activityModel.attendance(req.params.activity_id, req.session.student.id);
-
-  if (!result) {
-    req.flash('error', 'Có lỗi xảy ra khi điểm danh');
-    res.redirect(`/activity/${req.params.activity_id}/view`);
-    return;
-  }
-
-  req.flash('success', 'Điểm danh thành công');
   res.redirect(`/activity/${req.params.activity_id}/view`);
+}
+
+activityController.my_activity = async (req, res) => {
+  const activities = await activityModel.getStudentActivities(req.session.student.id);
+
+  res.render('activity/my_activity', {
+    success: req.flash('success'),
+    error: req.flash('error'),
+    user: req.session.user,
+    student: req.session.student,
+    admin: req.session.admin,
+    organization: req.session.organization,
+    activities
+  });
 }

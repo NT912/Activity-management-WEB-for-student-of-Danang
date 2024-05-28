@@ -194,3 +194,40 @@ activityModel.getActivityRegistrationsAttendences = async (activity_id, student_
 
   return rows.filter(row => row.id);
 }
+
+activityModel.isAttendanced = async (activity_id, student_id) => {
+  const queryText = `
+    SELECT * FROM attendances
+    WHERE activity_id = ? AND student_id = ?
+  `;
+
+  const [result] = await pool.query(queryText, [activity_id, student_id]);
+
+  return result[0] ? true : false;
+}
+
+activityModel.attendance = async (activity_id, student_id) => {
+  const queryText = `
+    INSERT INTO attendances(activity_id, student_id)
+    VALUES(?, ?)
+  `;
+
+  const [result] = await pool.query(queryText, [activity_id, student_id]);
+
+  return result.affectedRows || null;
+}
+
+activityModel.getStudentActivities = async (student_id) => {
+  const queryText = `
+    SELECT activities.*, organizations.name as organization_name, attendances.id AS attendance_id
+    FROM activities
+    JOIN registrations ON activities.id = registrations.activity_id
+    JOIN organizations ON activities.organization_id = organizations.id
+    LEFT JOIN attendances ON activities.id = attendances.activity_id AND attendances.student_id = registrations.student_id
+    WHERE registrations.student_id = ?
+  `;
+
+  const [activities] = await pool.query(queryText, [student_id]);
+
+  return activities;
+}

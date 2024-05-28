@@ -1,0 +1,139 @@
+<%- include('../components/header'); %>
+
+<div class="row justify-content-lg-center">
+    <div class="col-md-6">
+        <% if (user.role == 'student') { %>
+            <h2>Cập nhật thông tin</h2>
+            <form action="/user/me" method="post">
+                <div class="form-group mb-3">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_username">Tài khoản</label>
+                            <input type="text" name="username" id="id_username" class="form-control" value="<%- user.username %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_password">Mật khẩu</label>
+                            <input type="password" name="password" id="id_password" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_student_id">Mã sinh viên</label>
+                            <input type="text" name="student_id" id="id_student_id" class="form-control" value="<%- student.id %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_fullname">Họ và tên</label>
+                            <input type="text" name="fullname" id="id_fullname" class="form-control"  value="<%- student.fullname %>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_faculty">Khoa</label>
+                            <input type="text" name="faculty" id="id_faculty" class="form-control"  value="<%- student.faculty %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_class">Lớp</label>
+                            <input type="text" name="class" id="id_class" class="form-control"  value="<%- student.class %>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_email">Email</label>
+                            <input type="email" name="email" id="id_email" class="form-control"  value="<%- student.email %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_phone">Số điện thoại</label>
+                            <input type="text" name="phone" id="id_phone" class="form-control"  value="<%- student.phone %>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-12 mx-auto">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        <% } else if (user.role == 'organization') { %>
+            <h2>Cập nhật thông tin</h2>
+            <form action="/user/me" method="post">
+                <div class="form-group mb-3">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_username">Tài khoản</label>
+                            <input type="text" name="username" id="id_username" class="form-control" value="<%- user.username %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_password">Mật khẩu</label>
+                            <input type="password" name="password" id="id_password" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-12">
+                            <label for="id_name">Tên tổ chức</label>
+                            <input type="text" name="name" id="id_name" class="form-control" value="<%- organization.name %>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_email">Email</label>
+                            <input type="email" name="email" id="id_email" class="form-control" value="<%- organization.email %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_phone">Số điện thoại</label>
+                            <input type="text" name="phone" id="id_phone" class="form-control" value="<%- organization.phone %>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-12">
+                            <label for="id_description">Mô tả tổ chức</label>
+                            <textarea class="form-control" name="description" id="id_description" rows="3" required><%- organization.description %></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-12">
+                            <label for="id_address">Địa chỉ</label>
+                            <input type="text" name="address" id="id_address" class="form-control" value="<%- organization.address %>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-12 mx-auto">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        <% } else { %>
+            <form action="/user/me" method="post">
+                <div class="form-group mb-3">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_username">Tài khoản</label>
+                            <input type="text" name="username" id="id_username" class="form-control" value="<%- user.username %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_password">Mật khẩu</label>
+                            <input type="password" name="password" id="id_password" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-12">
+                            <label for="id_fullname">Họ và tên</label>
+                            <input type="text" name="fullname" id="id_fullname" class="form-control"  value="<%- admin.fullname %>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="id_email">Email</label>
+                            <input type="email" name="email" id="id_email" class="form-control"  value="<%- admin.email %>" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_phone">Số điện thoại</label>
+                            <input type="text" name="phone" id="id_phone" class="form-control"  value="<%- admin.phone %>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-12 mx-auto">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../components/footer'); %>

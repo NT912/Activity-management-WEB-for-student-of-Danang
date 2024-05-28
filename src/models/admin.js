@@ -24,3 +24,19 @@ adminModel.create = async (admin) => {
 
     return null;
 }
+
+adminModel.update = async (admin_id, admin) => {
+    const queryText = `
+      UPDATE administrators
+      SET fullname = ?, email = ?, phone = ?
+      WHERE id = ?
+    `;
+
+    const [result] = await pool.query(queryText, [admin.fullname, admin.email, admin.phone, admin.id]);
+
+    if (result.affectedRows) {
+        return await adminModel.getById(admin_id);
+    }
+
+    return null;
+}
