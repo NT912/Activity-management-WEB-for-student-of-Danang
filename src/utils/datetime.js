@@ -8,3 +8,11 @@ datetimeUtils.formatDate = (date) => {
 
   return `${year}-${month}-${day}`;
 }
+
+datetimeUtils.formatStartDatetime = (date) => {
+  return `${date} 00:00:00`;
+}
+
+datetimeUtils.formatEndDatetime = (date) => {
+  return `${date} 23:59:59`;
+}

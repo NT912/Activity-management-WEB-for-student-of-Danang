@@ -44,3 +44,12 @@ authMiddleware.isOrganization = (req, res, next) => {
   req.flash('error', 'Bạn không có quyền truy cập vào trang này');
   return res.redirect('/');
 }
+
+authMiddleware.isOrganizationOrAdmin = (req, res, next) => {
+  if (req.session.user && (req.session.user.role === roles.ORGANIZATION || req.session.user.role === roles.ADMIN)) {
+    return next();
+  }
+
+  req.flash('error', 'Bạn không có quyền truy cập vào trang này');
+  return res.redirect('/');
+}
