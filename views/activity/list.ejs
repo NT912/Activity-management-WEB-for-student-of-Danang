@@ -92,6 +92,28 @@
                                     </div>
                                 </div>
                             <% } %>
+                            <% if (organization) { %>
+                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modal_activity_attendance_<%- activity.id %>">
+                                    Tạo QR Code điểm danh
+                                </button>
+                                <div class="modal fade" id="modal_activity_attendance_<%- activity.id %>" tabindex="-1" aria-labelledby="modal_activity_attendance_<%- activity.id %>_label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="modal_activity_attendance_<%- activity.id %>_label">Cảnh báo</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Xác nhận <strong>TẠO QR CODE ĐIỂM DANH</strong> hoạt động <strong><%- activity.name %></strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <a href="/activity/<%- activity.id %>/qrcode_attendance" target="_blank" class="btn btn-primary">Xác nhận</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
                         </td>
                     </tr>
                 <% }) %>

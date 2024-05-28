@@ -47,10 +47,14 @@
                         </li>
                     <% } %>
                 </ul>
-                <form class="d-flex" role="search" action="/activities" method="get">
-                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm hoạt động" aria-label="Search" name="q">
-                    <button class="btn btn-outline-info" type="submit">Tìm kiếm</button>
-                </form>
+                <div class="navbar-nav mb-2 mb-lg-0 me-0">
+                    <li class="nav-item me-3 align-middle">
+                        <form class="d-flex" role="search" action="/activity/search" method="get">
+                            <input class="form-control me-2" style="width: auto;" type="search" placeholder="Tìm kiếm hoạt động" aria-label="Search" name="q">
+                            <button class="btn btn-outline-info" type="submit">Tìm kiếm</button>
+                        </form>
+                    </li>
+                </div>
                 &nbsp;
                 &nbsp;
                 <% if (!user) { %>
