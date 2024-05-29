@@ -26,7 +26,6 @@ const app = express();
 initRedis(); // connect to redis server
 
 const upload = multer({storage: multer.memoryStorage()}); // package for get document
-// const storageFirebase = firebase.initialFirebaseApp(); // init firebase app
 firebase.initialFirebaseApp();
 
 /*
@@ -48,19 +47,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public'))); // path join asset
-const port = 5100;
+const port = 3000;
 
 /*
     Config Redis to storage session
 */
-
-app.get("/",(req,res) => {
-    res.redirect('/account/login')
-})
+app.use(session({
+    store: new RedisStore({ client: getRedis()}), // RedisStore
+    secret: process.env.SECRET_SESSION,
+    saveUninitialized : false,
+    resave: false,
+    cookie: {
+        secure: false, // if true: only transmit cookie over https
+        httpOnly: true, // if true: prevent client side js from reding the cookie
+        maxAge: 1*10*1000, // 60 second
+    }
+}));
 
 // route
+app.use('/', homeRoutes);
 app.use('/admin', adminRoutes);
-app.use('/home', homeRoutes);
 app.use('/activity', activityRoute);
 app.use('/account', authRoutes);
 app.use(errorController.get404);

@@ -5,9 +5,19 @@ const db = require('../util/database');
 exports.AddActivity = (act, callback) => {
   return new Promise((resolve, reject) => {
     console.log(act);
-      const query = `INSERT INTO activity VALUES (null,${act.idOrganization},'${act.name}','${act.desc}','${act.date_start}','${act.date_end}','${act.date_start_regis}','${act.date_end_regis}','${act.location}',false,false,'${act.poster}',NOW())`;
-      console.log(query);
-      db.query(query, (err, res) => {
+    const query = 'INSERT INTO activity (Id_organization, Name_activity, Description, Date_start, Date_end, Date_start_registe, Date_end_registe, Location, image, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
+    const values = [
+      act.idOrganization,
+      act.name,
+      act.desc,
+      act.date_start,
+      act.date_end,
+      act.date_start_regis,
+      act.date_end_regis,
+      act.location,
+      act.poster
+    ];
+      db.query(query,values, (err, res) => {
         if (err)
         {
             callback(err,null)
@@ -20,9 +30,9 @@ exports.AddActivity = (act, callback) => {
 }
 exports.GetallActivity = () => {
   return new Promise((resolve, reject) => {
-      const query = `SELECT Id_activity, Id_organization, Name_activity, activity.Description, Date_start, Date_end, Date_start_registe, Date_end_registe, Location, image, Id, Name, avatar
+      const query = `SELECT Id_activity, Id_organization, Name_activity, activity.Description, Date_start, Date_end, Date_start_registe, Date_end_registe, Location, created_at, image, U.idUser, U.name, U.avatar
       FROM activity
-      INNER JOIN organization ON organization.Id = activity.Id_organization
+      INNER JOIN user U ON U.idUser = activity.Id_organization
       ORDER BY activity.created_at DESC`;
       db.query(query, (err, res) => {
         if (err) {
@@ -31,11 +41,8 @@ exports.GetallActivity = () => {
           resolve(res);
         }
       });
-  });}
-
-
-
-
+  });
+}
 
 exports.GetGame = (id) => {
     return new Promise((resolve, reject) => {

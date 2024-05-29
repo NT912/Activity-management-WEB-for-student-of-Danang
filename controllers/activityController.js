@@ -117,7 +117,7 @@ exports.POST_CreateActivity = (req, res, next) =>
     
     uploadFirebase((downloadURL) => {
       const act = new Activity(
-        2,
+        7,
       name,
       date_start,
       date_end,
@@ -129,13 +129,13 @@ exports.POST_CreateActivity = (req, res, next) =>
       );
       AddActDatabse(act)
       .then((result) => {
-          res.redirect('/home/NTC');
+          res.redirect('/');
       }
     )
     .catch((error) => {
       console.log(error);
-      res.render('game/gameadd', {
-        error: "An error occurred"
+      res.render('activity/createpost', {
+        error: ""
       });
     });
     });

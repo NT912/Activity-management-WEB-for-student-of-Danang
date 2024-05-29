@@ -16,8 +16,14 @@ router.get("/registerSV", authController.GET_RegisterSV);
 
 router.get("/registerNTC", authController.GET_RegisterNTC);
 
+router.get("/logout", authController.Get_LogOut);
+
 router.post("/registerSV", authController.POST_RegisterSV);
+
 router.post("/registerNTC", authController.POST_RegisterNTC);
+
 router.post("/login", authController.postLogin);
+
+
 
 module.exports = router;
