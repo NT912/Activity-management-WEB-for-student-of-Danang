@@ -46,7 +46,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/health_check', (req, res) => {
   res.send('OK');
 });
-app.use('/auth', require('./src/routes/auth'));
+
+/*
+    Routes
+*/
+
+const authRoutes = require('./src/routes/authRoute'); 
+
+app.use('/auth', authRoutes);
 app.use('/user', authMiddleware.isLoggedIn, require('./src/routes/user'));
 app.use('/activity', (req, res, next) => {
   req.session.previous_url = req.originalUrl
