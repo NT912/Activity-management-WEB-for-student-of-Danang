@@ -6,7 +6,7 @@ var client;
 const initRedis =  () =>{
   client =  redis.createClient({
     username: 'default',
-    password: '3qApQMlPx9fvZxCA3hSyJ5efVl8kl2/V96VmuerboTvs9Ox8am3UFeSRvdl1gUdLTFPOzgWhQLCkU1vE',
+    password: process.env.REDIS_PASS,
     host: 'localhost',
     port: 6379,
   });

@@ -19,9 +19,9 @@ exports.GetAllFaculty = () => {
 };
 
 exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
-  const que = `insert into student (masv, name, class, hashpassword, falcuty) values ('${masv}','${name}','${classs}','${password}', ${falcuty})`;
-  const params = [masv, name, classs, password, falcuty];
-  db.query(que, params, (err, res) => {
+  const que = `insert into user (masv, name, class, hashpassword, falcutyId, role) 
+  values ('${masv}','${name}','${classs}','${password}', ${falcuty}, 'STUDENT')`;
+  db.query(que, (err, res) => {
     if (err) {
       callback(err, null);
     } else {
@@ -31,12 +31,9 @@ exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
 };
 
 exports.AddNewOrganization = (name, email, password, callback) => {
-  // que = "INSERT INTO user VALUES(null, '"+name+"', '"+email+"','"+password+"',null,null,null,CURRENT_DATE())";
-
-  const que = `insert into organization (Name, Email, 	hashpassword) values ('${name}', '${email}', '${password}')`;
-  const params = [name, email, password];
-  // console.log(que);
-  db.query(que, params, (err, res) => {
+  const que = `insert into user (name, email, hashpassword, role) values (?, ?, ? , 'ORGANIZATION')`;
+  const values = [name, email, password];
+  db.query(que, values, (err, res) => {
     if (err) {
       callback(err, null);
     } else {
@@ -48,9 +45,7 @@ exports.AddNewOrganization = (name, email, password, callback) => {
 exports.CountMasv = (masv) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT COUNT(Masv) AS countMasv FROM student WHERE Masv = '" +
-      masv +
-      "'";
+      `SELECT COUNT(masv) AS countMasv FROM user WHERE masv = '${masv}'`;
     db.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -64,9 +59,7 @@ exports.CountMasv = (masv) => {
 exports.CountEmail = (email) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT COUNT(Email) AS countEmail FROM organization WHERE Email = '" +
-      email +
-      "'";
+      `SELECT COUNT(email) AS countEmail FROM user WHERE email = '${email}'`
     db.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -80,9 +73,7 @@ exports.CountEmail = (email) => {
 exports.CountName = (name) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT COUNT(Name) AS countName FROM organization WHERE Name = '" +
-      name +
-      "'";
+      `SELECT COUNT(name) AS countName FROM user WHERE name = '${name}'`
     db.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -93,26 +84,13 @@ exports.CountName = (name) => {
   });
 };
 
-exports.CheckLoginStudent = (mavs) => {
+exports.CheckLogin = (inform) => {
   return new Promise((resolve, reject) => {
-    const query =
-      "SELECT hashpassword FROM student WHERE Masv = '" + mavs + "'";
-    console.log(query);
-    db.query(query, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-};
+    const query = 'SELECT idUser as id, hashpassword, role FROM user WHERE email = ? or masv = ? LIMIT 1';
 
-exports.CheckLoginNTC = (email) => {
-  return new Promise((resolve, reject) => {
-    const query =
-      "SELECT hashpassword FROM organization WHERE Email = '" + email + "'";
-    db.query(query, (err, res) => {
+    const values = [inform, inform];
+
+    db.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -126,11 +104,11 @@ exports.CheckLoginNTC = (email) => {
 */
 exports.GetCheckLogin = (email) => {
   return new Promise((resolve, reject) => {
-    const query =
-      "SELECT id,COUNT(email) AS countemail, hass_password FROM User WHERE email = '" +
-      email +
-      "'";
-    db.query(query, (err, res) => {
+    const query = 'SELECT id, COUNT(email) AS countemail, hass_password FROM User WHERE email = ?';
+
+    const values = [email];
+
+    db.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {

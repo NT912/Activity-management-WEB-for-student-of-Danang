@@ -2,31 +2,33 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const authModel = require("../models/authModel");
 const db = require("../util/database");
-const { response } = require("express");
-require("../util/redis").getRedis();
+const session = require('express-session'); // session
+const { response } = require('express');
+require('../util/redis').getRedis();
 
 exports.GET_Login = (req, res, next) => {
-  res.render("home/login", {
+  if (req.session.id){
+    return res.redirect('/');
+  }
+  res.render("auth/login", {
     error: "",
   });
 };
 
 exports.GET_RegisterRole = (req, res, next) => {
-  res.render("home/registerRole", {
-    error: "",
-  });
+  res.render("auth/registerRole");
 };
 
 exports.GET_RegisterSV = async (req, res, next) => {
   try {
     const Facultys = await authModel.GetAllFaculty();
-    res.render("home/registerStudent", {
+    res.render("auth/registerStudent", {
       error: "",
       Facultys: Facultys,
     });
   } catch (err) {
     console.error(err);
-    res.render("home/registerStudent", {
+    res.render("auth/registerStudent", {
       error: "An error occurred while fetching faculties",
       Facultys: [],
     });
@@ -34,208 +36,130 @@ exports.GET_RegisterSV = async (req, res, next) => {
 };
 
 exports.GET_RegisterNTC = (req, res, next) => {
-  res.render("home/registerNTC", {
+  res.render("auth/registerNTC", {
     error: "",
   });
 };
 
 exports.POST_RegisterSV = async (req, res, next) => {
   const { name, masv, classs, falcuty, password, confirmpassword } = req.body;
-  // const error = validationResult(req);
-  // if (!error)
-  // {
-  //   return res.status(422).render('home/register',{
-  //       error: error.msg,
-  //   });
-  // }
-  // else
-  async function registerUser() {
-    try {
-      const countEmailResult = await authModel.CountMasv(masv);
-      if (countEmailResult[0].countMasv > 0) {
-        return {
-          error: "Ma sinh vien '" + masv + "'da duoc dang ky tai khoan",
-        };
-      }
-      if (password != confirmpassword) {
-        return {
-          error: "Passwords have to match!",
-        };
-      }
+  try {
+    let err = '';
+    const countEmailResult = await authModel.CountMasv(masv);
+    if (countEmailResult[0].countMasv > 0) {
+      err= `Ma sinh vien ${masv} da duoc dang ky tai khoan`;
+    } else  if (password != confirmpassword) {
+        err =  "Passwords have to match!";
+    } else {
       const hashPass = await bcrypt.hash(password, 10);
-
-      authModel.AddNewStudent(
-        masv,
-        name,
-        falcuty,
-        classs,
-        hashPass,
-        (err, res) => {
-          if (err) {
-            console.log(err);
+      authModel.AddNewStudent( masv, name, falcuty, classs, hashPass, (error, res) => {
+          if (error) {
+            console.log(error);
+            err = `Register new account fail`;
           } else {
+            err = ``;
           }
         }
       );
-      return {
-        error: "",
-      };
-    } catch (err) {
-      console.log(err);
-      return {
-        error: "An error occurred",
-      };
     }
-  }
-
-  // Sử dụng hàm registerUser
-  registerUser()
-    .then((result) => {
-      if (result.error) {
-        res.render("home/registerStudent", {
-          error: result.error,
-        });
-      } else {
-        res.redirect("/account/login");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.render("home/registerSV", {
-        error: "An error occurred",
+    if (err === ''){
+      res.redirect('/account/login');
+    } else {
+      const Facultys = await authModel.GetAllFaculty();
+      res.render("auth/registerStudent", {
+        error: err,
+        Facultys: Facultys,
       });
-    });
+    }
+    
+  } catch (err) {
+    console.log(err);
+    res.render("auth/registerRole");
+  }
 };
 
 exports.POST_RegisterNTC = async (req, res, next) => {
   const { name, email, password, confirmpassword } = req.body;
-  // const error = validationResult(req);
-  // if (!error)
-  // {
-  //   return res.status(422).render('home/register',{
-  //       error: error.msg,
-  //   });
-  // }
-  // else
-  async function registerUser() {
-    try {
-      const countEmail = await authModel.CountEmail(email);
-      const countname = await authModel.CountName(name);
-      if (countEmail[0].countEmail > 0) {
-        return {
-          error: email + "'da duoc dang ky tai khoan",
-        };
-      } else if (countname[0].countName > 0) {
-        return {
-          error: "Ten da ton tai",
-        };
-      }
-      if (password != confirmpassword) {
-        return {
-          error: "Passwords have to match!",
-        };
-      }
+  try {
+    let err = '';
+    const countEmail = await authModel.CountEmail(email);
+    const countname = await authModel.CountName(name);
+    if (countEmail[0].countEmail > 0) {
+        err = email + "da duoc dang ky tai khoan";
+    } else if (countname[0].countName > 0) {
+        err = "Ten da ton tai";
+    } else 
+    if (password != confirmpassword) {
+        err = "Passwords have to match!";
+    }else {
       const hashPass = await bcrypt.hash(password, 10);
-
       authModel.AddNewOrganization(name, email, hashPass, (err, res) => {
         if (err) {
           console.log(err);
+          err = 'Tao tai khoan moi that bai';
         } else {
+          err = '';
         }
       });
-      return {
-        error: "",
-      };
-    } catch (err) {
-      console.log(err);
-      return {
-        error: "An error occurred",
-      };
     }
-  }
-
-  // Sử dụng hàm registerUser
-  registerUser()
-    .then((result) => {
-      if (result.error) {
-        res.render("home/registerNTC", {
-          err: result.error,
-        });
-      } else {
-        res.redirect("/account/login");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.render("home/register", {
-        error: "An error occurred",
+    
+    if (err == ''){
+      res.redirect('/account/login');
+    } else {
+      res.render("auth/registerNTC", {
+        error: err,
       });
+    }
+    
+  } catch (err) {
+    console.log(err);
+    res.render("auth/registerNTC", {
+      error: 'Tao tai khoan moi that bai',
     });
+  }
 };
 
 exports.postLogin = async (req, response, next) => {
   const { userID, password } = req.body;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  //  const error = validationResult(req);
-
-  async function Login() {
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var err = '';
     try {
-      let GetAccCheckLogin;
-      let NTC = true;
-      if (emailRegex.test(userID)) {
-        GetAccCheckLogin = await authModel.CheckLoginNTC(userID);
-      } else {
-        GetAccCheckLogin = await authModel.CheckLoginStudent(userID);
-        NTC = false;
+      const GetAccCheckLogin = await authModel.CheckLogin(userID);
+      if (GetAccCheckLogin == null) {
+        err = "Email was not registered"
       }
-      if (GetAccCheckLogin[0].hashpassword == 0) {
-        return {
-          error: " was not registered",
-        };
-      } else {
-        const isMatchPass = await bcrypt.compare(
-          password,
-          GetAccCheckLogin[0].hashpassword
-        );
-        if (!isMatchPass) {
-          return {
-            error: "Wrong email or password",
-          };
-        } else {
-          return {
-            error: "",
-            NTC: NTC,
-          };
+      else{
+        const isMatchPass = await bcrypt.compare(password,GetAccCheckLogin[0].hashpassword);
+        if (!isMatchPass)
+        {
+          err = "Wrong email or password"
         }
+      }
+      if (err == '')
+      {
+        id = GetAccCheckLogin[0].id;
+        role = GetAccCheckLogin[0].role;
+        req.session.id = id;
+        req.session.id = role;
+        response.redirect('/');
+      }
+      else
+      {
+        console.log(err);
+        response.render('home/login',{
+          error: 'error',
+        });
       }
     } catch (err) {
       console.log(err);
       return {
-        error: "An error occurred",
+        error: "An error occurred"
       };
     }
-  }
-
-  // Sử dụng hàm registerUser
-  Login()
-    .then((result) => {
-      console.log(result.error);
-      if (result.error) {
-        response.render("home/login", {
-          error: result.error,
-        });
-      } else {
-        if (result.NTC) response.redirect("/home/NTC");
-        else response.redirect("/home/SV");
-      }
-    })
-    .catch((er) => {
-      console.log(er);
-      response.render("home/login", {
-        error: "An error occurred",
-      });
-    });
 };
-
-// HACKSAW RIDGE" (2016),
+exports.Get_LogOut = (req, res, next) => {
+  if (req.session.id){
+    console.log(req.session);
+    req.session.destroy();
+  }
+};
