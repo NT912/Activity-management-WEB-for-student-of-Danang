@@ -14,10 +14,16 @@ organizationModel.getByUserId = async (user_id) => {
   return rows[0] ? rows[0] : null;
 }
 
+organizationModel.getByEmail = async (email) => {
+  const [rows] = await pool.query("SELECT * FROM organizations WHERE email = ?", [email]);
+
+  return rows[0] ? rows[0] : null;
+}
+
 organizationModel.create = async (organization) => {
   const [result] = await pool.query(
-    "INSERT INTO organizations (user_id, name, description, address, email, phone) VALUES (?, ?, ?, ?, ?, ?)",
-    [organization.user_id, organization.name, organization.description, organization.address, organization.email, organization.phone]
+    "INSERT INTO organizations (user_id, email) VALUES (?, ?)",
+    [organization.user_id, organization.email]
   );
 
   if (result.insertId) {
