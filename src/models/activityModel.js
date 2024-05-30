@@ -25,24 +25,59 @@ activityModel.add = async (activity) => {
 
   const [result] = await pool.query(queryText, [
     activity.name,
-    activity.organization_id,
-    activity.description,
-    datetimeUtils.formatStartDatetime(activity.start_date),
-    datetimeUtils.formatEndDatetime(activity.end_date),
-    datetimeUtils.formatStartDatetime(activity.registration_start_date),
-    datetimeUtils.formatEndDatetime(activity.registration_end_date),
+    activity.idOrganization,
+    activity.desc,
+    datetimeUtils.formatStartDatetime(activity.date_start),
+    datetimeUtils.formatEndDatetime(activity.date_end),
+    datetimeUtils.formatStartDatetime(activity.date_start_regis),
+    datetimeUtils.formatEndDatetime(activity.date_end_regis),
     activity.location,
-    activity.image,
+    activity.poster,
   ]);
 
-  if (result.insertId) {
-    return await this.getById(result.insertId);
-  }
-
-  return null;
+  return result;
 }
 
-activityModel.getAll = async (withOrganization = false, organization = null) => {
+exports.AddActivity = (act, callback) => {
+  return new Promise((resolve, reject) => {
+    console.log(act);
+    const query = `
+    INSERT INTO activities(name, organization_id, description, start_date, end_date, registration_start_date, registration_end_date, location, image)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) `;
+    
+    const values = [
+      act.idOrganization,
+      act.name,
+      act.desc,
+      act.date_start,
+      act.date_end,
+      act.date_start_regis,
+      act.date_end_regis,
+      act.location,
+      act.poster
+    ];
+      db.query(query,values, (err, res) => {
+        if (err)
+        {
+            callback(err,null)
+        } else
+        {
+            callback(null, res)
+        }
+      });
+  });
+}
+
+activityModel.GetAll = async (num) => {
+  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id
+  FROM activities A 
+  INNER JOIN organizations O ON A.organization_id = O.id 
+  INNER JOIN users U ON O.user_id = U.id`;
+  const result = await pool.query(query);
+  return result;
+}
+
+activityModel.getAll = async (num) => {
   let queryText = `
     SELECT * FROM activities
   `;
@@ -59,6 +94,7 @@ activityModel.getAll = async (withOrganization = false, organization = null) => 
       FROM activities
       JOIN organizations ON activities.organization_id = organizations.id
     `;
+    
   }
 
   if (where.length) {

@@ -1,13 +1,40 @@
 const qrcode = require('qrcode');
 const fs = require('fs');
 
-const organizationModel = require('../models/organization');
-const activityModel = require('../models/activity');
+const organizationModel = require('../models/organizationModel');
+const activityModel = require('../models/activityModel');
 const datetimeUtils = require('../utils/datetime');
 const pathUtils = require('../utils/path');
 const { public_domain } = require('../config');
+const firebase = require('../utils/firebase');
+const { error } = require('console');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
 
 const activityController = module.exports;
+
+class Activity {
+  constructor(
+    idOrganization,
+    name,
+    date_start,
+    date_end,
+    date_start_regis,
+    date_end_regis,
+    location,
+    desc,
+    poster
+  ) {
+    this.idOrganization = idOrganization,
+    this.name = name;
+    this.date_start = date_start;
+    this.date_end = date_end;
+    this.date_start_regis = date_start_regis;
+    this.date_end_regis = date_end_regis;
+    this.location = location;
+    this.desc = desc;
+    this.poster = poster;
+  }
+}
 
 activityController.getList = async (req, res) => {
   const activities = await activityModel.getAll(withOrganization = true, organization = req.session.organization);
@@ -72,50 +99,110 @@ activityController.getView = async (req, res) => {
   });
 }
 
-activityController.getAdd = async (req, res) => {
-  const organizations = await organizationModel.getAll();
 
-  res.render('activity/add', {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    user: req.session.user,
-    student: req.session.student,
-    admin: req.session.admin,
-    organization: req.session.organization,
-    organizations
-  });
+activityController.Get_AddActivity = async (req, res) => {
+  res.render('activity/createpost', {
+    error: '',
+      });
 }
+// activityController.getAdd = async (req, res) => {
+//   // const organizations = await organizationModel.getAll();
+
+//   res.render('activity/add', {
+//     success: req.flash('success'),
+//     error: req.flash('error'),
+//     user: req.session.user,
+//     student: req.session.student,
+//     admin: req.session.admin,
+//     organization: req.session.organization,
+//     organizations
+//   });
+// }
 
 activityController.add = async (req, res) => {
-  try {
-    const organization = await organizationModel.getById(req.body.organization_id);
+  const {
+    name,
+    date_start,
+    date_end,
+    date_start_regis,
+    date_end_regis,
+    location,
+    desc,
+  } = req.body;
+  const dateTime = new Date().getTime();
+  var poster = req.file;
+  const storage = getStorage();
+  const storageRef = ref(storage,`poster/${poster.originalname + " " + dateTime}`)
 
-    if (!organization) {
-      throw new Error('Tổ chức không tồn tại');
-    }
+  // Lấy thông tin metadata của tệp
+  const metadata = {
+    contentType: req.file.mimetype,
+  };
 
-    const activity = await activityModel.add({
-      name: req.body.name,
-      organization_id: req.body.organization_id,
-      description: req.body.description,
-      start_date: req.body.start_date,
-      end_date: req.body.end_date,
-      registration_start_date: req.body.registration_start_date,
-      registration_end_date: req.body.registration_end_date,
-      location: req.body.location,
-      image: req.file ? req.file.path : null,
-    });
-
-    if (!activity) {
-      throw new Error('Có lỗi xảy ra khi thêm hoạt động');
-    }
-
-    req.flash('success', `Thêm hoạt động ${req.body.name} thành công`);
-  } catch (error) {
-    req.flash('error', error.message);
+  function uploadFirebase(callback) {
+    uploadBytesResumable(storageRef, poster.buffer, metadata)
+      .then((uploadSnapshot) => {
+        snapshot = uploadSnapshot;
+        return getDownloadURL(snapshot.ref);
+      })
+      .then((url) => {
+        downloadURL = url;
+        callback(downloadURL);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-
-  res.redirect('/activity/list');
+  
+  uploadFirebase((downloadURL) => {
+    const act = new Activity(
+      7,
+    name,
+    date_start,
+    date_end,
+    date_start_regis,
+    date_end_regis,
+    location,
+    desc,
+    downloadURL,
+    );
+    AddActDatabse(act)
+    .then((result) => {
+        res.redirect('/');
+    }
+  )
+  .catch((error) => {
+    console.log(error);
+    res.render('activity/createpost', {
+      error: ""
+    });
+  });
+  });
+  
+  async function AddActDatabse(act) {
+    try
+    {
+      activityModel.add(act,(err, res) => {
+        if (err) {
+          return {
+            error: "fail to add game to database",
+          }
+        }
+        else{
+          return {
+            error: '',
+          }
+        }
+      })
+    } 
+    catch (err)
+    {
+      console.log(err);
+      return {
+        error: "An error occured",
+      }
+    }
+  }
 }
 
 activityController.getEdit = async (req, res) => {

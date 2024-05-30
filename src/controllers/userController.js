@@ -1,9 +1,9 @@
-const userModel = require('../models/user');
-const studentModel = require('../models/student');
-const organizationModel = require('../models/organization');
-const adminModel = require('../models/admin');
-const registrationModel = require('../models/registration');
-const attendanceModel = require('../models/attendance');
+const userModel = require('../models/userModel');
+const studentModel = require('../models/studentModel');
+const organizationModel = require('../models/organizationModel');
+const adminModel = require('../models/adminModel');
+const registrationModel = require('../models/registrationModel');
+const attendanceModel = require('../models/attendanceModel');
 const { roles } = require('../constants');
 
 const userController = module.exports;

@@ -11,7 +11,7 @@ authMiddleware.isLoggedIn = (req, res, next) => {
 }
 
 authMiddleware.isLoggedOut = (req, res, next) => {
-  if (!req.session.user) {
+  if (!req.session.idUser) {
     return next();
   }
 
@@ -46,7 +46,7 @@ authMiddleware.isOrganization = (req, res, next) => {
 }
 
 authMiddleware.isOrganizationOrAdmin = (req, res, next) => {
-  if (req.session.user && (req.session.user.role === roles.ORGANIZATION || req.session.user.role === roles.ADMIN)) {
+  if (req.session.idUser && (req.session.role === roles.ORGANIZATION || req.session.role === roles.ADMIN)) {
     return next();
   }
 

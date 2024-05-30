@@ -16,6 +16,26 @@ userModel.getByUsername = async (username) => {
   return rows[0] ? rows[0] : null;
 }
 
+userModel.getByUserEmail = async (email) => {
+  const [rows] = await pool.query("SELECT * FROM organizations WHERE email = ?", [email]);
+
+  return rows[0] ? rows[0] : null;
+}
+
+userModel.GetUserByMasv = async (masv) => {
+  const [rows] = await pool.query(`SELECT * FROM users U
+  INNER JOIN students S ON U.id = S.user_id
+  WHERE S.masv = ?`, [masv]);
+  return rows[0] ? rows[0] : null;
+}
+
+userModel.GetOrganiAcByEmail = async (email) => {
+  const [rows] = await pool.query(`SELECT * FROM users U
+  INNER JOIN organizations O ON U.id = O.user_id
+  WHERE O.email = ?`, [email]);
+  return rows[0] ? rows[0] : null;
+}
+
 userModel.create = async (user) => {
   hashed_password = md5(user.password);
 

@@ -6,7 +6,8 @@ const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const connectMysql = require('connect-mysql');
-
+const {initializeApp} = require("firebase/app");
+const firebase = require('./src/utils/firebase');
 const authMiddleware = require('./src/middlewares/auth');
 
 dotenv.config();
@@ -17,6 +18,8 @@ const MysqlStore = connectMysql(expressSession);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+firebase.initialFirebaseApp();
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -43,17 +46,21 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*
+  Routes
+*/
+const authRoute = require('./src/routes/authRoute');  //auth routes
+const userRoute = require('./src/routes/user');  //user routes
+const acitvityRoute = require('./src/routes/activityRoute');  //user routes
+const homeRoute = require('./src/routes/homeRoute');  //user routes
+
 app.get('/health_check', (req, res) => {
   res.send('OK');
 });
-app.use('/auth', require('./src/routes/auth'));
-app.use('/user', authMiddleware.isLoggedIn, require('./src/routes/user'));
-app.use('/activity', (req, res, next) => {
-  req.session.previous_url = req.originalUrl
-  req.session.save();
-  next();
-}, authMiddleware.isLoggedIn, require('./src/routes/activity'));
-app.use('/', authMiddleware.isLoggedIn, require('./src/routes/home'));
+app.use('/auth', authRoute);
+app.use('/user', authMiddleware.isLoggedIn, userRoute );
+app.use('/activity', acitvityRoute);
+app.use('/', homeRoute);
 app.use((req, res) => {
   res.render('404');
 })

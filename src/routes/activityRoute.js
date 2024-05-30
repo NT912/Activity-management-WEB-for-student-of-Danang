@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
 const { static_paths } = require('../constants');
-const controller = require('../controllers/activity');
+const controller = require('../controllers/activityController');
 const authMiddleware = require('../middlewares/auth');
 
 const upload = multer({
@@ -26,8 +26,9 @@ const upload = multer({
 router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);
 router.get('/:activity_id/view', controller.getView);
 
-router.get('/add', authMiddleware.isOrganizationOrAdmin, controller.getAdd);
-router.post('/add', authMiddleware.isOrganizationOrAdmin, upload.single('image'), controller.add);
+router.get('/create', controller.Get_AddActivity);
+router.post('/create', upload.single('poster'), controller.add);
+// router.post('/create', authMiddleware.isOrganizationOrAdmin, upload.single('image'), controller.add);
 
 router.get('/:activity_id/edit', authMiddleware.isOrganizationOrAdmin, controller.getEdit);
 router.post('/:activity_id/edit', authMiddleware.isOrganizationOrAdmin, upload.single('image'), controller.edit);
