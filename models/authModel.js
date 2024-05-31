@@ -7,7 +7,7 @@ const uuid = require("uuid");
 */
 exports.GetAllFaculty = () => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT * FROM major`;
+    const query = `SELECT * FROM faculty`;
     db.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -19,13 +19,15 @@ exports.GetAllFaculty = () => {
 };
 
 exports.AddNewStudent = (masv, name, falcuty, classs, password, callback) => {
-  const que = `insert into user (masv, name, class, hashpassword, falcutyId, role) 
-  values ('${masv}','${name}','${classs}','${password}', ${falcuty}, 'STUDENT')`;
+  const que = `insert into users (masv, username, hashed_password, role) 
+  values (?, ?, ?, 'STUDENT')`;
+  const values = [masv, name, classs, password, falcuty]
   db.query(que, (err, res) => {
     if (err) {
       callback(err, null);
     } else {
       callback(null, res);
+      console.log(res);
     }
   });
 };
@@ -45,7 +47,7 @@ exports.AddNewOrganization = (name, email, password, callback) => {
 exports.CountMasv = (masv) => {
   return new Promise((resolve, reject) => {
     const query =
-      `SELECT COUNT(masv) AS countMasv FROM user WHERE masv = '${masv}'`;
+      `SELECT COUNT(masv) AS countMasv FROM users WHERE masv = '${masv}'`;
     db.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -59,7 +61,7 @@ exports.CountMasv = (masv) => {
 exports.CountEmail = (email) => {
   return new Promise((resolve, reject) => {
     const query =
-      `SELECT COUNT(email) AS countEmail FROM user WHERE email = '${email}'`
+      `SELECT COUNT(email) AS countEmail FROM users WHERE email = '${email}'`
     db.query(query, (err, res) => {
       if (err) {
         reject(err);

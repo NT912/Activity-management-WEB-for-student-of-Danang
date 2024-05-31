@@ -47,14 +47,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public'))); // path join asset
-const port = 3000;
+const port = 3200;
 
 /*
     Config Redis to storage session
 */
 app.use(session({
-    store: new RedisStore({ client: getRedis()}), // RedisStore
-    secret: process.env.SECRET_SESSION,
+    // store: new RedisStore({ client: getRedis()}), // RedisStore
+    secret: 'hehehehe',
     saveUninitialized : false,
     resave: false,
     cookie: {
