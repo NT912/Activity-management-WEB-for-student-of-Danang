@@ -10,18 +10,23 @@ const { roles } = require('../constants');
 const homeController = module.exports;
 
 homeController.Get_Home = async (req, res) => {
-    let activities = await activityModel.getAll(10);
 
-  activities = activities.filter(activity => activity.admin_id );
+  let activities = await activityModel.GetAll(10);
+  const users = req.session.user;
+  let user;
+  if (users)
+  {
+    if (users.role == 'organization'){
+      user = await organizationModel.getByUserId(users.id);
+    } else 
+    if (users.role == 'student') {
+      user = await studentModel.getByUserId(users.id);
+    }
+  }
 
-  res.render('home', {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    user: req.session.user,
-    student: req.session.student,
-    admin: req.session.admin,
-    activities,
-    datetimeUtils,
-    pathUtils
+  res.render('home/homeNTC', {
+    activities: activities,
+    userss: users,
+    announc: req.flash('announc'),
   });
 }

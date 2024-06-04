@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../includes/head.ejs',{title: 'BK Volunteer'}) %>
+
+<body class="color-theme-blue mont-font">
+
+    <!-- <div class="preloader"></div> -->
+
+    <div class="main-wrapper">
+
+
+        <!-- navigation top-->
+        <%- include('../includes/header.ejs',{
+            userss: userss,
+        })
+        %>
+        <!-- navigation top -->
+
+        <!-- navigation left -->
+        <%- include('../includes/nav.ejs',{
+            userss: userss,
+        }) %>
+        <!-- navigation left -->
+
+        <!-- main content -->
+        <div class="main-content">
+            <% if (userss != null && userss.role == 'organization') {%>
+                <div class="card-body p-0" style="height: 60px; display: flex; align-items: center; background-color: rgb(248, 248, 248); width: 600px;">
+                    <a href="/activity/create" class=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center">
+                        <i class="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>
+                        Create Post
+                    </a>
+                </div>
+            <%}%>
+            <div style="display: flex;">
+                <div class="col-xl-13 col-xxl-9" style="display: flex; flex-wrap: wrap;">
+                    <% activities.forEach(activity => { %>
+                        <div class="col-md-4 px-2 py-2" style="width: 400px;">
+                            <div class="col-md-12 rounded border px-3 py-3">
+                                <div class="col-md-12 justify-content-lg-center mb-3" style="height: 200px; overflow: hidden; ">
+                                    <img src="<%= activity.image %>" class="img-fluid rounded">
+                                </div>
+                                <h5 class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block">
+                                    <%- activity.name %>
+                                </h5>
+                                <p class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block" style="height: 50px; overflow: hidden; ">
+                                    <%- activity.description %>
+                                </p>
+                                <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">
+                                    Chi tiết
+                                </a>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/plugin.js"></script>
+    <script src="/js/lightbox.js"></script>
+    <script src="/js/scripts.js"></script>
+</body>
+
+</html>
+<% if (announc != ''){ %>
+    <script>alert('<%= announc %>')</script>
+<%}%>

@@ -26,6 +26,36 @@ studentModel.getByUserId = async (user_id) => {
   return rows[0] ? rows[0] : null;
 }
 
+studentModel.getSvRegister = async (user_id) => {
+  const [rows] = await pool.query(`
+  SELECT S.*, U.username, F.name
+  FROM students S 
+  INNER JOIN users U ON U.id = S.user_id 
+  INNER JOIN faculty F ON F.idFaculty = S.faculty
+  WHERE user_id = ?
+  `, [user_id]);
+
+  return rows[0] ? rows[0] : null;
+}
+
+studentModel.GetAvtByMasv = async (masv) => {
+  const [rows] = await pool.query("SELECT avt FROM students WHERE masv = ?", [masv]);
+
+  return rows[0] ? rows[0].avt : null;
+}
+
+studentModel.GetProfileById = async (user_id) =>
+{
+  const query = `SELECT masv, class, email, F.name as faculty, F.idFaculty , phone, S.avt, U.username
+  FROM students S 
+  INNER JOIN users U ON U.id = S.user_id
+  INNER JOIN faculty F ON F.idFaculty = S.faculty
+  WHERE S.user_id = ?`;
+  const [rows] = await pool.query(query, [user_id]);
+
+  return rows[0] ? rows[0] : null;
+}
+
 studentModel.create = async (student) => {
   const [result] = await pool.query(
     "INSERT INTO students (masv, user_id, faculty, class) VALUES (?, ?, ?, ?)",

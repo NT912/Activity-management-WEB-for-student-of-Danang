@@ -8,13 +8,12 @@ router.post('/login', authMiddleware.isLoggedOut, controller.login);
 
 router.get('/register', authMiddleware.isLoggedOut, controller.GET_Register);
 
-
 router.get('/register/student', authMiddleware.isLoggedOut, controller.GET_RegisterST);
 router.post('/register/student', authMiddleware.isLoggedOut, controller.registerStudent);
 
 router.get('/register/organization', authMiddleware.isLoggedOut, controller.GET_registerOrganization);
 router.post('/register/organization', authMiddleware.isLoggedOut, controller.registerOrganization);
 
-router.get('/logout', authMiddleware.isLoggedIn, controller.logout);
+router.get('/logout', controller.logout);
 
 module.exports = router;
