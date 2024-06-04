@@ -12,7 +12,6 @@ userModel.getById = async (id) => {
 
 userModel.getByUsername = async (username) => {
   const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
-
   return rows[0] ? rows[0] : null;
 }
 
@@ -22,7 +21,7 @@ userModel.getByUserEmail = async (email) => {
   return rows[0] ? rows[0] : null;
 }
 
-userModel.GetUserByMasv = async (masv) => {
+userModel.getByUserMasv = async (masv) => {
   const [rows] = await pool.query(`SELECT * FROM users U
   INNER JOIN students S ON U.id = S.user_id
   WHERE S.masv = ?`, [masv]);

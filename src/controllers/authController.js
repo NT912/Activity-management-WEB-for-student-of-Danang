@@ -12,8 +12,7 @@ const authController = module.exports;
 
 authController.getLogin = (req, res) => {
   res.render('auth/login',{
-    error: req.flash('error'),
-    success: req.flash('success'),
+    error: ''
   });
 }
 
@@ -21,7 +20,7 @@ authController.login = async (req, res) => {
   try {
     const {userID, password} = req.body;
     var user;
-    user = await userModel.GetUserByMasv(userID);
+    user = await userModel.getByUserMasv(userID);
     if (!user){
       user = await userModel.GetOrganiAcByEmail(userID); 
     }
@@ -34,29 +33,32 @@ authController.login = async (req, res) => {
       throw new Error('Mật khẩu không chính xác');
     }
 
+    let avt;
     if (user.role === roles.STUDENT) {
       req.flash('success', `Chao sinh vien ${user.username}`);
+      avt = await studentModel.GetAvtByMasv(userID);
     } else 
     if (user.role === roles.ORGANIZATION) {
       req.flash('success', `Chào mừng tổ chức ${user.username}!`);
+      avt = await organizationModel.GetAvtByEmail(userID);
     } else if (user.role === roles.ADMIN) {
       req.flash('success', `Chào mừng quản trị viên ${user.username}!`);
     }
 
-    req.session.role = user.role;
-    req.session.idUser = user.id;
+    var userss = {
+      id: user.id,
+      role: user.role,
+      avt: avt,
+    }
+    req.session.user = userss;
     req.session.save();
 
     return res.redirect('/');
-      // req.session.organization = organization;
-      // req.session.save();
-      // req.session.admin = admin;
-      // req.session.save();
-    // return res.redirect(req.session.previous_url ?? '/');
+  
   } catch (error) {
     console.log(error);
     req.flash('error', error.message);
-    return res.redirect('auth/login');
+    return res.redirect('/auth/login');
   }
 }
 
@@ -64,20 +66,11 @@ authController.GET_Register = (req, res) => {
   res.render('auth/registerRole');
 }
 
-// authController.getRegister = (req, res) => {
-//   res.render('auth/registerold', {
-//     success: req.flash('success'),
-//     error: req.flash('error'),
-//     user: req.session.user ?? null,
-//     student: req.session.student ?? null,
-//     admin: req.session.admin ?? null,
-//   });
-// }
 authController.GET_RegisterST = async (req, res) => {
   const falcutys = await facultyModel.getAllFaculty();
   res.render('auth/registerStudent',{
     error: '',
-    Falculties: falcutys,
+    Falculties: falcutys[0],
   });
 }
 
@@ -104,6 +97,7 @@ authController.registerStudent = async (req, res) => {
     const user = await userModel.create({
       username: name,
       password: password,
+      faculty: falcuty,
       role: roles.STUDENT,
     });
 
@@ -188,6 +182,7 @@ authController.registerOrganization = async (req, res) => {
 }
 
 authController.logout = async (req, res) => {
+  console.log("here");
   req.session.destroy();
   res.redirect('/auth/login');
 }

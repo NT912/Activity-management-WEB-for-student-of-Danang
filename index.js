@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
   Routes
 */
 const authRoute = require('./src/routes/authRoute');  //auth routes
-const userRoute = require('./src/routes/user');  //user routes
+const userRoute = require('./src/routes/userRoute');  //user routes
 const acitvityRoute = require('./src/routes/activityRoute');  //user routes
 const homeRoute = require('./src/routes/homeRoute');  //user routes
 
@@ -58,7 +58,8 @@ app.get('/health_check', (req, res) => {
   res.send('OK');
 });
 app.use('/auth', authRoute);
-app.use('/user', authMiddleware.isLoggedIn, userRoute );
+app.use('/user', userRoute );
+// app.use('/user', authMiddleware.isLoggedIn, userRoute );
 app.use('/activity', acitvityRoute);
 app.use('/', homeRoute);
 app.use((req, res) => {

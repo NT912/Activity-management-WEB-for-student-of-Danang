@@ -1,5 +1,7 @@
+const facultyModel = require('../models/facultyModel');
 const userModel = require('../models/userModel');
 const studentModel = require('../models/studentModel');
+const acitivityModel = require('../models/activityModel');
 const organizationModel = require('../models/organizationModel');
 const adminModel = require('../models/adminModel');
 const registrationModel = require('../models/registrationModel');
@@ -148,63 +150,75 @@ userController.addOrganization = async (req, res) => {
   }
 }
 
-userController.getEdit = async (req, res) => {
-  try {
-    const user = await userModel.getById(req.params.user_id);
 
-    if (!user) {
-      throw new Error(`Tài khoản với ID ${req.params.user_id} không tồn tại`);
+
+userController.Get_Profile = async (req, res) => {
+    const userss = req.session.user;
+    if (!userss) {
+      return res.redirect('/auth/login');
     }
 
-    if (user.role === roles.STUDENT) {
-      const student = await studentModel.getByUserId(user.id);
-
-      res.render('user/edit', {
-        success: req.flash('success'),
-        error: req.flash('error'),
-        user: req.session.user,
-        student: req.session.student,
-        admin: req.session.admin,
-        organization: req.session.organization,
-        _user: user,
-        _student: student
-      });
-    } else if (user.role === roles.ORGANIZATION) {
-      const organization = await organizationModel.getByUserId(user.id);
-
-      res.render('user/edit', {
-        success: req.flash('success'),
-        error: req.flash('error'),
-        user: req.session.user,
-        student: req.session.student,
-        admin: req.session.admin,
-        organization: req.session.organization,
-        _user: user,
-        _organization: organization
-      });
+    console.log(userss.role);
+    if (userss.role == roles.STUDENT){
+      try {
+        const user = await studentModel.GetProfileById(userss.id);
+        const activities = await acitivityModel.GetActSVRegistered(userss.id);
+        res.render('user/profileStudent',{
+          User: user,
+          activities: activities,
+          userss: userss,
+        });
+      } catch (err){
+        console.log(err);
+        req.flash('announc', err.message);
+        return res.redirect('/');
+      }
+    } else if (userss.role == roles.ORGANIZATION){
+      try {
+        const user = await organizationModel.GetProfileById(userss.id);
+        // const activities = await acitivityModel.GetActSVRegistered(userss.id);
+        res.render('user/profileNTC',{
+          User: user,
+          // activities: activities,
+          userss: userss,
+        });
+      } catch (err){
+        console.log(err);
+        req.flash('announc', err.message);
+        return res.redirect('/');
+      }
     }
-  } catch (error) {
-    req.flash('error', error.message);
-    res.redirect('/user/list');
-  }
 }
 
-userController.getMe = async (req, res) => {
+userController.get_Edit = async (req, res) => {
   try {
-    res.render('user/me', {
-      success: req.flash('success'),
-      error: req.flash('error'),
-      user: req.session.user,
-      student: req.session.student,
-      admin: req.session.admin,
-      organization: req.session.organization,
+    const userss = req.session.user;
+    if (!userss){
+      return res.redirect('/auth/login');
+    }
+
+    var user;
+    let faculty;
+    if (userss.role === roles.STUDENT) {
+      user = await studentModel.GetProfileById(userss.id);
+      faculty = await facultyModel.getAllFaculty();
+
+    } else if (userss.role === roles.ORGANIZATION){
+      user = await organizationModel.GetProfileById(userss.id);
+    }
+
+    console.log(faculty);
+    res.render('user/edit', {
+      userss: userss,
+      user: user,
+      faculties: faculty,
     });
   } catch (error) {
+    console.log(error);
     req.flash('error', error.message);
-    res.redirect('/');
+    res.redirect('/user/profile');
   }
 }
-
 userController.edit = async (req, res) => {
   try {
     const _user = await userModel.getById(req.params.user_id);

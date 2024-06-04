@@ -2,11 +2,6 @@ const pool = require("../database");
 
 organizationModel = module.exports;
 
-organizationModel.getById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM organizations WHERE id = ?", [id]);
-
-  return rows[0] ? rows[0] : null;
-}
 
 organizationModel.getByUserId = async (user_id) => {
   const [rows] = await pool.query("SELECT * FROM organizations WHERE user_id = ?", [user_id]);
@@ -20,6 +15,23 @@ organizationModel.getByEmail = async (email) => {
   return rows[0] ? rows[0] : null;
 }
 
+organizationModel.GetProfileById = async (id) => {
+  const query = `
+  SELECT U.username, O.description, O.address, O.email, O.phone, O.avt
+  FROM organizations O
+  INNER JOIN users U ON O.user_id = U.id
+  WHERE U.id = ?
+  `
+  const [rows] = await pool.query(query, id);
+
+  return rows[0] ? rows[0] : null;
+}
+
+organizationModel.GetAvtByEmail = async (email) => {
+  const [rows] = await pool.query("SELECT avt FROM organizations WHERE email = ?", [email]);
+  return rows[0] ? rows[0].avt : null;
+}
+
 organizationModel.create = async (organization) => {
   const [result] = await pool.query(
     "INSERT INTO organizations (user_id, email) VALUES (?, ?)",
@@ -27,7 +39,7 @@ organizationModel.create = async (organization) => {
   );
 
   if (result.insertId) {
-    return await organizationModel.getById(result.insertId);
+    return await organizationModel.getByUserId(result.insertId);
   }
 
   return null;

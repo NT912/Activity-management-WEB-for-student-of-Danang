@@ -4,18 +4,6 @@ const datetimeUtils = require('../utils/datetime');
 
 const activityModel = module.exports;
 
-activityModel.getById = async (id) => {
-  const queryText = `
-    SELECT activities.*, organizations.name AS organization_name
-    FROM activities
-    INNER JOIN organizations ON activities.organization_id = organizations.id
-    WHERE activities.id = ?
-  `;
-
-  const [result] = await pool.query(queryText, [id]);
-
-  return result[0] || null;
-}
 
 activityModel.add = async (activity) => {
   const queryText = `
@@ -25,14 +13,14 @@ activityModel.add = async (activity) => {
 
   const [result] = await pool.query(queryText, [
     activity.name,
-    activity.idOrganization,
-    activity.desc,
-    datetimeUtils.formatStartDatetime(activity.date_start),
-    datetimeUtils.formatEndDatetime(activity.date_end),
-    datetimeUtils.formatStartDatetime(activity.date_start_regis),
-    datetimeUtils.formatEndDatetime(activity.date_end_regis),
+    activity.organization_id,
+    activity.description,
+    datetimeUtils.formatStartDatetime(activity.start_date),
+    datetimeUtils.formatEndDatetime(activity.end_date),
+    datetimeUtils.formatStartDatetime(activity.registration_start_date),
+    datetimeUtils.formatEndDatetime(activity.registration_end_date),
     activity.location,
-    activity.poster,
+    activity.image,
   ]);
 
   return result;
@@ -69,43 +57,40 @@ exports.AddActivity = (act, callback) => {
 }
 
 activityModel.GetAll = async (num) => {
-  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id
+  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser
   FROM activities A 
-  INNER JOIN organizations O ON A.organization_id = O.id 
+  INNER JOIN organizations O ON A.organization_id = O.user_id 
   INNER JOIN users U ON O.user_id = U.id`;
-  const result = await pool.query(query);
+  const [result] = await pool.query(query);
   return result;
 }
 
-activityModel.getAll = async (num) => {
-  let queryText = `
-    SELECT * FROM activities
-  `;
-
-  const where = [];
-
-  if (organization) {
-    where.push(`organization_id = ${organization.id}`);
-  }
-
-  if (withOrganization) {
-    queryText = `
-      SELECT activities.*, organizations.name as organization_name
-      FROM activities
-      JOIN organizations ON activities.organization_id = organizations.id
-    `;
-    
-  }
-
-  if (where.length) {
-    queryText += ` WHERE ${where.join(' AND ')}`;
-  }
-
-  const [activities] = await pool.query(queryText);
-
-  return activities;
+activityModel.GetById = async (id) => {
+  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser, O.avt
+  FROM activities A 
+  INNER JOIN organizations O ON A.organization_id = O.user_id 
+  INNER JOIN users U ON O.user_id = U.id
+  Where A.id = ?`;
+  const [result] = await pool.query(query, id);
+  return result[0];
 }
 
+activityModel.GetActSVRegistered = async (student_id) => {
+  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser
+  FROM registrations R
+  INNER JOIN activities A ON R.activity_id = A.id
+  INNER JOIN users U ON U.id = A.organization_id
+  WHERE R.student_id = ?`;
+  const values = student_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+// SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser, O.avt
+//   FROM activities A 
+//   INNER JOIN organizations O ON A.organization_id = O.user_id 
+//   INNER JOIN users U ON O.user_id = U.id
+//   INNER JOIN registrations R ON U.id = R.student_id
+//   Where U.id = 31
 activityModel.update = async (activity_id, activity) => {
   const queryText = `
     UPDATE activities
@@ -166,13 +151,14 @@ activityModel.unverify = async (activity_id) => {
   return null;
 }
 
-activityModel.register = async (activity_id, student_id) => {
+activityModel.register = async (activity_id, student_id, email, phone_number, wish) => {
   const queryText = `
-    INSERT INTO registrations(activity_id, student_id)
-    VALUES(?, ?)
-  `;
-
-  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
+    INSERT INTO registrations(activity_id, student_id, email, phone_number, wish)
+    VALUES(?, ?, ?, ? ,?)
+  `
+  ;
+  const values = [activity_id, student_id, email, phone_number,wish];
+  const [result] = await pool.query(queryText, values);
 
   return result.affectedRows || null;
 }
@@ -193,10 +179,42 @@ activityModel.isRegistered = async (activity_id, student_id) => {
     SELECT * FROM registrations
     WHERE activity_id = ? AND student_id = ?
   `;
-
-  const [result] = await pool.query(queryText, [activity_id, student_id.toString()]);
-
+  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  console.log(result.length);
   return result.length > 0;
+}
+
+activityModel.isRegistered = async (activity_id, student_id) => {
+  const queryText = `
+    SELECT * FROM registrations
+    WHERE activity_id = ? AND student_id = ?
+  `;
+  const [result] = await pool.query(queryText, [activity_id, student_id]);
+  return result.length > 0;
+}
+
+activityModel.ChangeConfirmRegister = async (activity_id, student_id, isConfirm) => {
+  const queryText = `
+  UPDATE registrations R
+  SET isComfirm = ${isConfirm}
+  WHERE R.activity_id = ? AND R.student_id = ?
+  `;
+  const values = [activity_id, student_id];
+  const [result] = await pool.query(queryText, values);
+  return result.affectedRows > 0;
+}
+
+activityModel.GetListRegistationOfActivity = async (activity_id) => {
+  const queryText = `
+  SELECT R.id, R.student_id, U.username, R.email, R.phone_number, R.isComfirm, S.masv, S.class, F.name as faculty, R.isComfirm, R.isAttendance
+  FROM registrations R
+  INNER JOIN students S ON S.user_id = R.student_id
+  INNER JOIN users U ON S.user_id = U.id
+  INNER JOIN faculty F ON S.faculty = F.idFaculty 
+  WHERE R.activity_id = ?
+  `;
+  const [result] = await pool.query(queryText, [activity_id]);
+  return result;
 }
 
 activityModel.search = async (query) => {
