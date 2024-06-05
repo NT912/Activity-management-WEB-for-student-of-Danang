@@ -66,6 +66,38 @@ userModel.getByRole = async (role) => {
   return rows;
 }
 
+userModel.updateAvtSV = async (url, student_id) => {
+  let query = `
+  UPDATE students 
+  SET avt = ?
+  where user_id = ?`;
+  const values = [url, student_id]
+  
+  const [result] = await pool.query(query, values);
+
+  if (result.affectedRows) {
+    return true
+  }
+
+  return false;
+}
+
+userModel.updateAvtNTC = async (url, organization_id) => {
+  let query = `
+  UPDATE organizations 
+  SET avt = ?
+  where user_id = ?`;
+  const values = [url, organization_id]
+  
+  const [result] = await pool.query(query, values);
+
+  if (result.affectedRows) {
+    return true
+  }
+
+  return false;
+}
+
 userModel.update = async (user_id, user) => {
   let query = 'UPDATE users SET ';
   let setStatements = [];

@@ -7,6 +7,8 @@ const adminModel = require('../models/adminModel');
 const registrationModel = require('../models/registrationModel');
 const attendanceModel = require('../models/attendanceModel');
 const { roles } = require('../constants');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } = require('firebase/storage');
+const md5 = require('md5');
 
 const userController = module.exports;
 
@@ -35,47 +37,6 @@ userController.getAdd = async (req, res) => {
     admin: req.session.admin,
     organization: req.session.organization
   });
-}
-
-userController.getView = async (req, res) => {
-  try {
-    const user = await userModel.getById(req.params.user_id);
-
-    if (!user) {
-      throw new Error(`Tài khoản với ID ${req.params.user_id} không tồn tại`);
-    }
-
-    if (user.role === roles.STUDENT) {
-      const student = await studentModel.getByUserId(user.id);
-
-      res.render('user/view', {
-        success: req.flash('success'),
-        error: req.flash('error'),
-        user: req.session.user,
-        student: req.session.student,
-        admin: req.session.admin,
-        organization: req.session.organization,
-        _user: user,
-        _student: student
-      });
-    } else if (user.role === roles.ORGANIZATION) {
-      const organization = await organizationModel.getByUserId(user.id);
-
-      res.render('user/view', {
-        success: req.flash('success'),
-        error: req.flash('error'),
-        user: req.session.user,
-        student: req.session.student,
-        admin: req.session.admin,
-        organization: req.session.organization,
-        _user: user,
-        _organization: organization
-      });
-    }
-  } catch (error) {
-    req.flash('error', error.message);
-    res.redirect('/user/list');
-  }
 }
 
 userController.addStudent = async (req, res) => {
@@ -158,14 +119,31 @@ userController.Get_Profile = async (req, res) => {
       return res.redirect('/auth/login');
     }
 
-    console.log(userss.role);
     if (userss.role == roles.STUDENT){
       try {
         const user = await studentModel.GetProfileById(userss.id);
-        const activities = await acitivityModel.GetActSVRegistered(userss.id);
+        var activities;
+        var active;
+        if (req.query.mod){
+          const mod = req.query.mod;
+          if (mod == 'joined'){
+            active = 'joined';
+            activities= await acitivityModel.GetActSVJoined(userss.id);
+          } else 
+          if (mod == 'saved') {
+            active = 'saved';
+            activities= await acitivityModel.GetActSave(userss.id);
+          } else {
+            return res.redirect('/user/profile');
+          }
+        } else {
+            active = 'registered';
+            activities = await acitivityModel.GetActSVRegistered(userss.id);
+        }
         res.render('user/profileStudent',{
           User: user,
           activities: activities,
+          active: active,
           userss: userss,
         });
       } catch (err){
@@ -177,9 +155,34 @@ userController.Get_Profile = async (req, res) => {
       try {
         const user = await organizationModel.GetProfileById(userss.id);
         // const activities = await acitivityModel.GetActSVRegistered(userss.id);
+        var activities;
+        var active;
+        if (req.query.mod){
+          const mod = req.query.mod;
+          console.log(mod);
+          if (mod == 'wait'){
+            active = 'wait';
+            activities= await acitivityModel.GetActSVJoined(userss.id);
+          } else 
+          if (mod == 'process') {
+            active = 'process';
+            activities= await acitivityModel.GetActNTCProcess(userss.id);
+          }
+          else 
+          if (mod == 'saved') {
+            active = 'saved';
+            activities= await acitivityModel.GetActSave(userss.id);
+          } else {
+            return res.redirect('/user/profile');
+          }
+        } else {
+            active = 'done';
+            activities = await acitivityModel.GetActNTCDone(userss.id);
+        }
         res.render('user/profileNTC',{
           User: user,
-          // activities: activities,
+          activities: activities,
+          active: active,
           userss: userss,
         });
       } catch (err){
@@ -190,41 +193,130 @@ userController.Get_Profile = async (req, res) => {
     }
 }
 
-userController.get_Edit = async (req, res) => {
+userController.Get_Edit = async (req, res) => {
   try {
     const userss = req.session.user;
     if (!userss){
       return res.redirect('/auth/login');
     }
 
-    var user;
-    let faculty;
     if (userss.role === roles.STUDENT) {
-      user = await studentModel.GetProfileById(userss.id);
+      const user = await studentModel.GetProfileById(userss.id);
       faculty = await facultyModel.getAllFaculty();
-
-    } else if (userss.role === roles.ORGANIZATION){
-      user = await organizationModel.GetProfileById(userss.id);
+      return res.render('user/edit', {
+        userss: userss,
+        user: user,
+        error: req.flash('error'),
+        faculties: faculty,
+      });
+    } else 
+    if (userss.role === roles.ORGANIZATION){
+      const user = await organizationModel.GetProfileById(userss.id);
+      return res.render('user/edit', {
+        userss: userss,
+        error: '',
+        user: user,
+      });
     }
-
-    console.log(faculty);
-    res.render('user/edit', {
-      userss: userss,
-      user: user,
-      faculties: faculty,
-    });
   } catch (error) {
     console.log(error);
     req.flash('error', error.message);
     res.redirect('/user/profile');
   }
 }
+
+userController.Post_Edit = async (req, res) => {
+  try {
+    const userss = req.session.user;
+    if (!userss){
+      return res.redirect('/');
+    }
+    
+    if (userss.role === roles.STUDENT) {
+      const _student = await studentModel.getByUserId(userss.id);
+
+      if (!_student) {
+        throw new Error(`Tai khoan khong ton tai`);
+      }
+
+      const {username, masv, faculty, classs, email, phone} = req.body;
+      if (!username || !masv || !faculty || !classs || !email || !phone){
+          throw new Error(`Vui long nhap day du thong tin`);
+      }
+      
+      const student_msv = await studentModel.getByMasv(masv);
+      if (student_msv && student_msv.user_id != userss.id){
+        throw new Error(`Ma sinh vien da ton tai`);
+      }
+
+      const student_email = await studentModel.getByEmail(email);
+      if (student_email && student_email.user_id != userss.id){
+        throw new Error(`Email da ton tai`);
+      }
+      const student = await studentModel.update(userss.id, {
+        name: username,
+        email: email,
+        phone: phone,
+        faculty: faculty,
+        classs: classs,
+        masv: masv,
+      });
+
+      if (!student){
+          throw new Error(`Cap nhat thong tin khong thanh cong`);
+      }
+      req.flash('success', `Sinh viên ${student.fullname} | ${student.id} đã được cập nhật`);
+      res.redirect('/user/profile');
+    } else if (userss.role === roles.ORGANIZATION) {
+
+      const organization = await organizationModel.getByUserId(userss.id);
+
+      if (!organization) {
+        throw new Error(`Tai khoan da bi xoa hoac khong ton tai`);
+      }
+
+      const {username, email, address, phone, description} = req.body;
+      if (!username || !email || !address || !phone || !description || !phone){
+          throw new Error(`Vui long nhap day du thong tin`);
+      }
+
+      const organization_email = await organizationModel.getByEmail(email);
+      if (organization_email && organization_email.user_id != userss.id){
+        throw new Error(`Email da ton tai`);
+      }
+
+      const check = await organizationModel.update(userss.id, {
+        name: username,
+        description: description,
+        email: email,
+        phone: phone,
+        address: address
+      });
+
+      if (!check){
+        throw new Error(`Cap nhat thong tin khong thanh cong`);
+      }
+
+      req.flash('success', `Tổ chức ${organization.name} đã được cập nhật`);
+      res.redirect('/user/profile');
+    }
+  } catch (error) {
+    console.log(error);
+    req.flash('error', error.message);
+    res.redirect('/user/edit');
+  }
+}
 userController.edit = async (req, res) => {
   try {
-    const _user = await userModel.getById(req.params.user_id);
+    // const _user = await userModel.getById(req.params.user_id);
 
-    if (!_user) {
-      throw new Error(`Tài khoản với ID ${req.params.user_id} không tồn tại`);
+    // if (!_user) {
+    //   throw new Error(`Tài khoản với ID ${req.params.user_id} không tồn tại`);
+    // }
+
+    const userss = req.session.user;
+    if (!userss){
+      return res.redirect('/');
     }
 
     const user = await userModel.update(_user.id, {
@@ -281,6 +373,49 @@ userController.edit = async (req, res) => {
   }
 }
 
+userController.Post_avt = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  try{
+    const userss = req.session.user;
+
+    if (!userss){
+      throw Error('Ban chua dang nhap');
+    }
+
+    const firebaseStore = getStorage();
+    const currentTimestamp = Date.now();
+    const StoreRef = ref(firebaseStore, `avt-user/${req.file.originalname} ${currentTimestamp}`);
+    const metadata = {
+      contentType: req.file.mimetype,
+    };
+    const snapshot = await uploadBytesResumable(StoreRef,req.file.buffer, metadata);
+    const url = await getDownloadURL(snapshot.ref);
+
+    var result = false;
+    if (url){
+      if (userss.role == roles.STUDENT){
+        result = await userModel.updateAvtSV(url,userss.id);
+      } else 
+      if (userss.role == roles.ORGANIZATION){
+        result = await userModel.updateAvtNTC(url,userss.id);
+      } 
+    } else {
+      throw Error('Loi up anh len firebase');
+    }
+
+    if (!result){
+      throw Error('Loi up anh len databse');
+    }
+
+    return res.status(200).json({ newAvatarUrl: url });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Failed to upload avatar' });
+  }
+}
 userController.editMe = async (req, res) => {
   try {
     const user = await userModel.update(req.session.user.id, {

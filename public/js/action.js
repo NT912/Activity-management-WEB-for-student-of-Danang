@@ -1,5 +1,5 @@
 function ConfirmStudentRegister(activityId, studentId, isConfirmed, checkboxId) {
-    fetch(`http://127.0.0.1:3200/activity/confirmStudentRegister?activity_id=${activityId}&student_id=${studentId}&is_confirmed=${isConfirmed}`, {
+    fetch(`/activity/confirmStudentRegister?activity_id=${activityId}&student_id=${studentId}&is_confirmed=${isConfirmed}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -25,3 +25,49 @@ function ConfirmStudentRegister(activityId, studentId, isConfirmed, checkboxId) 
         console.error('There was a problem with the fetch operation:', error);
     });
 }
+document.getElementById('avatarInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Hiển thị ảnh đã chọn trong thẻ img
+            document.getElementById('avatarImg').src = e.target.result;
+            // Hiển thị nút xác nhận
+            document.getElementById('confirmButton').classList.remove('d-none');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+async function uploadAvatar() {
+    const formData = new FormData();
+    const fileInput = document.getElementById('avatarInput');
+    
+    if (fileInput.files.length > 0) {
+        formData.append('avatar', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/user/upload-avatar', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert('Avatar updated successfully');
+                // Cập nhật ảnh avatar mới (đã được xử lý từ server)
+                document.getElementById('avatarImg').src = result.newAvatarUrl;
+                // Ẩn nút xác nhận sau khi tải lên thành công
+                document.getElementById('confirmButton').classList.add('d-none');
+            } else {
+                alert('Failed to update avatar');
+            }
+        } catch (error) {
+            console.error('Error uploading avatar:', error);
+            alert('An error occurred while uploading the avatar');
+        }
+    } else {
+        alert('Please select an image file to upload');
+    }
+}
+

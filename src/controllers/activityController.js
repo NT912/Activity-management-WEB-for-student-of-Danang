@@ -2,6 +2,7 @@ const qrcode = require('qrcode');
 const fs = require('fs');
 
 const organizationModel = require('../models/organizationModel');
+const ExcelJS = require('exceljs');
 const activityModel = require('../models/activityModel');
 const datetimeUtils = require('../utils/datetime');
 const pathUtils = require('../utils/path');
@@ -10,8 +11,9 @@ const firebase = require('../utils/firebase');
 const multer = require('multer');
 const { error } = require('console');
 const bodyParser = require('body-parser');
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
-const { roles } = require('../constants');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } = require('firebase/storage');
+const { roles, state_activity, state } = require('../constants');
+const { url } = require('inspector');
 
 const activityController = module.exports;
 
@@ -54,14 +56,15 @@ activityController.getList = async (req, res) => {
 
 activityController.getView = async (req, res) => {
   const userss = req.session.user;
-  const idAct = req.params.activity_id;
-  const activity = await activityModel.GetById(idAct);
+  const activity_id = req.params.activity_id;
+  const activity = await activityModel.GetById(activity_id);
   
   if (!activity) {
     req.flash('announc', 'Hoạt động không tồn tại');
     res.redirect('/activity/list');
     return;
   }
+
   // user is student
   if (userss == null || userss.role == roles.STUDENT)
   {
@@ -78,10 +81,9 @@ activityController.getView = async (req, res) => {
     // check register
     var registered = false;
     if (userss != null && userss.role == roles.STUDENT){
-      registered = await activityModel.isRegistered(idAct, userss.id);
+      registered = await activityModel.isRegistered(activity_id, userss.id);
     }
 
-    console.log(req.flash('announc'));
     return res.render('activity/viewSV', {
       userss: userss,
       activity: activity,
@@ -93,13 +95,44 @@ activityController.getView = async (req, res) => {
   // User is organization
   if (userss.role == roles.ORGANIZATION)
   {
-    let isOwn = userss.id == idAct;
+    var isOwn = false;
+    var allow_update = false;
+    const now = new Date();
+    var state_activity = '';
+      if (activity.organization_id == userss.id){
+        isOwn = true;
+        const stateact = activity.Confirm.toString();
+        state_activity = state[stateact];
+      }
+    if (now < activity.registration_end_date){
+      allow_update = true;
+    }
+    console.log(req.flash('announc'));
     return res.render('activity/viewNTC', {
       userss: userss,
       activity: activity,
       allowRegister: null,
       registered: null,
       isOwn: isOwn,
+      allow_update: allow_update,
+      state: state_activity,
+      announc: req.flash('announc'),
+    });
+  } else 
+  if (userss.role == roles.ADMIN){
+    const now = new Date();
+    var state_activity = '';
+    if (now < activity.registration_end_date){
+      if (activity.organization_id == userss.id){
+        isOwn = true;
+        const stateact = activity.Confirm.toString();
+        state_activity = state[stateact];
+      }
+    }
+    return res.render('activity/viewNTC', {
+      userss: userss,
+      activity: activity,
+      state: state_activity,
     });
   }
   
@@ -130,7 +163,6 @@ activityController.registration = async (req, res) => {
 
   const activities = await activityModel.GetById(activity_id);
   const list = await activityModel.GetListRegistationOfActivity(activity_id);
-  console.log(userss);
   res.render('activity/listmember', {
     activity: activities,
     listmember: list,
@@ -142,13 +174,54 @@ activityController.registration = async (req, res) => {
 
 activityController.Get_AddActivity = async (req, res) => {
   const userss = req.session.user;
+  if (!userss){
+    return res.redirect('/auth/login');
+  }
   if (!userss || (userss.role == 'student')){
     req.flash('announc','Ban khong duoc phep truy cap trang tao hoat dong');
     return res.redirect('/');
   }
   res.render('activity/createpost', {
     error: req.flash('announc'),
+    userss: userss,
+    announc: req.flash('cannounc'),
   });
+}
+
+activityController.DownloadExcel = async (req, res) => {
+  const activity_id = req.params.activity_id;
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Members');
+  worksheet.columns = [
+    { header: 'Ho van ten', key: 'username', width: 30 },
+    { header: 'Ma SV', key: 'masv', width: 15 },
+    { header: 'Khoa', key: 'faculty', width: 35 },
+    { header: 'Lop', key: 'class', width: 15 },
+    { header: 'Email', key: 'email', width: 30 },
+    { header: 'So dien thoai', key: 'phone_number', width: 20 },
+    { header: 'Xac nhan', key: 'isComfirm', width: 10 },
+    { header: 'Diem danh', key: 'isAttendance', width: 10 }
+  ];  
+  const members = await activityModel.GetListRegistationOfActivity(activity_id);
+
+  const transformedMembers = members.map(member => ({
+    ...member,
+    isComfirm: member.isComfirm ? 'Yes' : 'No',
+    isAttendance: member.isAttendance ? 'Yes' : 'No'
+  }));
+
+  transformedMembers.forEach(member => {
+    worksheet.addRow(member);
+  });
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', 'attachment; filename=members.xlsx');
+  workbook.xlsx.write(res)
+      .then(() => {
+        res.end();
+      })
+      .catch(err => {
+          res.status(500).send(err);
+      });
 }
 
 activityController.add = async (req, res) => {
@@ -188,78 +261,145 @@ activityController.add = async (req, res) => {
     }
 
     req.flash('announc', `Ban da dang ky thanh cong hoat dong ${req.body.name}`);
+    return res.redirect('/');
   } catch (error) {
     req.flash('announc', error.message);
     res.redirect('/activity/create');
   }
 }
 activityController.getEdit = async (req, res) => {
-  const organizations = await organizationModel.getAll();
-  const activity = await activityModel.getById(req.params.activity_id);
-
-  if (!activity) {
-    req.flash('error', 'Hoạt động không toàn tại');
-    res.redirect('/activity/list');
-    return;
-  }
-
-  const registrations = await activityModel.getActivityRegistrationsAttendences(
-    req.params.activity_id,
-    req.session.student ? req.session.student.id : null
-  )
-
-  res.render('activity/edit', {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    user: req.session.user,
-    student: req.session.student,
-    admin: req.session.admin,
-    organization: req.session.organization,
-    activity: activity,
-    organizations,
-    datetimeUtils,
-    pathUtils,
-    registrations
-  });
-}
-
-activityController.edit = async (req, res) => {
-  try {
-    const organization = await organizationModel.getById(req.body.organization_id);
-
-    if (!organization) {
-      throw new Error('Tổ chức không tồn tại');
+  try{
+    const userss = req.session.user;
+    if (!userss){
+      return res.redirect('/auth/login');
     }
 
-    const activity = await activityModel.getById(req.params.activity_id);
-
-    if (!activity) {
-      throw new Error('Hoạt động không tồn tại');
+    if (userss.role != roles.ORGANIZATION){
+      return res.redirect('/');
     }
 
-    const updatedActivity = await activityModel.update(req.params.activity_id, {
-      name: req.body.name,
-      organization_id: req.body.organization_id,
-      description: req.body.description,
-      start_date: req.body.start_date,
-      end_date: req.body.end_date,
-      registration_start_date: req.body.registration_start_date,
-      registration_end_date: req.body.registration_end_date,
-      location: req.body.location,
-      image: req.file ? req.file.path : activity.image,
-      comment: req.body.comment
+    const activity_id = req.params.activity_id;
+    const activity = await activityModel.GetById(activity_id);
+
+    if (!activity){
+      req.flash('announc','hoat dong khong ton tai hoac da bi xoa');
+      return res.redirect('/');
+    }
+
+    if (activity.organization_id != userss.id){
+      req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
+      return res.redirect(`/activity/${activity_id}/view`);
+    }
+    activity.end_date = new Date(activity.end_date).toISOString().split('T')[0];
+    activity.start_date = new Date(activity.start_date).toISOString().split('T')[0];
+    activity.registration_start_date = new Date(activity.registration_start_date).toISOString().split('T')[0];
+    activity.registration_end_date = new Date(activity.registration_end_date).toISOString().split('T')[0];
+    console.log(activity);
+    res.render('activity/editpost', {
+      activity: activity,
+      error: req.flash('announc'),
+      userss: userss,
     });
+    
+  } catch (err) {
+    req.flash('announc',err.message);
+    res.redirect('/');
+  }
+}
+// const activity = await activityModel.getById(req.params.activity_id);
 
-    if (!updatedActivity) {
-      throw new Error('Có lỗi xảy ra khi cập nhật hoạt động');
+//   if (!activity) {
+//     req.flash('error', 'Hoạt động không toàn tại');
+//     res.redirect('/activity/list');
+//     return;
+//   }
+
+//   const registrations = await activityModel.getActivityRegistrationsAttendences(
+//     req.params.activity_id,
+//     req.session.student ? req.session.student.id : null
+//   )
+
+//   res.render('activity/edit', {
+//     success: req.flash('success'),
+//     error: req.flash('error'),
+//     user: req.session.user,
+//     student: req.session.student,
+//     admin: req.session.admin,
+//     organization: req.session.organization,
+//     activity: activity,
+//     organizations,
+//     datetimeUtils,
+//     pathUtils,
+//     registrations
+//   });
+
+activityController.post_edit = async (req, res) => {
+  try {
+    const userss = req.session.user;
+    if (!userss){
+      return res.redirect('/auth/login');
+    }
+    console.log('a');
+    if (userss.role != roles.ORGANIZATION){
+      return res.redirect('/');
+    }
+    console.log('b');
+
+    const activity_id = req.params.activity_id;
+    const activity = await activityModel.GetById(activity_id);
+
+    if (!activity){
+      req.flash('announc','hoat dong khong ton tai hoac da bi xoa');
+      return res.redirect('/');
+    }
+    console.log('c');
+
+    if (activity.organization_id != userss.id){
+      req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
+      return res.redirect(`/activity/${activity_id}/view`);
+    }
+    console.log('');
+
+    var url;
+    // Kiểm tra nếu có tệp mới được tải lên
+    if (req.file) {
+      const firebaseStore = getStorage();
+      const currentTimestamp = Date.now();
+      const StoreRef = ref(firebaseStore, `poster/${req.file.originalname} ${currentTimestamp}`);
+      console.log(req.file);
+      const metadata = {
+        contentType: req.file.mimetype,
+      };
+      const snapshot = await uploadBytesResumable(StoreRef,req.file.buffer, metadata);
+      url = await getDownloadURL(snapshot.ref);
+    } 
+    const { name, desc, date_start, date_end, date_start_regis, date_end_regis, location } = req.body;
+    if (!name || !desc || !date_start || !date_end || !date_start_regis || !date_end_regis || !location ){
+      throw Error('Vui long nhap du thong tin');
+    }
+    console.log("here");
+    const updatedActivity = {
+        name: name,
+        description: desc,
+        start_date: date_start,
+        end_date: date_end,
+        registration_start_date: date_start_regis,
+        registration_end_date: date_end_regis,
+        location: location, 
+        image: url,
+    };
+    const result = await activityModel.update(activity_id, updatedActivity);
+    if (!updatedActivity){
+      throw Error('loi khi sua hoat dong');
     }
 
-    req.flash('success', `Cập nhật hoạt động ${req.body.name} thành công`);
-  } catch (error) {
-    req.flash('error', error.message);
+    req.flash('annouc','Chinh sua thong tin hoat dong thanh cong');
+    return res.redirect(`/activity/${activity_id}/view`)
+  } catch (err){
+    console.log(err);
+    req.flash('announc',err.message);
+    res.redirect(`/activity/${req.params.activity_id}/edit`);
   }
-
-  res.redirect('/activity/list');
 }
 
 activityController.verify = async (req, res) => {
