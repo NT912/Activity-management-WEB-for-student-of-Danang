@@ -18,7 +18,7 @@
             <div class="row justify-content-lg-center">
                 <div class="col-md-6 bg-white">
                     <% if (userss.role === 'student') { %>
-                        <h2>Cập nhật tài khoản sinh viên%></h2>
+                        <h2>Chinh sua thong tin ca nhan%></h2>
                         <form action="/user/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
@@ -27,17 +27,16 @@
                                         <input type="text" name="username" id="id_username" class="form-control" value="<%= user.username %>" required>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="id_student_id">Mã sinh viên</label>
-                                        <input type="text" name="student_id" id="id_student_id" class="form-control" value="<%= user.masv %>" required>
+                                        <label for="masv">Mã sinh viên</label>
+                                        <input type="text" name="masv" id="masv" class="form-control" value="<%= user.masv %>" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
                                         <label for="id_faculty">Khoa</label>
                                         <select name="faculty" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600">
-                                            <option value="<%= user.idFaculty %>" selected disabled hidden><%= user.faculty %></option>
                                             <% faculties.forEach(function(fat){ %>
-                                                <option value="<%= fat.idFaculty %>">
+                                                <option value="<%= fat.idFaculty %>" <%= user.idFaculty === fat.idFaculty ? 'selected' : '' %>>
                                                     <%= fat.name %>
                                                 </option>
                                             <% }); %>
@@ -46,7 +45,7 @@
                                     
                                     <div class="col-lg-6">
                                         <label for="id_class">Lớp</label>
-                                        <input type="text" name="class" id="id_class" class="form-control"  placeholder="Nhap lop"
+                                        <input type="text" name="classs" id="id_class" class="form-control"  placeholder="Nhap lop"
                                         value="<%= user.class %>" required>
                                     </div>
                                 </div>
@@ -63,53 +62,50 @@
                                     </div>
                                 </div>
                             </div>
+                            <span style="color:red;"><%= error%></span>
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </div>
                         </form>
-                    <%}else if (_user.role == 'organization') { %>
-                        <h2>Cập nhật tài khoản tổ chức | ID: #<%- _user.id %></h2>
-                        <form action="/user/<%- _user.id %>/edit" method="post">
+                    <%}else if (userss.role == 'organization') { %>
+                        <h2>Chinh sua thong tin to chuc</h2>
+                        <form action="/user/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
-                                        <label for="id_username">Tài khoản</label>
-                                        <input type="text" name="username" id="id_username" class="form-control" value="<%- user.username %>" required>
+                                        <label for="id_username">Ten</label>
+                                        <input type="text" name="username" id="id_username" class="form-control" value="<%= user.username %>" required>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="id_password">Mật khẩu</label>
-                                        <input type="password" name="password" id="id_password" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-12">
-                                        <label for="id_name">Tên tổ chức</label>
-                                        <input type="text" name="name" id="id_name" class="form-control" value="<%- user.name %>" required>
+                                        <label for="id_student_id">Email</label>
+                                        <input type="text" name="email" id="email" class="form-control" value="<%= user.email != null ? user.email : '' %>" 
+                                        placeholder="Hay nhap email cua ban" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
-                                        <label for="id_email">Email</label>
-                                        <input type="email" name="email" id="id_email" class="form-control" value="<%- user.email %>" required>
+                                        <label for="id_class">Dia chi</label>
+                                        <input type="text" name="address" id="address" class="form-control"  placeholder="Dia chi cua ban"
+                                        value="<%= user.class %>" required>
                                     </div>
+                                    
                                     <div class="col-lg-6">
-                                        <label for="id_phone">Số điện thoại</label>
-                                        <input type="text" name="phone" id="id_phone" class="form-control" value="<%- user.phone %>" required>
+                                        <label for="id_class">So dien thoai</label>
+                                        <input type="text" name="phone" id="phone" class="form-control"  placeholder="Nhap so dien thoai cua ban"
+                                        value="<%= user.phone %>" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-lg-12">
-                                        <label for="id_description">Mô tả tổ chức</label>
-                                        <textarea class="form-control" name="description" id="id_description" rows="3" required><%- user.description %></textarea>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-12">
-                                        <label for="id_address">Địa chỉ</label>
-                                        <input type="text" name="address" id="id_address" class="form-control" value="<%- user.address %>" required>
+                                    <div class="row mb-3">
+                                        <div class="col-lg-12">
+                                            <label for="description">Mo ta</label>
+                                            <textarea name="description" id="description" class="form-control" style="height: 200px;"
+                                            placeholder="Hay mo ta ve to chuc cua ban" required><%= user.description %></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <span style="color:red;"><%= error%></span>
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </div>

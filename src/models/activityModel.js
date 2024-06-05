@@ -57,7 +57,7 @@ exports.AddActivity = (act, callback) => {
 }
 
 activityModel.GetAll = async (num) => {
-  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser
+  const query = `SELECT A.id, A.name, A.description, A.location, A.image,  U.username, U.id as idUser
   FROM activities A 
   INNER JOIN organizations O ON A.organization_id = O.user_id 
   INNER JOIN users U ON O.user_id = U.id`;
@@ -66,7 +66,8 @@ activityModel.GetAll = async (num) => {
 }
 
 activityModel.GetById = async (id) => {
-  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser, O.avt
+  const query = `SELECT A.id, A.organization_id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, 
+  A.registration_end_date, A.location, A.image,A.Confirm, A.created_at, A.updated_at, A.comment, U.username, U.id as idUser, O.avt
   FROM activities A 
   INNER JOIN organizations O ON A.organization_id = O.user_id 
   INNER JOIN users U ON O.user_id = U.id
@@ -76,15 +77,64 @@ activityModel.GetById = async (id) => {
 }
 
 activityModel.GetActSVRegistered = async (student_id) => {
-  const query = `SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser
+  const query = `SELECT A.id, A.name, A.description,  A.location, A.image,U.username, U.id as idUser
   FROM registrations R
   INNER JOIN activities A ON R.activity_id = A.id
   INNER JOIN users U ON U.id = A.organization_id
-  WHERE R.student_id = ?`;
+  WHERE R.student_id = ? AND A.start_date > CURRENT_TIME()`;
   const values = student_id;
   const [result] = await pool.query(query, values);
   return result;
 }
+
+
+activityModel.GetActSVJoined = async (student_id) => {
+  const query = `SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
+  FROM registrations R
+  INNER JOIN activities A ON R.activity_id = A.id
+  INNER JOIN users U ON U.id = A.organization_id
+  WHERE R.student_id = ? AND R.isAttendance = true`;
+  const values = student_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+
+activityModel.GetActNTCDone = async (organization_id) => {
+  const query = `
+  SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
+  FROM activities A
+  INNER JOIN users U ON U.id = A.organization_id
+  WHERE A.Confirm = 'done' and CURRENT_TIME() > A.end_date AND A.organization_id = ?
+  `;
+  const values = organization_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+
+activityModel.GetActNTCProcess = async (organization_id) => {
+  const query = `
+  SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
+  FROM activities A
+  INNER JOIN users U ON U.id = A.organization_id
+  WHERE A.Confirm = 'confirm' and CURRENT_TIME() < A.start_date AND A.organization_id = ?
+  `;
+  const values = organization_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+
+activityModel.GetActSave = async (user_id) => {
+  const query = `
+  SELECT A.id, A.name, A.description,  A.image,  U.username, U.id as idUser
+  FROM saved S
+  INNER JOIN activities A ON S.activity_id = A.id
+  INNER JOIN users U ON U.id = S.user_id
+  WHERE U.id = ?`;
+  const values = user_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+
 // SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser, O.avt
 //   FROM activities A 
 //   INNER JOIN organizations O ON A.organization_id = O.user_id 
@@ -92,31 +142,41 @@ activityModel.GetActSVRegistered = async (student_id) => {
 //   INNER JOIN registrations R ON U.id = R.student_id
 //   Where U.id = 31
 activityModel.update = async (activity_id, activity) => {
-  const queryText = `
-    UPDATE activities
-    SET name = ?, organization_id = ?, description = ?, start_date = ?, end_date = ?, registration_start_date = ?, registration_end_date = ?, location = ?, image = ?, comment = ?
-    WHERE id = ?
-  `;
+  let query = `
+  UPDATE activities SET 
+      name = ?, 
+      description = ?, 
+      start_date = ?, 
+      end_date = ?, 
+      registration_start_date = ?, 
+      registration_end_date = ?, 
+      location = ?`;
 
-  const [result] = await pool.query(queryText, [
-    activity.name,
-    activity.organization_id,
-    activity.description,
-    datetimeUtils.formatStartDatetime(activity.start_date),
-    datetimeUtils.formatEndDatetime(activity.end_date),
-    datetimeUtils.formatStartDatetime(activity.registration_start_date),
-    datetimeUtils.formatEndDatetime(activity.registration_end_date),
-    activity.location,
-    activity.image,
-    activity.comment,
-    activity_id,
-  ]);
+    const values = [
+      activity.name,
+      activity.description,
+      activity.start_date,
+      activity.end_date,
+      activity.registration_start_date,
+      activity.registration_end_date,
+      activity.location,
+    ];
+
+    if (activity.image) {
+      query += `, image = ?`;
+      values.push(activity.image);
+    }
+
+    query += ` WHERE id = ?`;
+    values.push(activity_id);
+
+  const [result] = await pool.query(query, values);
 
   if (result.affectedRows) {
-    return await this.getById(activity_id);
+    return true;
   }
 
-  return null;
+  return false;
 }
 
 activityModel.verify = async (activity_id, admin_id) => {

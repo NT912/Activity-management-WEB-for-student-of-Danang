@@ -22,10 +22,9 @@
         <!-- navigation left -->
         
         <!-- main content -->
-        <div class="main-content">
-
-            <div class="row">
-                <div class="col-xl-12 col-xxl-9 col-lg-9" style="max-width: 900px;">
+        <div class="main-content d-flex" style="margin-right: 0;">
+            <div class="col-xl-6 d-flex" style="margin-right: 20px;">
+                <div class="col-xl-12 " style="max-width: 1000px;">
                         <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
                             <div class="card-body p-0 d-flex">
                                 <figure class="avatar me-3"><img src="<%=activity.avt%>" alt="image" class="shadow-sm rounded-circle w45"></figure>
@@ -35,6 +34,11 @@
                                         3 hour ago
                                     </span>
                                 </h4>
+                                <% if (isOwn) { %>
+                                    <p class="ms-auto font-xss status-button">Trạng thái: 
+                                        <%= state %></p>
+                                <%}%>
+
                                 <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
                                 <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
                                     <div class="card-body p-0 d-flex">
@@ -79,37 +83,49 @@
                                 <a href="/activity/<%= activity.id %>/registration/" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
                                     Danh sách
                                 </a>
-                                <% if (isOwn){  %>
-                                    <a href="#" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                                <% if (allow_update){  %>
+                                    <a href="/activity/<%=activity.id%>/edit" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
                                         Sua
                                     </a>
-                                    <a href="#" class="p-2 lh-20 w100  me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl" style="background-color: rgb(134, 0, 0);">
+                                    <a href="/activity/<%=activity.id%>/edit" class="p-2 lh-20 w100  me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl" style="background-color: rgb(134, 0, 0);">
                                         Xoa
                                     </a>
                                 <%}%>
-                                
                             </div>
                         </div>
+                </div>
+                
+            </div>
+            <div class="col-xl-5 bg-greylight" style="max-width: 900px;">
+                <div class="d-flex justify-content-center">
+                    <h4 class="font-xssss fw-600 ">Phan hoi tu admin</h4>
+                </div>
+                <div class="col-xl-12 mb-3 d-flex justify-content-center">
+                    <!-- <label for="location" class="font-xsss fw-60">Dia diem</label> -->
+                    <textarea id="location" name="desc" class="col-xl-11 style2-input ps-5 form-control-textarea text-grey-900 fw-60" 
+                    placeholder="Nội dung hoạt động" readonly>
+                        <%= activity.comment != null ? activity.comment : 'Chua co phan hoi tu admin' %>
+                    </textarea>
                 </div>
             </div>
         </div>
     </div>
+    <% if (announc != '') { %>
+        <script>alert(`<%announc%>`);</script>
+    <%} %>
 
     
-
-    
-
-
-
-
-
 
 
     <script src="/js/plugin.js"></script>
 
     <script src="/js/lightbox.js"></script>
     <script src="/js/scripts.js"></script>
-
+    <style>
+        #location {
+            line-height: 1.2; /* Điều chỉnh giá trị này theo ý muốn */
+        }
+    </style>
 
 </body>
 

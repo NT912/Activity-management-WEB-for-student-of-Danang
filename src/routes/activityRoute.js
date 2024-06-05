@@ -17,8 +17,9 @@ router.get('/create', controller.Get_AddActivity);
 router.post('/create', upload.single('poster'), controller.add);
 // router.post('/create', authMiddleware.isOrganizationOrAdmin, upload.single('image'), controller.add);
 
-router.get('/:activity_id/edit', authMiddleware.isOrganizationOrAdmin, controller.getEdit);
-router.post('/:activity_id/edit', authMiddleware.isOrganizationOrAdmin, upload.single('image'), controller.edit);
+router.get('/:activity_id/edit', controller.getEdit);
+// router.post('/:activity_id/edit', controller.edit);
+router.post('/:activity_id/edit',  upload.single('poster'), controller.post_edit);
 
 router.get('/:activity_id/verify', authMiddleware.isAdmin, controller.verify);
 router.get('/:activity_id/unverify', authMiddleware.isAdmin, controller.unverify);
@@ -29,6 +30,7 @@ router.post('/:activity_id/register',  controller.Post_register);
 router.get('/:activity_id/unregister', controller.unregister);
 
 router.get('/:activity_id/registration/', controller.registration);
+router.get('/:activity_id/download-excel/', controller.DownloadExcel);
 
 router.post('/confirmStudentRegister', controller.ConfirmRegisterSV);
 // router.get('/:activity_id/unregister', authMiddleware.isStudent, controller.unregister);

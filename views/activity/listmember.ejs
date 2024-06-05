@@ -12,7 +12,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
 </head>
 
 
@@ -61,17 +63,17 @@
                     </div>
             </div>
         </div>
-        <div style=" display: flex;">
+        <div class="d-flex col-xl-8 justify-content-between align-items-center">
             <div>
-                <h4>Danh sach sinh vien dang ky tham gia hoat dong</h4>
+                <h5>Danh sach sinh vien dang ky tham gia hoat dong</h5>
             </div>
-            <div>
-                <a href=""> 
-                    <p>
-                        hello
-                    </p>
-                </a>
-            </div>
+            <% if (activity.organization_id == userss.id){ %>
+                <div>
+                    <a href="/activity/<%= activity.id %>/download-excel">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </a>
+                </div>
+            <%}%>
         </div>
         <div style="padding: 20px 0px 20px 0px; max-width: 95%; min-width: 600px;">
             <div class="middle-sidebar-left pe-0 ms-0 me-0" style="max-width: 100%;">
@@ -86,24 +88,24 @@
                                                 Ho va ten
                                             </h6>
                                         </div>
-                                        <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">
                                             Ma sv
                                         </div>
-                                        <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <div class="email-text text-grey-500 fw-700 font-xssss">
                                             Khoa
                                         </div>
-                                        <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">
                                             Lop
                                         </div>
-                                        <div class="email-text text-grey-500 fw-600 font-xssss">
+                                        <div class="email-text text-grey-500 fw-700 font-xssss">
                                             Email
                                         </div>
-                                        <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">
                                             So dien thoai
                                         </div>
                                         <% if (userss != null) {
-                                            if (userss.role == 'admin' || userss.id == activity.id) { %>
-                                                <div style="" class="text-grey-900 text-dark fw-600 font-xssss col-member-100">
+                                            if (userss.role == 'admin' || userss.id == activity.organization_id) { %>
+                                                <div class="text-grey-900 text-dark fw-600 font-xssss col-member-100">
                                                     Xac nhan
                                                 </div>
                                                 <div class="text-grey-900 text-dark fw-600 font-xssss col-member-100">
@@ -128,7 +130,7 @@
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
                                                 <%=  member.masv %>
                                             </div>
-                                            <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                            <div class="email-text text-grey-500 fw-600 font-xssss">
                                                 <%= member.faculty %>
                                             </div>
                                             <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
@@ -141,9 +143,9 @@
                                                 <%= member.phone_number %>
                                             </div>
                                             <% if (userss != null) {
-                                                if (userss.role == 'admin' || userss.id == activity.id) { %>
+                                                if (userss.role == 'admin' || userss.id == activity.organization_id) { %>
                                                 <div class="col-member-100">
-                                                    <input class="form-check-input" type="checkbox" id="checkbox_<%= member.student_id %>" value="option1" aria-label="" 
+                                                    <input class="" type="checkbox" id="checkbox_<%= member.student_id %>" value="option1" aria-label="" 
                                                     <% if (member.isComfirm == true)  {%> 
                                                         checked
                                                         onchange="ConfirmStudentRegister(<%= activity.id %>, <%= member.student_id %>, false, 'checkbox_<%= member.student_id %>')"
@@ -155,7 +157,7 @@
                                                 
                                                 <div class="col-member-100">
                                                     <!--tich vo la sinh vien da diem danh, cap nhat tren database-->
-                                                    <input class="form-check-input" type="checkbox" value="option1" aria-label=""
+                                                    <input class="" type="checkbox" value="option1" aria-label=""
                                                     <% if (member.isAttendance == true)  {%> 
                                                         checked 
                                                     <%}%> disabled>
@@ -166,7 +168,8 @@
                                         </a>
                                     </li>
                                 <%})%>
-                                <!-- ket thuc thong tin cu mot sinh vien -->
+                            </ul>
+                        </div>
                 </div>
             </div>
         </div>

@@ -46,42 +46,27 @@ organizationModel.create = async (organization) => {
 }
 
 organizationModel.update = async (organization_id, organization) => {
-  let query = 'UPDATE organizations SET ';
-  let setStatements = [];
-
-  if (organization.name) {
-    setStatements.push(`name = '${organization.name}'`);
-  }
-
-  if (organization.description) {
-    setStatements.push(`description = '${organization.description}'`);
-  }
-
-  if (organization.address) {
-    setStatements.push(`address = '${organization.address}'`);
-  }
-
-  if (organization.email) {
-    setStatements.push(`email = '${organization.email}'`);
-  }
-
-  if (organization.phone) {
-    setStatements.push(`phone = '${organization.phone}'`);
-  }
-
-  if (setStatements.length === 0) {
-    return null;
-  }
-
-  query += setStatements.join(', ') + ` WHERE id = ${organization_id}`;
-
-  const [result] = await pool.query(query);
+  var query = `
+  UPDATE organizations 
+  SET email = ?, phone = ?, address = ?, description = ?
+  WHERE user_id = ?
+  `
+  const values = [organization.email, organization.phone, organization.address, organization.description, organization_id]
+ 
+  var [result] = await pool.query(query, values);
 
   if (result.affectedRows) {
-    return await organizationModel.getById(organization_id);
+    query = `
+    UPDATE users 
+    SET username = ?
+    WHERE id = ?
+    `;
+    [result] = await pool.query(query, [organization.name, organization_id]);
+    if (result.affectedRows) return true; else return false;
   }
-
-  return null;
+  else{
+    return false;
+  }
 }
 
 organizationModel.delete = async (id) => {

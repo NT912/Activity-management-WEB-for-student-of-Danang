@@ -12,7 +12,7 @@ const authController = module.exports;
 
 authController.getLogin = (req, res) => {
   res.render('auth/login',{
-    error: ''
+    error: req.flash('error'),
   });
 }
 
@@ -24,7 +24,7 @@ authController.login = async (req, res) => {
     if (!user){
       user = await userModel.GetOrganiAcByEmail(userID); 
     }
-
+    console.log(user);
     if (!user){
       throw Error("Tai khoan khong ton tai")
     } 
@@ -35,14 +35,14 @@ authController.login = async (req, res) => {
 
     let avt;
     if (user.role === roles.STUDENT) {
-      req.flash('success', `Chao sinh vien ${user.username}`);
+      req.flash('announc', `Chao sinh vien ${user.username}`);
       avt = await studentModel.GetAvtByMasv(userID);
     } else 
     if (user.role === roles.ORGANIZATION) {
-      req.flash('success', `Chào mừng tổ chức ${user.username}!`);
+      req.flash('announc', `Chào mừng tổ chức ${user.username}!`);
       avt = await organizationModel.GetAvtByEmail(userID);
     } else if (user.role === roles.ADMIN) {
-      req.flash('success', `Chào mừng quản trị viên ${user.username}!`);
+      req.flash('announc', `Chào mừng quản trị viên ${user.username}!`);
     }
 
     var userss = {
@@ -138,6 +138,7 @@ authController.registerStudent = async (req, res) => {
 authController.registerOrganization = async (req, res) => {
   try {
     const {username, email, password, confirmpassword} = req.body;
+   
     const _user = await userModel.getByUsername(username);
     if (_user) {
       throw Error('Ten nha to chuc da ton tai');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Popup</title>
+    <title><%= activity.name %></title>
     
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -81,7 +81,7 @@
     <div class="main-wrapper">
 
         <!-- navigation top-->
-        <%- include('../includes/header.ejs',{isLogin: true}) %>
+        <%- include('../includes/header.ejs',{userss: userss}) %>
         <!-- navigation top -->
 
         <!-- navigation left -->
@@ -95,7 +95,7 @@
                     <div class="form-group icon-input mb-3">
                         <!-- <label for="name" class="font-xss fw-60">Ten hoat dong</label> -->
                         <input type="text" id="name" name="name" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
-                        placeholder="Ten hoat dong" require maxlength="60" required>
+                        value="<%= activity.name %>" placeholder="Ten hoat dong" require maxlength="60">
 
                     </div>
                     <div>
@@ -104,12 +104,12 @@
                             <div class="form-group icon-input mb-3">
                                 <label for="date_start" class="font-xsss fw-60">Ngày bắt đầu</label>
                                 <input type="date" id="date_start" name="date_start" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
-                                placeholder="Ngày bắt đầu" require>
+                                value="<%= activity.start_date %>" placeholder="Ngày bắt đầu" require>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <label for="date_end"  class="font-xsss fw-60">Ngày kết thúc</label>
                                 <input type="date" id="date_end" name="date_end" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
-                                placeholder="Ngày kết thúc" require>
+                                value="<%= activity.end_date %>" placeholder="Ngày kết thúc" require>
                             </div>
                         </div>
                     </div>
@@ -118,65 +118,63 @@
                         <div style="display:flex;">
                             <div class="form-group icon-input mb-3">
                                 <label for="date_start_regis" class="font-xsss fw-60">Ngày bắt đầu</label>
-                                <input type="date" id="date_start_regis" name="date_start_regis"
-                                class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ngày bắt đầu" require>
+                                <input type="date" id="date_start_regis" name="date_start_regis"class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
+                                value="<%= activity.registration_start_date %>" placeholder="Ngày bắt đầu" require>
                             </div>
                             <div class="form-group icon-input mb-3">
                                 <label for="date_end_regis" class="font-xsss fw-60">Ngày kết thúc</label>
-                                <input type="date" id="date_end_regis" name="date_end_regis" 
-                                class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" placeholder="Ngày kết thúc" require>
+                                <input type="date" id="date_end_regis" name="date_end_regis" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
+                                value="<%= activity.registration_end_date %>" placeholder="Ngày kết thúc" require>
                             </div>
                         </div>
                     </div>
                     <div class="form-group icon-input mb-3">
                         <!-- <label for="location" class="font-xsss fw-60">Dia diem</label> -->
                         <input type="text" id="location" name="location" class="style2-input ps-5 form-control text-grey-900 font-xsss fw-60" 
-                        placeholder="Dia diem" require>
+                        value="<%= activity.location %>" placeholder="Dia diem" require>
                     </div>
                     <div class="form-group icon-input mb-3">
                         <!-- <label for="location" class="font-xsss fw-60">Dia diem</label> -->
                         <textarea id="location" name="desc" class="style2-input ps-5 form-control-textarea text-grey-900 fw-60" style="height: 400px" 
-                        placeholder="Nội dung hoạt động" required></textarea>
+                       placeholder="Nội dung hoạt động" required>
+                        <%= activity.description %></textarea>
+                    </div>
+                    <div class="card-body d-block p-0" style="max-height: 500px; overflow: hidden; margin-bottom: 30px;">
+                        <div class="row ps-2 pe-2">
+                            <!-- href = link anh, src = link -->
+                            <div class="col-xs-4 col-sm-12 p-1">
+                                <a href="<%= activity.image %>" id="image-link">
+                                    <img src="<%= activity.image %>" class="rounded-3 w-100" alt="image" id="image-preview">
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group ">
-                        <label style="color: rgb(255, 255, 255);">Poster  </label>
-                        <input type="file" name="poster" accept=".jpg, .jpeg, .png">
+                        <label style="color: rgb(255, 255, 255);">Poster</label>
+                        <input type="file" name="poster" accept=".jpg, .jpeg, .png" id="poster-input">
                     </div>
                     <span style="color: red;"><%= error %></span>
                     <!-- khi ấn đăng ký thì dữ liệu đc lưu vào trong database -->
                     <button type="submit" name="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">Đăng ký</button>
-
                 </form>
             </div>
         </div>
-<script>
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     document.querySelector("form").addEventListener("submit", function(event) {
-    //         event.preventDefault(); 
-
-    //         fetch("process.php", {
-    //             method: "POST",
-    //             body: new FormData(this) // Gửi dữ liệu từ biểu mẫu
-    //         })
-    //         .then(response => {
-    //             if (response.ok) {
-    //                 alert("Bài viết đã được tạo!");
-    //                 window.location.href = "NTC-profile.php";
-    //             } else {
-    //                 alert("Có lỗi xảy ra khi tạo bài viết.");
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error("Error:", error);
-    //         });
-    //     });
-    // });
-</script>
+        <script>
+            document.getElementById('poster-input').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewImage = document.getElementById('image-preview');
+                        const imageLink = document.getElementById('image-link');
+                        previewImage.src = e.target.result;
+                        imageLink.href = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            </script>
 
 </body>
 </html>
-<% if (announc != '') { %>
-    <script>
-        alert('<%= announc %>')
-    </script>
-<%}%>
+

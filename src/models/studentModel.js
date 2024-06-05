@@ -14,6 +14,12 @@ studentModel.getByMasv = async (id) => {
   return rows[0] ? rows[0] : null;
 }
 
+studentModel.getByEmail = async (email) => {
+  const [rows] = await pool.query("SELECT * FROM students WHERE email = ?", [email.toString()]);
+
+  return rows[0] ? rows[0] : null;
+}
+
 studentModel.getByMasvCheckLogin = async (id) => {
   const [rows] = await pool.query("SELECT * FROM students WHERE masv = ?", [id.toString()]);
 
@@ -70,48 +76,27 @@ studentModel.create = async (student) => {
 }
 
 studentModel.update = async (student_id, student) => {
-  let query = 'UPDATE students SET ';
-  let setStatements = [];
-
-  const newStudentId = student.id || student_id;
-
-  if (student.id) {
-    setStatements.push(`id = '${student.id}'`);
-  }
-
-  if (student.fullname) {
-    setStatements.push(`fullname = '${student.fullname}'`);
-  }
-
-  if (student.faculty) {
-    setStatements.push(`faculty = '${student.faculty}'`);
-  }
-
-  if (student.class) {
-    setStatements.push(`class = '${student.class}'`);
-  }
-
-  if (student.email) {
-    setStatements.push(`email = '${student.email}'`);
-  }
-
-  if (student.phone) {
-    setStatements.push(`phone = '${student.phone}'`);
-  }
-
-  if (setStatements.length === 0) {
-    return null;
-  }
-
-  query += setStatements.join(', ') + ` WHERE id = '${student_id}'`;
-
-  const [result] = await pool.query(query);
+  var query = `
+  UPDATE students 
+  SET masv = ?, class = ?, email = ?, faculty = ?, phone = ?
+  WHERE user_id = ?
+  `
+  const values = [student.masv, student.classs, student.email, student.faculty, student.phone, student_id]
+ 
+  var [result] = await pool.query(query, values);
 
   if (result.affectedRows) {
-    return await studentModel.getById(newStudentId);
+    query = `
+    UPDATE users 
+    SET username = ?
+    WHERE id = ?
+    `;
+    [result] = await pool.query(query, [student.name, student_id]);
+    if (result.affectedRows) return true; else return false;
   }
-
-  return null;
+  else{
+    return false;
+  }
 }
 
 studentModel.delete = async (id) => {
