@@ -43,7 +43,14 @@ class Activity {
 
 adminController.Get_Home = async (req, res) => {
     try {
-        let activities = await activityModel.GetAll(10);
+        const mod = req.query.mod;
+        let activities;
+        if (mod == 'wait'){
+            activities = await activityModel.GetAllWaitConfirm(0);
+        } else {
+            activities = await activityModel.GetAll(0);
+        }
+
         const userss = req.session.user;
         res.render('admin/home', {
         activities: activities,
@@ -144,14 +151,21 @@ adminController.post_RejectActivity = async (req, res) => {
             result = await activityModel.ChangeState('yet',activity_id);
         } else 
         if (stateact == 'update') {
-            result = await activityModel.ChangeState('yet',activity_id);
+            const activity_backup = await activityModel.GetBackupActivity(activity_id);
+
+            if (activity_backup){
+                const result_backup = activityModel.update(activity_id,activity_backup);
+                if (!result_backup){
+                    throw Error('Loi backup');
+                }
+            }
         }
 
         if (!result){
             throw Error('Sai sai roi');
         }
         req.flash('announc','Ban da tu choi hoat dong');
-        req.redirect(`/admin/${activity_id}/view`);
+        res.redirect(`/admin/activity/${activity_id}/view`);
     } catch (err){
         console.log(err);
         req.flash('announc',err.message);

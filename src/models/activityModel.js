@@ -61,7 +61,18 @@ activityModel.GetAll = async (num) => {
   const query = `SELECT A.id, A.name, A.description, A.location, A.image,  U.username, U.id as idUser
   FROM activities A 
   INNER JOIN organizations O ON A.organization_id = O.user_id 
-  INNER JOIN users U ON O.user_id = U.id`;
+  INNER JOIN users U ON O.user_id = U.id
+  Where A.Confirm = 'done'`;
+  const [result] = await pool.query(query);
+  return result;
+}
+
+activityModel.GetAllWaitConfirm = async (num) => {
+  const query = `SELECT A.id, A.name, A.description, A.location, A.image,  U.username, U.id as idUser
+  FROM activities A 
+  INNER JOIN organizations O ON A.organization_id = O.user_id 
+  INNER JOIN users U ON O.user_id = U.id
+  Where A.Confirm != 'done'`;
   const [result] = await pool.query(query);
   return result;
 }
@@ -148,12 +159,7 @@ activityModel.GetActSave = async (user_id) => {
   return result;
 }
 
-// SELECT A.id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, A.registration_end_date, A.location, A.image, A.admin_id, A.created_at, A.updated_at, U.username, U.id as idUser, O.avt
-//   FROM activities A 
-//   INNER JOIN organizations O ON A.organization_id = O.user_id 
-//   INNER JOIN users U ON O.user_id = U.id
-//   INNER JOIN registrations R ON U.id = R.student_id
-//   Where U.id = 31
+
 activityModel.update = async (activity_id, activity) => {
   let query = `
   UPDATE activities SET 
@@ -166,7 +172,6 @@ activityModel.update = async (activity_id, activity) => {
       location = ?,
       Confirm = 'update'
       `;
-
     const values = [
       activity.name,
       activity.description,
@@ -194,8 +199,45 @@ activityModel.update = async (activity_id, activity) => {
   return false;
 }
 
-activityModel.ChangeState = async (newstate, activity_id) => {
+activityModel.backup = async (activity) => {
   const queryText = `
+  INSERT INTO activities_backup(activity_id, name, description, start_date, end_date, registration_start_date, registration_end_date, location, maxnumber, image, confirm) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const [result] = await pool.query(queryText, [
+    activity.activity_id,
+    activity.name,
+    activity.description,
+    activity.start_date,
+    activity.end_date,
+    activity.registration_start_date,
+    activity.registration_end_date,
+    activity.location,
+    activity.number,
+    activity.image,
+    activity.confirm,
+  ]);
+
+  return result;
+}
+
+activityModel.GetBackupActivity = async (activity_id) => {
+  const queryText = `
+    SELECT * FROM activities_backup 
+    WHERE activity_id = ? 
+    ORDER BY updated_at DESC 
+    LIMIT 1
+  `;
+
+  const [result] = await pool.query(queryText, [activity_id]);
+  return result[0];
+}
+
+
+activityModel.ChangeState = async (newstate, activity_id) => {
+  const queryText = 
+  `
     UPDATE activities
     SET Confirm = ?
     WHERE id = ?
@@ -208,38 +250,6 @@ activityModel.ChangeState = async (newstate, activity_id) => {
   }
 
   return false;
-}
-
-activityModel.verify = async (activity_id, admin_id) => {
-  const queryText = `
-    UPDATE activities
-    SET admin_id = ?
-    WHERE id = ?
-  `;
-
-  const [result] = await pool.query(queryText, [admin_id, activity_id]);
-
-  if (result.affectedRows) {
-    return await this.getById(activity_id);
-  }
-
-  return null;
-}
-
-activityModel.unverify = async (activity_id) => {
-  const queryText = `
-    UPDATE activities
-    SET admin_id = NULL
-    WHERE id = ?
-  `;
-
-  const [result] = await pool.query(queryText, [activity_id]);
-
-  if (result.affectedRows) {
-    return await this.getById(activity_id);
-  }
-
-  return null;
 }
 
 activityModel.register = async (activity_id, student_id, email, phone_number, wish) => {
