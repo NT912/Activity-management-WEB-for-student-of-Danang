@@ -43,6 +43,8 @@ router.get('/:activity_id/attendance', authMiddleware.isStudent, controller.atte
 
 router.get('/:activity_id/delete', controller.delete);
 
+router.get('/:activity_id/confirm', controller.delete);
+
 module.exports = router;
 
 // const upload = multer({

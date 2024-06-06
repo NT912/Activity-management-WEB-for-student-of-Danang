@@ -698,7 +698,41 @@ activityController.delete = async (req, res) => {
   try {
     const userss = req.session.user;
     const activity_id = req.params.activity_id;
-    console.log('here');
+
+    if (!userss){
+      return res.redirect('/auth/login');
+    }
+
+    const activity = await activityModel.GetById(activity_id);
+    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
+      throw Error('Ban khong duoc phep xoa hoat dong nay')
+    }
+
+    if (!activity) {
+      throw new Error('Hoạt động không tồn tại');
+    }
+
+    const result = await activityModel.delete(activity_id);
+
+    if (!result) {
+      throw new Error('Có lỗi xảy ra khi xóa hoạt động');
+    }
+
+    req.flash('announc', `Xóa hoạt động ${activity.name} thành công`);
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+    req.flash('announc', error.message);
+    res.redirect('/');
+  }
+
+}
+
+activityController.confirm = async (req, res) => {
+  try {
+    const userss = req.session.user;
+    const activity_id = req.params.activity_id;
+    
     if (!userss){
       return res.redirect('/auth/login');
     }
