@@ -45,14 +45,14 @@
                             <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
                                 <div class="card-body p-0 d-flex">
                                     <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
-                                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link
-                                        <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span>
+                                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Lưu bài viết
+                                        <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Thêm bài này vào mục đã lưu của bạn</span>
                                     </h4>
                                 </div>
                                 <div class="card-body p-0 d-flex mt-2">
                                     <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post
-                                        <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span>
+                                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Ẩn bài viết 
+                                        <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Ẩn khỏi trang chủ</span>
                                     </h4>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                     <h4 class="font-xssss fw-600 text-center">Phản hồi từ admin</h4>
                     <div class="col-xl-12 mb-3">
                         <textarea id="adminFeedback" name="adminFeedback" class="style2-input ps-5 form-control text-grey-900 fw-60" readonly>
-                            <%= activity.comment != null ? activity.comment : 'Chua phan hoi' %>
+                            <%= activity.comment != null ? activity.comment : 'Chưa phản hồi' %>
                         </textarea>
                     </div>
                 </div>
@@ -105,34 +105,34 @@
                     <% if (stateact == 'yet' || stateact == 'update') {%>
                         <a href="/admin/activity/<%= activity.id %>/confirm" 
                             class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyet
+                            Duyệt
                         </a>
                         <a href="/admin/activity/<%= activity.id %>/reject" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Tu choi
+                            Từ chối
                         </a>
                     <%} else 
                     if (stateact == 'reject'){%>
                         <a href="/admin/activity/<%= activity.id %>/confirm" 
                             class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyet
+                            Duyệt 
                         </a>
                     <%} else 
                     if (stateact == 'confirm'){%>
                         <a href="/admin/activity/<%= activity.id %>/reject" 
                             class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Huy duyet
+                            Hủy duyệt
                         </a>
                     <%} else 
                     if (stateact == 'reject'){%>
                         <a href="/admin/activity/<%= activity.id %>/confirm" 
                             class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyet
+                            Duyệt
                         </a>
                     <%}else 
                     if (stateact == 'done'){%>
                         <a href="/admin/activity/<%= activity.id %>/reject" 
                             class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Xoa
+                            Xóa
                         </a>
                     <%}%>
                 </div>
