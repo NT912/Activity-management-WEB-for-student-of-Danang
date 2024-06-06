@@ -3,6 +3,7 @@ const fs = require('fs');
 
 const organizationModel = require('../models/organizationModel');
 const ExcelJS = require('exceljs');
+const facultyModel = require('../models/facultyModel');
 const activityModel = require('../models/activityModel');
 const datetimeUtils = require('../utils/datetime');
 const pathUtils = require('../utils/path');
@@ -45,8 +46,17 @@ adminController.Get_Home = async (req, res) => {
     try {
         const mod = req.query.mod;
         let activities;
+        var state = '';
+        var student_users;
+        var organization_users;
         if (mod == 'wait'){
             activities = await activityModel.GetAllWaitConfirm(0);
+            state = 'wait';
+        } 
+        if (mod == 'account'){
+            student_users = await userModel.getByRole(roles.STUDENT);
+            organization_users = await userModel.getByRole(roles.ORGANIZATION);
+            state = 'account';
         } else {
             activities = await activityModel.GetAll(0);
         }
@@ -56,6 +66,9 @@ adminController.Get_Home = async (req, res) => {
         activities: activities,
         userss: userss,
         announc: req.flash('announc'),
+        state: state,
+        student_users,
+        organization_users
         });
     } catch (err){
         console.log(err);
@@ -172,4 +185,41 @@ adminController.post_RejectActivity = async (req, res) => {
         res.redirect(`/admin/activity/${req.params.activity_id}/view`);
     }
 }
+
+adminController.Get_EditUser = async (req, res) => {
+    try {
+        const userss = req.session.user;
+      const user_id = req.params.user_id;
+
+        const user = await userModel.getById(user_id);
+        if (user.role == roles.STUDENT){
+          const user = await studentModel.GetProfileById(user_id);
+          const faculty = await facultyModel.getAllFaculty();
+          user.role = 'student';
+          console.log(user);
+          return res.render('admin/editUser', {
+            userss: userss,
+            user: user,
+            error: req.flash('error'),
+            faculties: faculty,
+          });
+        } 
+        else 
+        if (user.role == roles.ORGANIZATION){
+          const user = await organizationModel.GetProfileById(user_id);
+          user.role = 'organization';
+          console.log(user);
+          return res.render('admin/editUser', {
+            userss: userss,
+            error: '',
+            user: user,
+          });
+        }
+      return res.redirect('/admin/?mod=account');
+    } catch (error) {
+      console.log(error);
+      req.flash('error', error.message);
+      res.redirect('/user/profile');
+    }
+  }
 

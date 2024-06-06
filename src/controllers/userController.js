@@ -195,11 +195,102 @@ userController.Get_Profile = async (req, res) => {
     }
 }
 
+userController.Get_ViewUser = async (req, res) => {
+  const userss = req.session.user;
+  const user_id = req.params.user_id;
+
+  const user = await userModel.getById(user_id);
+  if (user.role == roles.STUDENT){
+    try {
+      const userInf = await studentModel.GetProfileById(user_id);
+        const mod = req.query.mod;
+      if (mod == 'joined'){
+        active = 'joined';
+        activities= await acitivityModel.GetActSVJoined(user_id);
+      } else {
+        active = 'registered';
+        activities = await acitivityModel.GetActSVRegistered(user_id);
+      }
+
+      res.render('user/viewSV',{
+        User: userInf,
+        activities: activities,
+        active: active,
+        userss: userss,
+        announc: req.flash('announc'),
+      });
+    } catch (err){
+      console.log(err);
+      req.flash('announc', err.message);
+      return res.redirect('/');
+    }
+  } else if (user.role == roles.ORGANIZATION){
+    try {
+      const user = await organizationModel.GetProfileById(user_id);
+      
+      var activities;
+      var active;
+      if (req.query.mod){
+        const mod = req.query.mod;
+        console.log(mod);
+        if (mod == 'wait'){
+          active = 'wait';
+          activities= await acitivityModel.GetActNTCWait(userss.id);
+        } else 
+        if (mod == 'process') {
+          active = 'process';
+          activities= await acitivityModel.GetActNTCProcess(userss.id);
+        }
+        else {
+          return res.redirect('/user/profile');
+        }
+      } else {
+          active = 'done';
+          activities = await acitivityModel.GetActNTCDone(userss.id);
+      }
+      res.render('user/viewNTC',{
+        User: user,
+        activities: activities,
+        active: active,
+        userss: userss,
+        announc: req.flash('announc'),
+      });
+    } catch (err){
+      console.log(err);
+      req.flash('announc', err.message);
+      return res.redirect('/');
+    }
+  }
+}
+
 userController.Get_Edit = async (req, res) => {
   try {
     const userss = req.session.user;
     if (!userss){
       return res.redirect('/auth/login');
+    }
+
+    const user_id = req.params.user_id;
+    if (user_id && userss.role == roles.ADMIN){
+      const user = await userModel.getById(user_id);
+      if (user.role == roles.STUDENT){
+        const user = await studentModel.GetProfileById(user_id);
+        faculty = await facultyModel.getAllFaculty();
+        return res.render('user/editUserAdmin', {
+          userss: userss,
+          user: user,
+          error: req.flash('error'),
+          faculties: faculty,
+        });
+      } else 
+      if (user.role == roles.ORGANIZATION){
+        const user = await organizationModel.GetProfileById(user_id);
+        return res.render('user/edit', {
+          userss: userss,
+          error: '',
+          user: user,
+        });
+      }
     }
 
     if (userss.role === roles.STUDENT) {
@@ -220,6 +311,7 @@ userController.Get_Edit = async (req, res) => {
         user: user,
       });
     }
+    return res.redirect('/');
   } catch (error) {
     console.log(error);
     req.flash('error', error.message);
@@ -308,6 +400,7 @@ userController.Post_Edit = async (req, res) => {
     res.redirect('/user/edit');
   }
 }
+
 userController.edit = async (req, res) => {
   try {
     // const _user = await userModel.getById(req.params.user_id);
@@ -417,63 +510,6 @@ userController.Post_avt = async (req, res) => {
     console.error(err);
     return res.status(500).json({ error: 'Failed to upload avatar' });
   }
-}
-userController.editMe = async (req, res) => {
-  try {
-    const user = await userModel.update(req.session.user.id, {
-      username: req.body.username,
-      password: req.body.password
-    });
-
-    if (user.role === roles.STUDENT) {
-      const _student = await studentModel.getByUserId(user.id);
-
-      if (!_student) {
-        throw new Error(`Sinh viên với ID ${user.id} không tồn tại`);
-      }
-
-      await studentModel.update(_student.id, {
-        id: req.body.student_id,
-        fullname: req.body.fullname,
-        email: req.body.email,
-        phone: req.body.phone,
-        faculty: req.body.faculty,
-        class: req.body.class
-      });
-    } else if (user.role === roles.ORGANIZATION) {
-      const organization = await organizationModel.getByUserId(user.id);
-
-      if (!organization) {
-        throw new Error(`Tổ chức với ID ${user.id} không tồn tại`);
-      }
-
-      await organizationModel.update(organization.id, {
-        name: req.body.name,
-        description: req.body.description,
-        email: req.body.email,
-        phone: req.body.phone,
-        address: req.body.address
-      });
-    } else if (user.role === roles.ADMIN) {
-      const admin = await adminModel.getByUserId(user.id);
-
-      if (!admin) {
-        throw new Error(`Quản trị viên với ID ${user.id} không tồn tại`);
-      }
-
-      await adminModel.update(admin.id, {
-        fullname: req.body.fullname,
-        email: req.body.email,
-        phone: req.body.phone
-      });
-    }
-
-    req.flash('success', `Thông tin đã được cập nhật`);
-  } catch (error) {
-    req.flash('error', error.message);
-  }
-
-  res.redirect('/user/me');
 }
 
 userController.delete = async (req, res) => {

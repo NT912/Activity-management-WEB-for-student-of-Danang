@@ -17,12 +17,16 @@ router.post('/add/organization', authMiddleware.isAdmin, controller.addOrganizat
 router.get('/:user_id/delete', authMiddleware.isAdmin, controller.delete);
 
 router.get('/profile', controller.Get_Profile);
-router.post('/me', controller.editMe);
 
 router.get('/edit',controller.Get_Edit);
 router.post('/edit',controller.Post_Edit);
 
 router.post('/upload-avatar',upload.single('avatar'), controller.Post_avt);
+
+router.get('/:user_id/view',controller.Get_ViewUser);
+
+
+
 
 
 
