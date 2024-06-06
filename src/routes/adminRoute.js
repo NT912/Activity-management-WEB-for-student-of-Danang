@@ -15,7 +15,7 @@ router.get('/', authMiddleware.isAdmin, controller.Get_Home);
 router.get('/activity/:activity_id/view', authMiddleware.isAdmin, controller.get_ViewActivity);
 
 router.get('/activity/:activity_id/confirm', authMiddleware.isAdmin, controller.post_ConfirmActivity);
-router.post('/activity/:activity_id/reject', authMiddleware.isAdmin, controller.post_RejectActivity);
+router.get('/activity/:activity_id/reject', authMiddleware.isAdmin, controller.post_RejectActivity);
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);
 // router.get('/:activity_id/view', controller.getView);

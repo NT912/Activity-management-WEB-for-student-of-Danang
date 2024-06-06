@@ -348,7 +348,7 @@ activityController.post_edit = async (req, res) => {
       req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
       return res.redirect(`/activity/${activity_id}/view`);
     }
-    console.log('');
+    
 
     var url;
     // Kiểm tra nếu có tệp mới được tải lên
@@ -367,7 +367,37 @@ activityController.post_edit = async (req, res) => {
     if (!name || !desc || !date_start || !date_end || !date_start_regis || !date_end_regis || !location ){
       throw Error('Vui long nhap du thong tin');
     }
-    console.log("here");
+    // if (activity.name == name 
+    //   && activity.description == desc 
+    //   && activity.date_start == date_start 
+    //   && activity.date_end == date_end 
+    //   && activity.date_start_regis == date_start_regis 
+    //   && activity.date_end_regis == date_end_regis 
+    //   && activity.location == location) {
+    //     req.flash('announc', 'Thong tin hoat dong khong thay doi');
+    //     res.redirect(`/activity/${req.params.activity_id}/edit`);
+    // }
+
+    const backup_acticity = {
+      activity_id: activity.id,
+      name: activity.name,
+      description: activity.description,
+      start_date: activity.start_date,
+      end_date: activity.end_date,
+      registration_start_date: activity.registration_start_date,
+      registration_end_date: activity.registration_end_date,
+      location: activity.location,
+      number: activity.maxnumber,
+      image: activity.image,
+      confirm: activity.Confirm,
+    }
+
+    const result_backup = await activityModel.backup(backup_acticity);
+
+    if (!result_backup){
+      throw Error('Loi backup');
+    }
+
     const updatedActivity = {
         name: name,
         description: desc,
@@ -378,8 +408,9 @@ activityController.post_edit = async (req, res) => {
         location: location, 
         image: url,
     };
+
     const result = await activityModel.update(activity_id, updatedActivity);
-    if (!updatedActivity){
+    if (!result){
       throw Error('loi khi sua hoat dong');
     }
 
