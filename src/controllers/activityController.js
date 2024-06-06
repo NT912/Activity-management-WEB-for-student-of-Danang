@@ -298,11 +298,19 @@ activityController.getEdit = async (req, res) => {
       req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
       return res.redirect(`/activity/${activity_id}/view`);
     }
+
+    const now = new Date();
+    if (now > Date(activity.start_date)){
+      req.flash('announc','Hoat dong da het thoi han sua');
+      return res.redirect(`/activity/${activity_id}/view`);
+    }
+
     activity.end_date = new Date(activity.end_date).toISOString().split('T')[0];
     activity.start_date = new Date(activity.start_date).toISOString().split('T')[0];
     activity.registration_start_date = new Date(activity.registration_start_date).toISOString().split('T')[0];
     activity.registration_end_date = new Date(activity.registration_end_date).toISOString().split('T')[0];
-    console.log(activity);
+
+    
     res.render('activity/editpost', {
       activity: activity,
       error: req.flash('announc'),
@@ -707,12 +715,12 @@ activityController.delete = async (req, res) => {
     }
 
     const activity = await activityModel.GetById(activity_id);
-    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
-      throw Error('Ban khong duoc phep xoa hoat dong nay')
-    }
-
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
+    }
+
+    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
+      throw Error('Ban khong duoc phep xoa hoat dong nay')
     }
 
     const result = await activityModel.delete(activity_id);
@@ -741,21 +749,21 @@ activityController.confirm = async (req, res) => {
     }
 
     const activity = await activityModel.GetById(activity_id);
-    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
-      throw Error('Ban khong duoc phep xoa hoat dong nay')
-    }
-
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
     }
 
-    const result = await activityModel.delete(activity_id);
+    if (userss.id != activity.organization_id){
+      throw Error('Ban khong phai nha to chuc hoat dong nay')
+    }
+
+    const result = await activityModel.ChangeState('done',activity_id);
 
     if (!result) {
       throw new Error('Có lỗi xảy ra khi xóa hoạt động');
     }
 
-    req.flash('announc', `Xóa hoạt động ${activity.name} thành công`);
+    req.flash('announc', `Hoat dong ${activity.name} da duoc cong khai`);
     res.redirect('/');
   } catch (error) {
     console.log(error);
