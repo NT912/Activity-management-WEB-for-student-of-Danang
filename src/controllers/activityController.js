@@ -100,9 +100,10 @@ activityController.getView = async (req, res) => {
       var allow_update = false;
       const now = new Date();
       var state_activity = '';
+      var stateact;
         if (activity.organization_id == userss.id){
           isOwn = true;
-          const stateact = activity.Confirm.toString();
+          stateact = activity.Confirm.toString();
           state_activity = state[stateact];
         }
       if (now < activity.registration_end_date && isOwn){
@@ -117,6 +118,7 @@ activityController.getView = async (req, res) => {
         isOwn: isOwn,
         allow_update: allow_update,
         state: state_activity,
+        stateact: stateact,
         announc: req.flash('announc'),
       });
     } else 
@@ -124,6 +126,7 @@ activityController.getView = async (req, res) => {
       return redirect('/amin');
     }
   } catch (err){
+    console.log(err);
     req.flash('announc','Loi xem hoat dong');
     res.redirect('/');
   }
@@ -698,7 +701,41 @@ activityController.delete = async (req, res) => {
   try {
     const userss = req.session.user;
     const activity_id = req.params.activity_id;
-    console.log('here');
+
+    if (!userss){
+      return res.redirect('/auth/login');
+    }
+
+    const activity = await activityModel.GetById(activity_id);
+    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
+      throw Error('Ban khong duoc phep xoa hoat dong nay')
+    }
+
+    if (!activity) {
+      throw new Error('Hoạt động không tồn tại');
+    }
+
+    const result = await activityModel.delete(activity_id);
+
+    if (!result) {
+      throw new Error('Có lỗi xảy ra khi xóa hoạt động');
+    }
+
+    req.flash('announc', `Xóa hoạt động ${activity.name} thành công`);
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+    req.flash('announc', error.message);
+    res.redirect('/');
+  }
+
+}
+
+activityController.confirm = async (req, res) => {
+  try {
+    const userss = req.session.user;
+    const activity_id = req.params.activity_id;
+    
     if (!userss){
       return res.redirect('/auth/login');
     }
