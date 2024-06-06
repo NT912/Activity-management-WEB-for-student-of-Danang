@@ -154,7 +154,7 @@ activityController.Get_AddActivity = async (req, res) => {
     return res.redirect('/auth/login');
   }
   if (!userss || (userss.role == 'student')){
-    req.flash('announc','Ban khong duoc phep truy cap trang tao hoat dong');
+    req.flash('announc','Bạn không được phép truy cập trang hoạt động');
     return res.redirect('/');
   }
   res.render('activity/createpost', {
@@ -206,7 +206,7 @@ activityController.add = async (req, res) => {
     const userss = req.session.user;
     if (!userss || req.session.user.role == roles.STUDENT)
     {
-      req.flash('announc','Ban khong the tao hoat dong');
+      req.flash('announc','Bạn không được phép tạo hoạt động');
       return res.redirect('/');
     }
     const { name, desc, date_start, date_end, date_start_regis, date_end_regis, location, number } = req.body;
@@ -262,10 +262,10 @@ activityController.add = async (req, res) => {
         throw new Error('fail firebase');
       }
   
-      req.flash('announc', `Ban da dang ky thanh cong hoat dong ${req.body.name}`);
+      req.flash('announc', `Bạn đã đăng ký thành công hoạt động ${req.body.name}`);
       return res.redirect('/');
     } else {
-      throw Error('nhap ngay phu hop');
+      throw Error('Nhập ngày phù hợp ');
     }
 
     

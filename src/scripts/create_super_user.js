@@ -13,13 +13,13 @@ const createSuperUser = async () => {
     var _user = await userModel.GetAdminByemail(email);
 
     if (_user) {
-      throw new Error('Email cua admin da ton tai');
+      throw new Error('Email của admin đã tồn tại');
     }
 
     _user = await userModel.GetOrganiAcByEmail(email);
 
     if (_user) {
-      throw new Error('Email cua admin da ton tai');
+      throw new Error('Email của admin đã tồn tại');
     }
 
     // Tạo người dùng mới với mật khẩu đã được hash
