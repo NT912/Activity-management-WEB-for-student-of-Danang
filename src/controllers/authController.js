@@ -13,6 +13,7 @@ const authController = module.exports;
 authController.getLogin = (req, res) => {
   res.render('auth/login',{
     error: req.flash('error'),
+    announc: req.flash('announc'),
   });
 }
 
@@ -23,8 +24,11 @@ authController.login = async (req, res) => {
     user = await userModel.getByUserMasv(userID);
     if (!user){
       user = await userModel.GetOrganiAcByEmail(userID); 
+      if (!user){
+        user = await userModel.GetAdminByemail(userID);
+      }
     }
-    console.log(user);
+
     if (!user){
       throw Error("Tai khoan khong ton tai")
     } 
@@ -43,6 +47,7 @@ authController.login = async (req, res) => {
       avt = await organizationModel.GetAvtByEmail(userID);
     } else if (user.role === roles.ADMIN) {
       req.flash('announc', `Chào mừng quản trị viên ${user.username}!`);
+      avt = await adminModel.GetAvtByEmail(userID);
     }
 
     var userss = {
@@ -53,6 +58,10 @@ authController.login = async (req, res) => {
     req.session.user = userss;
     req.session.save();
 
+    console.log(userss);
+    if (userss.role == roles.ADMIN){
+      return res.redirect('/admin/');
+    }
     return res.redirect('/');
   
   } catch (error) {
@@ -68,9 +77,10 @@ authController.GET_Register = (req, res) => {
 
 authController.GET_RegisterST = async (req, res) => {
   const falcutys = await facultyModel.getAllFaculty();
+  console.log(falcutys);
   res.render('auth/registerStudent',{
     error: '',
-    Falculties: falcutys[0],
+    Falculties: falcutys,
   });
 }
 
@@ -84,6 +94,15 @@ authController.registerStudent = async (req, res) => {
   try {
     var err = '';
     const {name, masv, classs, falcuty, password, confirmpassword} = req.body;
+
+    if (!name || !masv || !classs || !falcuty || !password || !confirmpassword) {
+      throw new Error('Vui lòng nhập đủ các trường');
+    }
+    
+    const masvRegex = /^[a-zA-Z0-9]+$/;
+    if (!masvRegex.test(masv)) {
+      throw new Error('Mã sinh viên chỉ được chứa chữ cái và số');
+    }
     const _student = await userModel.getByUserMasv(req.body.masv);
 
     if (_student) {
@@ -115,17 +134,10 @@ authController.registerStudent = async (req, res) => {
       await userModel.delete(user.id);
       err = 'Có lỗi xảy ra khi đăng ký thông tin sinh viên';
     }
-    req.flash('success','Dang ky tai khoan moi thanh cong');
+    req.flash('announc','Dang ky tai khoan moi thanh cong');
     return res.redirect('/auth/login');
   }
 
-    // req.flash('success', `Chào mừng sinh viên ${student.fullname} | ${student.id}!`);
-
-    // req.session.user = user;
-    // req.session.student = student;
-    // req.session.save();
-
-    // return res.redirect('/');
   catch (error) {
     const falcutys = await facultyModel.getAllFaculty();
     return res.render('auth/registerStudent',{
@@ -146,6 +158,11 @@ authController.registerOrganization = async (req, res) => {
 
     const _organization = await userModel.getByUserEmail(email);  
     if (_organization) {
+      throw Error('Email da duoc dang ky tai khoan');
+    } 
+
+    const admin = await userModel.GetAdminByemail(email);
+    if (admin) {
       throw Error('Email da duoc dang ky tai khoan');
     } 
 
@@ -172,7 +189,7 @@ authController.registerOrganization = async (req, res) => {
       await userModel.delete(user.id);
       throw Error('Có lỗi xảy ra khi đăng ký thông tin tổ chức');
     }
-    req.flash('success','Dang ky tai khoan moi thanh cong');
+    req.flash('announc','Dang ky tai khoan moi thanh cong');
     return res.redirect('/auth/login');
     
   } catch (error) {

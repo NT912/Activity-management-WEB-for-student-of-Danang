@@ -36,9 +36,9 @@
                                 <%= activity.username %>
                                 <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">3 hours ago</span>
                             </h4>
-                            <% if (isOwn) { %>
-                                <span class="status-label ms-auto">Trạng thái: <%= state %></span>
-                            <% } %>
+
+                            <span class="status-label ms-auto">Trạng thái: <%= state %></span>
+
                             <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
                             </a>
@@ -88,50 +88,40 @@
                             <a href="/activity/<%= activity.id %>/registration/" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
                                 Danh sách
                             </a>
-                            <% if (allow_update) { %>
-                                <a href="/activity/<%= activity.id %>/edit" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                    Sửa
-                                </a>
-                                <a href="/activity/<%= activity.id %>/delete" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                    Xóa
-                                </a>
-                            <% } %>
                         </div>
                     </div>
                 </div>
             </div>
-            <% if (isOwn) { %>
-                <div class="col-xl-5 bg-greylight" style="max-width: 900px;">
-                    <div class="feedback-section">
-                        <h4 class="font-xssss fw-600 text-center">Phản hồi từ admin</h4>
-                        <div class="col-xl-12 mb-3">
-                            <textarea id="adminFeedback" name="adminFeedback" class="style2-input ps-5 form-control text-grey-900 fw-60" readonly>
-                                <%= activity.comment != null ? activity.comment : 'Chưa có phản hồi từ admin' %>
-                            </textarea>
-                        </div>
+            <div class="col-xl-5 bg-greylight" style="max-width: 900px;">
+                <div class="feedback-section">
+                    <h4 class="font-xssss fw-600 text-center">Phản hồi từ admin</h4>
+                    <div class="col-xl-12 mb-3">
+                        <textarea id="adminFeedback" name="adminFeedback" class="style2-input ps-5 form-control text-grey-900 fw-60" readonly>
+                            <%= activity.comment != null ? activity.comment : 'Chua phan hoi' %>
+                        </textarea>
                     </div>
-                    <div class="d-flex justify-content-center">
-                        <% if (state == 'Da phan hoi') {%>
-                            <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                Xac nhan
-                            </a>
-                            <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                Tu choi
-                            </a>
-                        <%} else 
-                        if (state == 'Bai viet da bi tu choi') {%>
-                            <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                Sửa
-                            </a>
-                            <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                Huy
-                            </a>
-                        <%}%>
-                    </div>
-                    
+                </div>
+                <div class="d-flex justify-content-center">
+                    <% if (state == 'Da phan hoi') {%>
+                        <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Xac nhan
+                        </a>
+                        <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Tu choi
+                        </a>
+                    <%} else 
+                    if (state == 'Bai viet da bi tu choi') {%>
+                        <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Sửa
+                        </a>
+                        <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Huy
+                        </a>
+                    <%}%>
                 </div>
                 
-            <%}%>
+            </div>
+                
         </div>
     </div>
 

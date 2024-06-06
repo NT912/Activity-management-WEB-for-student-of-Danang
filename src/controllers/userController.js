@@ -145,6 +145,7 @@ userController.Get_Profile = async (req, res) => {
           activities: activities,
           active: active,
           userss: userss,
+          announc: req.flash('announc'),
         });
       } catch (err){
         console.log(err);
@@ -162,7 +163,7 @@ userController.Get_Profile = async (req, res) => {
           console.log(mod);
           if (mod == 'wait'){
             active = 'wait';
-            activities= await acitivityModel.GetActSVJoined(userss.id);
+            activities= await acitivityModel.GetActNTCWait(userss.id);
           } else 
           if (mod == 'process') {
             active = 'process';
@@ -184,6 +185,7 @@ userController.Get_Profile = async (req, res) => {
           activities: activities,
           active: active,
           userss: userss,
+          announc: req.flash('announc'),
         });
       } catch (err){
         console.log(err);

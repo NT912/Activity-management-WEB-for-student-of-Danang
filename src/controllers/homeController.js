@@ -12,21 +12,14 @@ const homeController = module.exports;
 homeController.Get_Home = async (req, res) => {
 
   let activities = await activityModel.GetAll(10);
-  const users = req.session.user;
-  let user;
-  if (users)
-  {
-    if (users.role == 'organization'){
-      user = await organizationModel.getByUserId(users.id);
-    } else 
-    if (users.role == 'student') {
-      user = await studentModel.getByUserId(users.id);
-    }
-  }
+  const userss = req.session.user;
 
+  if (userss && userss.role == roles.ADMIN){
+    return res.redirect('/admin/');
+  }
   res.render('home/homeNTC', {
     activities: activities,
-    userss: users,
+    userss: userss,
     announc: req.flash('announc'),
   });
 }

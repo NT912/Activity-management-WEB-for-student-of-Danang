@@ -54,20 +54,18 @@ async function uploadAvatar() {
 
             if (response.ok) {
                 const result = await response.json();
-                alert('Avatar updated successfully');
-                // Cập nhật ảnh avatar mới (đã được xử lý từ server)
+                toastr.success('Avatar updated successfully');
                 document.getElementById('avatarImg').src = result.newAvatarUrl;
-                // Ẩn nút xác nhận sau khi tải lên thành công
                 document.getElementById('confirmButton').classList.add('d-none');
             } else {
-                alert('Failed to update avatar');
+                toastr.error('Failed to update avatar');
             }
         } catch (error) {
             console.error('Error uploading avatar:', error);
-            alert('An error occurred while uploading the avatar');
+            toastr.error('An error occurred while uploading the avatar');
         }
     } else {
-        alert('Please select an image file to upload');
+        toastr.warning('Please select an image file to upload');
     }
 }
 

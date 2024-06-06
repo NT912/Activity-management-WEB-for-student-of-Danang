@@ -7,8 +7,8 @@ const activityModel = module.exports;
 
 activityModel.add = async (activity) => {
   const queryText = `
-    INSERT INTO activities(name, organization_id, description, start_date, end_date, registration_start_date, registration_end_date, location, image)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO activities(name, organization_id, description, start_date, end_date, registration_start_date, registration_end_date, location, maxnumber, image)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const [result] = await pool.query(queryText, [
@@ -20,6 +20,7 @@ activityModel.add = async (activity) => {
     datetimeUtils.formatStartDatetime(activity.registration_start_date),
     datetimeUtils.formatEndDatetime(activity.registration_end_date),
     activity.location,
+    activity.number,
     activity.image,
   ]);
 
@@ -67,7 +68,7 @@ activityModel.GetAll = async (num) => {
 
 activityModel.GetById = async (id) => {
   const query = `SELECT A.id, A.organization_id, A.name, A.description, A.start_date, A.end_date, A.registration_start_date, 
-  A.registration_end_date, A.location, A.image,A.Confirm, A.created_at, A.updated_at, A.comment, U.username, U.id as idUser, O.avt
+  A.registration_end_date, A.location, A.maxnumber, A.image,A.Confirm, A.created_at, A.updated_at, A.comment, U.username, U.id as idUser, O.avt
   FROM activities A 
   INNER JOIN organizations O ON A.organization_id = O.user_id 
   INNER JOIN users U ON O.user_id = U.id
@@ -105,6 +106,18 @@ activityModel.GetActNTCDone = async (organization_id) => {
   FROM activities A
   INNER JOIN users U ON U.id = A.organization_id
   WHERE A.Confirm = 'done' and CURRENT_TIME() > A.end_date AND A.organization_id = ?
+  `;
+  const values = organization_id;
+  const [result] = await pool.query(query, values);
+  return result;
+}
+
+activityModel.GetActNTCWait = async (organization_id) => {
+  const query = `
+  SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
+  FROM activities A
+  INNER JOIN users U ON U.id = A.organization_id
+  WHERE (A.Confirm = 'yet' || A.Confirm = 'confirm') and CURRENT_TIME() > A.end_date AND A.organization_id = ?
   `;
   const values = organization_id;
   const [result] = await pool.query(query, values);
@@ -266,7 +279,7 @@ activityModel.ChangeConfirmRegister = async (activity_id, student_id, isConfirm)
 
 activityModel.GetListRegistationOfActivity = async (activity_id) => {
   const queryText = `
-  SELECT R.id, R.student_id, U.username, R.email, R.phone_number, R.isComfirm, S.masv, S.class, F.name as faculty, R.isComfirm, R.isAttendance
+  SELECT R.id, R.student_id, U.username, R.email, R.phone_number, R.isComfirm, S.masv, S.class, F.name as faculty, R.isComfirm, R.isAttendance, R.wish
   FROM registrations R
   INNER JOIN students S ON S.user_id = R.student_id
   INNER JOIN users U ON S.user_id = U.id

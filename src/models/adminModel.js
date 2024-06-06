@@ -12,10 +12,15 @@ adminModel.getByUserId = async (user_id) => {
   return rows[0] || null;
 }
 
+adminModel.GetAvtByEmail = async (user_id) =>{
+  const [rows] = await pool.query('SELECT avt FROM administrators WHERE email = ?', [user_id]);
+  return rows[0].avt || null;
+}
+
 adminModel.create = async (admin) => {
     const [result] = await pool.query(
-      'INSERT INTO administrators (user_id, fullname, email, phone) VALUES (?, ?, ?, ?)',
-      [admin.user_id, admin.fullname, admin.email, admin.phone]
+      'INSERT INTO administrators (user_id, email, phone) VALUES (?, ?, ?)',
+      [admin.user_id, admin.email, admin.phone]
     );
 
     if (result.insertId) {

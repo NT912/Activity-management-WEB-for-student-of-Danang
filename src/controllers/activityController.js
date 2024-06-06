@@ -55,106 +55,79 @@ activityController.getList = async (req, res) => {
 }
 
 activityController.getView = async (req, res) => {
-  const userss = req.session.user;
-  const activity_id = req.params.activity_id;
-  const activity = await activityModel.GetById(activity_id);
+  try{
+    const userss = req.session.user;
+    const activity_id = req.params.activity_id;
+    const activity = await activityModel.GetById(activity_id);
   
-  if (!activity) {
-    req.flash('announc', 'Hoạt động không tồn tại');
-    res.redirect('/activity/list');
-    return;
-  }
-
-  // user is student
-  if (userss == null || userss.role == roles.STUDENT)
-  {
-    let allowRegister = false;
-
-    // check time register
-    const now = new Date();
-    const startRegiDate = new Date(activity.registration_start_date);
-    const endRegiDate = new Date(activity.registration_end_date);
-    if (now >= startRegiDate && now <= endRegiDate) {
-      allowRegister = true;
-    } 
-
-    // check register
-    var registered = false;
-    if (userss != null && userss.role == roles.STUDENT){
-      registered = await activityModel.isRegistered(activity_id, userss.id);
+    if (!activity) {
+      req.flash('announc', 'Hoạt động không tồn tại');
+      res.redirect('/activity/list');
+      return;
     }
-
-    return res.render('activity/viewSV', {
-      userss: userss,
-      activity: activity,
-      allowRegister: allowRegister,
-      registered: registered,
-      announc: req.flash('announc'),
-    });
-  } else 
-  // User is organization
-  if (userss.role == roles.ORGANIZATION)
-  {
-    var isOwn = false;
-    var allow_update = false;
-    const now = new Date();
-    var state_activity = '';
-      if (activity.organization_id == userss.id){
-        isOwn = true;
-        const stateact = activity.Confirm.toString();
-        state_activity = state[stateact];
+  
+    // user is student
+    if (userss == null || userss.role == roles.STUDENT)
+    {
+      let allowRegister = false;
+  
+      // check time register
+      const now = new Date();
+      const startRegiDate = new Date(activity.registration_start_date);
+      const endRegiDate = new Date(activity.registration_end_date);
+      if (now >= startRegiDate && now <= endRegiDate) {
+        allowRegister = true;
+      } 
+  
+      // check register
+      var registered = false;
+      if (userss != null && userss.role == roles.STUDENT){
+        registered = await activityModel.isRegistered(activity_id, userss.id);
       }
-    if (now < activity.registration_end_date){
-      allow_update = true;
-    }
-    console.log(req.flash('announc'));
-    return res.render('activity/viewNTC', {
-      userss: userss,
-      activity: activity,
-      allowRegister: null,
-      registered: null,
-      isOwn: isOwn,
-      allow_update: allow_update,
-      state: state_activity,
-      announc: req.flash('announc'),
-    });
-  } else 
-  if (userss.role == roles.ADMIN){
-    const now = new Date();
-    var state_activity = '';
-    if (now < activity.registration_end_date){
-      if (activity.organization_id == userss.id){
-        isOwn = true;
-        const stateact = activity.Confirm.toString();
-        state_activity = state[stateact];
+  
+      return res.render('activity/viewSV', {
+        userss: userss,
+        activity: activity,
+        allowRegister: allowRegister,
+        registered: registered,
+        announc: req.flash('announc'),
+      });
+    } else 
+    // User is organization
+    if (userss.role == roles.ORGANIZATION)
+    {
+      var isOwn = false;
+      var allow_update = false;
+      const now = new Date();
+      var state_activity = '';
+        if (activity.organization_id == userss.id){
+          isOwn = true;
+          const stateact = activity.Confirm.toString();
+          state_activity = state[stateact];
+        }
+      if (now < activity.registration_end_date && isOwn){
+        allow_update = true;
       }
+      console.log(req.flash('announc'));
+      return res.render('activity/viewNTC', {
+        userss: userss,
+        activity: activity,
+        allowRegister: null,
+        registered: null,
+        isOwn: isOwn,
+        allow_update: allow_update,
+        state: state_activity,
+        announc: req.flash('announc'),
+      });
+    } else 
+    if (userss.role == roles.ADMIN){
+      return redirect('/amin');
     }
-    return res.render('activity/viewNTC', {
-      userss: userss,
-      activity: activity,
-      state: state_activity,
-    });
+  } catch (err){
+    req.flash('announc','Loi xem hoat dong');
+    res.redirect('/');
   }
   
-  
-
-  // activity.registered: = false;
-  // activity.attendanced = false;
-
-  // if (req.session.student) {
-    // const registered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
-    // activity.registered = registered;
-
-  //   const attendanced = await activityModel.isAttendanced(req.params.activity_id, req.session.student.id);
-  //   activity.attendanced = attendanced;
-  // }
-
-
-
-  // const registrations = await activityModel.getActivityRegistrationsAttendences(
-  //   req.params.activity_id,
-  //   req.session.student ? req.session.student.id : null
-  // )
 }
 
 activityController.registration = async (req, res) => {
@@ -207,7 +180,8 @@ activityController.DownloadExcel = async (req, res) => {
   const transformedMembers = members.map(member => ({
     ...member,
     isComfirm: member.isComfirm ? 'Yes' : 'No',
-    isAttendance: member.isAttendance ? 'Yes' : 'No'
+    isAttendance: member.isAttendance ? 'Yes' : 'No',
+    ...member
   }));
 
   transformedMembers.forEach(member => {
@@ -226,43 +200,74 @@ activityController.DownloadExcel = async (req, res) => {
 
 activityController.add = async (req, res) => {
   try {
-    if (!req.session.user || req.session.user.role == roles.STUDENT)
+    const userss = req.session.user;
+    if (!userss || req.session.user.role == roles.STUDENT)
     {
       req.flash('announc','Ban khong the tao hoat dong');
       return res.redirect('/');
     }
-    const firebaseStore = getStorage();
-    const currentTimestamp = Date.now();
-    const StoreRef = ref(firebaseStore, `poster/${req.file.originalname} ${currentTimestamp}`);
-    console.log(req.file);
-    const metadata = {
-      contentType: req.file.mimetype,
-    };
-    const snapshot = await uploadBytesResumable(StoreRef,req.file.buffer, metadata);
-    const url = await getDownloadURL(snapshot.ref);
-    if (url)
-    {
-      const activity = await activityModel.add({
-        name: req.body.name,
-        organization_id: 25,
-        description: req.body.desc,
-        start_date: req.body.date_start,
-        end_date: req.body.date_end,
-        registration_start_date: req.body.date_start_regis,
-        registration_end_date: req.body.date_end_regis,
-        location: req.body.location,
-        image: url,
-      });
-      if (!activity) {
-        throw new Error('Có lỗi xảy ra khi thêm hoạt động');
+    const { name, desc, date_start, date_end, date_start_regis, date_end_regis, location, number } = req.body;
+
+    if (!name || !desc || !date_start || !date_end || !date_start_regis || !date_end_regis || !location) {
+      throw new Error('Vui lòng nhập đủ các trường');
+    }
+    const now = new Date();
+    const startRegisterDate = new Date(date_start_regis);
+    const endRegisterDate = new Date(date_end_regis);
+    const startDate = new Date(date_start);
+    const endDate = new Date(date_end);
+
+    function resetTime(date) {
+      date.setHours(0, 0, 0, 0);
+      return date;
+    }
+    
+    resetTime(now);
+    resetTime(startRegisterDate);
+    resetTime(endRegisterDate);
+    resetTime(startDate);
+    resetTime(endDate);
+    if (
+      now < startRegisterDate && startRegisterDate < endRegisterDate && endRegisterDate < startDate && startDate <= endDate
+    ) {
+      const firebaseStore = getStorage();
+      const currentTimestamp = Date.now();
+      const StoreRef = ref(firebaseStore, `poster/${req.file.originalname} ${currentTimestamp}`);
+      const metadata = {
+        contentType: req.file.mimetype,
+      };
+      const snapshot = await uploadBytesResumable(StoreRef,req.file.buffer, metadata);
+      const url = await getDownloadURL(snapshot.ref);
+      if (url)
+      {
+        const activity = await activityModel.add({
+          name: req.body.name,
+          organization_id: userss.id,
+          description: req.body.desc.replace(/\n/g, '<br>'),
+          start_date: req.body.date_start,
+          end_date: req.body.date_end,
+          registration_start_date: req.body.date_start_regis,
+          registration_end_date: req.body.date_end_regis,
+          location: req.body.location,
+          number: number,
+          image: url,
+        });
+        if (!activity) {
+          throw new Error('Có lỗi xảy ra khi thêm hoạt động');
+        }
+      } else {
+        throw new Error('fail firebase');
       }
+  
+      req.flash('announc', `Ban da dang ky thanh cong hoat dong ${req.body.name}`);
+      return res.redirect('/');
     } else {
-      throw new Error('fail firebase');
+      throw Error('nhap ngay phu hop');
     }
 
-    req.flash('announc', `Ban da dang ky thanh cong hoat dong ${req.body.name}`);
-    return res.redirect('/');
+    
   } catch (error) {
+    console.log(error);
     req.flash('announc', error.message);
     res.redirect('/activity/create');
   }
@@ -306,32 +311,6 @@ activityController.getEdit = async (req, res) => {
     res.redirect('/');
   }
 }
-// const activity = await activityModel.getById(req.params.activity_id);
-
-//   if (!activity) {
-//     req.flash('error', 'Hoạt động không toàn tại');
-//     res.redirect('/activity/list');
-//     return;
-//   }
-
-//   const registrations = await activityModel.getActivityRegistrationsAttendences(
-//     req.params.activity_id,
-//     req.session.student ? req.session.student.id : null
-//   )
-
-//   res.render('activity/edit', {
-//     success: req.flash('success'),
-//     error: req.flash('error'),
-//     user: req.session.user,
-//     student: req.session.student,
-//     admin: req.session.admin,
-//     organization: req.session.organization,
-//     activity: activity,
-//     organizations,
-//     datetimeUtils,
-//     pathUtils,
-//     registrations
-//   });
 
 activityController.post_edit = async (req, res) => {
   try {
@@ -462,7 +441,7 @@ activityController.Get_register = async (req, res) => {
       res.redirect(`/activity/${activity_id}/view`);
     }
 
-    const activity = await activityModel.getById(activity_id);
+    const activity = await activityModel.GetById(activity_id);
 
     if (!activity) {
       req.flash('announc','Hoạt động không tồn tại');
@@ -476,27 +455,25 @@ activityController.Get_register = async (req, res) => {
       res.redirect(`/activity/${activity_id}/view`);
     }
 
-    const isRegistered = await activityModel.isRegistered(req.params.activity_id, req.session.student.id);
+    const isRegistered = await activityModel.isRegistered(req.params.activity_id, req.session.userid);
 
     if (isRegistered) {
       req.flash('announc',"Ban da dang ky hoat dong nay");
       res.redirect(`/activity/${activity_id}/view`);
     }
 
-    const student = await studentModel.getSvRegister(req.session.user.id);
+    const student = await studentModel.GetProfileById(req.session.user.id);
     return res.render('activity/register',{
-      error: '',
+      error: req.flash('announc'),
       student: student,
+      userss: userss,
+      activity: activity,
     });
 
   } catch (error) {
-    req.flash('error', error.message);
-    const student = await studentModel.getSvRegister(req.session.user.id);
-    return res.render('activity/register',{
-      error: error,
-      student: student,
-      announc: req.flash('announc'),
-    });
+    console.log(error);
+    req.flash('announc', error.message);
+    res.redirect(`/activity/${req.params.activity_id}/view`);
   }
 }
 
@@ -595,9 +572,9 @@ activityController.unregister = async (req, res) => {
       throw new Error('Có lỗi xảy ra khi hủy đăng ký hoạt động');
     }
 
-    req.flash('success', `Hủy đăng ký hoạt động ${activity.name} thành công`);
+    req.flash('announc', `Hủy đăng ký hoạt động ${activity.name} thành công`);
   } catch (error) {
-    req.flash('error', error.message);
+    req.flash('announc', error.message);
     console.log(error);
   }
 
@@ -719,22 +696,34 @@ activityController.my_activity = async (req, res) => {
 
 activityController.delete = async (req, res) => {
   try {
-    const activity = await activityModel.getById(req.params.activity_id);
+    const userss = req.session.user;
+    const activity_id = req.params.activity_id;
+    console.log('here');
+    if (!userss){
+      return res.redirect('/auth/login');
+    }
+
+    const activity = await activityModel.GetById(activity_id);
+    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
+      throw Error('Ban khong duoc phep xoa hoat dong nay')
+    }
 
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
     }
 
-    const result = await activityModel.delete(req.params.activity_id);
+    const result = await activityModel.delete(activity_id);
 
     if (!result) {
       throw new Error('Có lỗi xảy ra khi xóa hoạt động');
     }
 
-    req.flash('success', `Xóa hoạt động ${activity.name} thành công`);
+    req.flash('announc', `Xóa hoạt động ${activity.name} thành công`);
+    res.redirect('/');
   } catch (error) {
-    req.flash('error', error.message);
+    console.log(error);
+    req.flash('announc', error.message);
+    res.redirect('/');
   }
 
-  res.redirect('/activity/list');
 }
