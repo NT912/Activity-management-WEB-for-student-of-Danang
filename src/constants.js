@@ -15,10 +15,10 @@ module.exports = {
     DONE: 'done',
   },
   state: {
-    yet: 'Chua duyet',
-    reject: 'Bai viet da bi tu choi',
-    confirm: 'Da phan hoi',
-    update: 'Dang cho duyet thay doi',
-    done: 'Da duyet',
+    yet: 'Chưa duyệt ',
+    reject: 'Bài viết đã từ chối',
+    confirm: 'Đã phản hồi',
+    update: 'Đang chờ thay đổi',
+    done: 'Đã duyệt',
   }
 }

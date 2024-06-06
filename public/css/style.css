@@ -13874,7 +13874,7 @@ body:not(.theme-full) .main-content .middle-sidebar-bottom.header-padding {
     flex: 0 0 90px;
     width: 90x;
     /* padding: 0 20px 0 34px; */
-    overflow: hidden;
+    /* overflow: hidden; */
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -14987,7 +14987,7 @@ body:not(.theme-full) .main-content .middle-sidebar-bottom.header-padding {
 
 .form-group .style2-input {
     height: 50px;
-    line-height: 60px;
+    /* line-height: 60px; */
     display: block;
     border: 2px #eee solid;
     border-radius: 7px
