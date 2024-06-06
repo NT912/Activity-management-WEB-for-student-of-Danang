@@ -192,6 +192,22 @@ activityModel.update = async (activity_id, activity) => {
   return false;
 }
 
+activityModel.ChangeState = async (newstate, activity_id) => {
+  const queryText = `
+    UPDATE activities
+    SET Confirm = ?
+    WHERE id = ?
+  `;
+
+  const [result] = await pool.query(queryText, [newstate, activity_id]);
+
+  if (result.affectedRows) {
+    return true;
+  }
+
+  return false;
+}
+
 activityModel.verify = async (activity_id, admin_id) => {
   const queryText = `
     UPDATE activities

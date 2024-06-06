@@ -59,6 +59,7 @@ adminController.get_ViewActivity = async (req, res) => {
     try{
         const userss = req.session.user;
         const activity_id = req.params.activity_id;
+        console.log(activity_id);
         const activity = await activityModel.GetById(activity_id);
         
         if (!activity) {
@@ -82,5 +83,42 @@ adminController.get_ViewActivity = async (req, res) => {
       req.flash('announc','Loi xem hoat dong');
       res.redirect('/');
     }
+}
+
+adminController.post_ConfirmActivity = async (req, res) => {
+    try{
+        const userss = req.session.user;
+        const activity_id = req.params.activity_id;
+
+        const activity = await activityModel.GetById(activity_id);
+        
+        if (!activity) {
+            req.flash('announc', 'Hoạt động không tồn tại');
+            res.redirect('/admin/');
+            return;
+        }
+
+        const stateact = activity.Confirm.toString();
+        var result = false;
+        if (stateact == 'yet'){
+            result = await activityModel.ChangeState('confirm',activity_id);
+        } else 
+        if (stateact == 'reject') {
+            result = await activityModel.ChangeState('confirm',activity_id);
+        } else 
+        if (stateact == 'update') {
+            result = await activityModel.ChangeState('confirm',activity_id);
+        }
+
+        if (!result){
+            throw Error('Sai sai roi');
+        }
+        req.flash('announc','Duyet hoat dong thanh cong');
+        req.redirect(`/admin/${activity_id}/view`);
+    } catch (err){
+        console.log(err);
+        req.flash('announc',err.message);
+        res.redirect(`/admin/activity/${req.params.activity_id}/view`);
+    }
     
-  }
+}
