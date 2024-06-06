@@ -163,7 +163,9 @@ activityModel.update = async (activity_id, activity) => {
       end_date = ?, 
       registration_start_date = ?, 
       registration_end_date = ?, 
-      location = ?`;
+      location = ?,
+      Confirm = 'update'
+      `;
 
     const values = [
       activity.name,
