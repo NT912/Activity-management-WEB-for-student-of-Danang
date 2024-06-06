@@ -8,39 +8,6 @@
     <title>Đăng ký</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-        function validateInput(inputName) {
-            var inputValue = document.forms["registerForm"][inputName].value;
-            var errorElement = document.getElementById("error" + inputName.charAt(0).toUpperCase() + inputName.slice(1));
-
-            if (inputValue.trim() === "") {
-                errorElement.style.display = "block";
-            } else {
-                errorElement.style.display = "none";
-            }
-        }
-
-        function checkInputPasswordAgain() {
-            var password = document.forms["registerForm"]["password"].value;
-            var confirmPassword = document.forms["registerForm"]["confirmpassword"].value;
-            var confirmPasswordError = document.getElementById("errorConfirmpassword");
-            var submitButton = document.querySelector('button[type="submit"]');
-
-            if (confirmPassword.trim() === "") {
-                confirmPasswordError.innerText = "Vui lòng nhập lại mật khẩu.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else if (password !== confirmPassword) {
-                confirmPasswordError.innerText = "Mật khẩu nhập lại không khớp với mật khẩu đã nhập.";
-                confirmPasswordError.style.display = "block";
-                submitButton.disabled = true;
-            } else {
-                confirmPasswordError.style.display = "none";
-                submitButton.disabled = false;
-            }
-        }
-
-    </script>
 </head>
 
 <body class="color-theme-blue">

@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node --stack-size=2048 index.js",
     "start:monitor": "nodemon --inspect=0.0.0.0 --stack-size=2048 index.js",
-    "create_super_user": "node --stack-size=2048 src/scripts/create_super_user.js"
+    "create_admin": "node --stack-size=2048 src/scripts/create_super_user.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.2"
@@ -32,6 +32,7 @@
     "qrcode": "1.5.3",
     "readline-sync": "1.4.10",
     "sharp": "^0.33.4",
+    "toastr": "^2.1.4",
     "uuid": "^9.0.1"
   }
 }

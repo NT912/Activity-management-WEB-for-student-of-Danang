@@ -53,14 +53,17 @@ const authRoute = require('./src/routes/authRoute');  //auth routes
 const userRoute = require('./src/routes/userRoute');  //user routes
 const acitvityRoute = require('./src/routes/activityRoute');  //user routes
 const homeRoute = require('./src/routes/homeRoute');  //user routes
+const adminRoute = require('./src/routes/adminRoute');  //user routes
 
 app.get('/health_check', (req, res) => {
   res.send('OK');
 });
+
 app.use('/auth', authRoute);
 app.use('/user', userRoute );
 // app.use('/user', authMiddleware.isLoggedIn, userRoute );
 app.use('/activity', acitvityRoute);
+app.use('/admin', adminRoute);
 app.use('/', homeRoute);
 app.use((req, res) => {
   res.render('404');

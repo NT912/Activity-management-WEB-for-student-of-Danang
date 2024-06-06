@@ -35,6 +35,15 @@ userModel.GetOrganiAcByEmail = async (email) => {
   return rows[0] ? rows[0] : null;
 }
 
+userModel.GetAdminByemail = async (email) => {
+  const [rows] = await pool.query(`
+  SELECT * FROM users U
+  INNER JOIN administrators A ON U.id = A.user_id
+  WHERE A.email = ?
+  `, [email]);
+  return rows[0] ? rows[0] : null;
+}
+
 userModel.create = async (user) => {
   hashed_password = md5(user.password);
 
