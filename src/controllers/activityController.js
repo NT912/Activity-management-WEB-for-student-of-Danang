@@ -100,9 +100,10 @@ activityController.getView = async (req, res) => {
       var allow_update = false;
       const now = new Date();
       var state_activity = '';
+      var stateact;
         if (activity.organization_id == userss.id){
           isOwn = true;
-          const stateact = activity.Confirm.toString();
+          stateact = activity.Confirm.toString();
           state_activity = state[stateact];
         }
       if (now < activity.registration_end_date && isOwn){
@@ -117,6 +118,7 @@ activityController.getView = async (req, res) => {
         isOwn: isOwn,
         allow_update: allow_update,
         state: state_activity,
+        stateact: stateact,
         announc: req.flash('announc'),
       });
     } else 
@@ -124,6 +126,7 @@ activityController.getView = async (req, res) => {
       return redirect('/amin');
     }
   } catch (err){
+    console.log(err);
     req.flash('announc','Loi xem hoat dong');
     res.redirect('/');
   }
