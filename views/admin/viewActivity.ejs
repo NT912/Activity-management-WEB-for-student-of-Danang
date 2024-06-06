@@ -102,20 +102,37 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <% if (state == 'Da phan hoi') {%>
-                        <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Xac nhan
+                    <% if (stateact == 'yet' || stateact == 'update') {%>
+                        <a href="/admin/activity/<%= activity.id %>/confirm" 
+                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Duyet
                         </a>
-                        <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                        <a href="/admin/activity/<%= activity.id %>/reject" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
                             Tu choi
                         </a>
                     <%} else 
-                    if (state == 'Bai viet da bi tu choi') {%>
-                        <a href="/activity/<%= activity.id %>/confirm" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Sửa
+                    if (stateact == 'reject'){%>
+                        <a href="/admin/activity/<%= activity.id %>/confirm" 
+                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Duyet
                         </a>
-                        <a href="/activity/<%= activity.id %>/" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Huy
+                    <%} else 
+                    if (stateact == 'confirm'){%>
+                        <a href="/admin/activity/<%= activity.id %>/reject" 
+                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Huy duyet
+                        </a>
+                    <%} else 
+                    if (stateact == 'reject'){%>
+                        <a href="/admin/activity/<%= activity.id %>/confirm" 
+                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Duyet
+                        </a>
+                    <%}else 
+                    if (stateact == 'done'){%>
+                        <a href="/admin/activity/<%= activity.id %>/reject" 
+                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                            Xoa
                         </a>
                     <%}%>
                 </div>
