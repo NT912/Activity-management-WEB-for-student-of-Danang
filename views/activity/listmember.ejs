@@ -109,24 +109,56 @@
                             <% listmember.forEach(function(member){ %>
                             <li>
                                 <a href="/user/<%-member.id%>/view" class="rounded-3 bg-lightblue theme-light-bg">
+                                            
                                     <div class="email-user">
-                                        <span class="btn-round-xss ms-0 me-2"></span>
-                                        <h6 class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700"><%= member.username %></h6>
+                                        <!-- neu sinh vien huy dang ky thi la bg-warning, khong thi la bg-success -->
+                                        <span class="btn-round-xss ms-0 me-2"></span> 
+                                        <h6 class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">
+                                            <%= member.username %>
+                                        </h6>
                                     </div>
-                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss"><%= member.masv %></div>
-                                    <div class="email-text text-grey-500 fw-600 font-xssss"><%= member.faculty %></div>
-                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss"><%= member.class %></div>
-                                    <div class="email-text text-grey-500 fw-600 font-xssss"><%= member.email %></div>
-                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss"><%= member.phone_number %></div>
-                                    <% if (userss !=null) { if (userss.role=='admin' || userss.id==activity.organization_id) { %>
-                                    <div class="col-member-100">
-                                        <input class="" type="checkbox" id="checkbox_<%= member.student_id %>" value="<%= member.email %>" aria-label="" <% if (member.isComfirm==true) {%> checked <%} %>>
+                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <%=  member.masv %>
                                     </div>
-                                    <div class="col-member-100">
-                                        <input class="" type="checkbox" value="option1" aria-label="" <% if (member.isAttendance==true) {%> checked <%}%> disabled>
+                                    <div class="email-text text-grey-500 fw-600 font-xssss">
+                                        <%= member.faculty %>
                                     </div>
-                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss"><%= member.wish %></div>
+                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <%= member.class %>
+                                    </div>
+                                    <div class="email-text text-grey-500 fw-600 font-xssss">
+                                        <%= member.email %>
+                                    </div>
+                                    <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                        <%= member.phone_number %>
+                                    </div>
+                                    <% if (userss != null) {
+                                        if (userss.role == 'admin' || userss.id == activity.organization_id) { %>
+                                        <div class="col-member-100">
+                                            <input class="" type="checkbox" id="checkbox_<%= member.student_id %>" value="option1" aria-label="" 
+                                            <% if (member.isComfirm == true)  {%> 
+                                                checked
+                                                onchange="ConfirmStudentRegister(<%= activity.id %>, <%= member.student_id %>, false, 'checkbox_<%= member.student_id %>')"
+                                            <%} else {%>
+                                                onchange="ConfirmStudentRegister(<%= activity.id %>, <%= member.student_id %>, true, 'checkbox_<%= member.student_id %>')"
+                                            <%}%>
+                                            >
+                                        </div>
+                                        
+                                        <div class="col-member-100">
+                                            <!--tich vo la sinh vien da diem danh, cap nhat tren database-->
+                                            <input class="" type="checkbox" value="option1" aria-label=""
+                                            <% if (member.isAttendance == true)  {%> 
+                                                checked 
+                                            <%}%> disabled>
+                                        </div>
+
+                                        <div class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                            <%= member.wish %>
+                                        </div>
                                     <%}}%>
+                                    
+                                    <!-- <div class="email-time text-grey-500 fw-600">12:48PM</div> -->
                                 </a>
                             </li>
                             <%})%>
@@ -136,79 +168,77 @@
             </div>
         </div>
         <!-- Soạn email -->
-        <div class="middle-sidebar-left pe-0 ps-lg-3 ms-0 me-0" style="max-width: 100%;">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="chat-wrapper p-0 w-100 position-relative scroll-bar bg-white theme-dark-bg">
-                                <div class="chat-body p-lg-4 p-3 mt-lg-3 mt-0">
-                                    <div class="card dark-bg-transparent border-0 w-100 p-0 mb-3 shadow-none">
-                                        <div class="card-body p-0">
-                                            <h6 class="fw-600 text-grey-500 font-xsssss">Soạn Email</h6>
+        <% if (userss && activity.organization_id==userss.id) { %>
+            <div class="middle-sidebar-left pe-0 ps-lg-3 ms-0 me-0" style="max-width: 100%;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="chat-wrapper p-0 w-100 position-relative scroll-bar bg-white theme-dark-bg">
+                                    <div class="chat-body p-lg-4 p-3 mt-lg-3 mt-0">
+                                        <div class="card dark-bg-transparent border-0 w-100 p-0 mb-3 shadow-none">
+                                            <div class="card-body p-0">
+                                                <h6 class="fw-600 text-grey-500 font-xsssss">Soạn Email</h6>
+                                            </div>
                                         </div>
+                                        <form id="emailForm" action="/activity/<%-activity.id%>/sendemail" method="POST" enctype="multipart/form-data">
+                                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                                <div class="panel panel-default p-0 bg-transparent rounded-0">
+                                                    <div class="panel-heading pb-2" role="tab" id="headingSender">
+                                                        <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Chọn người nhan</span>
+                                                    </div>
+                                                    <div id="collapseSender" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingSender">
+                                                        <select name="senderType" class="form-control mb-3 border-0">
+                                                            <option value="confirm">Da xac nhan</option>
+                                                            <option value="attendance">Da tham gia</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default p-0 bg-transparent border-bottom rounded-0">
+                                                    <div class="panel-heading pb-2" role="tab" id="headingOne">
+                                                        <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Chủ đề</span>
+                                                    </div>
+                                                    <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                                        <input type="text" name="subject" class="form-control mb-3 border-0" placeholder="Nhập chủ đề" required>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default p-0 bg-transparent rounded-0">
+                                                    <div class="panel-heading pb-2" role="tab" id="headingThree">
+                                                        <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Nội dung</span>
+                                                    </div>
+                                                    <div id="collapseFour" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingFour">
+                                                        <textarea id="emailContent" name="content" class="form-control mb-5 p-3 h100 bg-greylight lh-16 border-0" rows="5" placeholder="Nhập nội dung email" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default p-0 bg-transparent rounded-0 me-2 d-flex">
+                                                    <div class="d-flex">
+                                                        <label class="btn bg-dark border-0 btn-round-md ms-1 float-left">
+                                                            <i class="ti-clip text-white lh-4 font-xs"></i>
+                                                            <input type="file" name="attachment" class="d-none" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                                        </label>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <label class="btn bg-dark border-0 btn-round-md ms-1 float-left">
+                                                            <i class="ti-image text-white lh-4 font-xs lh-4 font-xs"></i>
+                                                            <input type="file" name="imageAttachment" class="d-none" accept="image/*">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="" style="width: 98%; height: 50px;">
+                                                    <button type="submit" class="btn bg-current">Send</button>
+                                                </div> 
+                                            </div>
+                                        </form>
                                     </div>
-                                    <form id="emailForm" action="/send-email" method="POST" enctype="multipart/form-data">
-                                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                            <div class="panel panel-default p-0 mb-0 bg-transparent border-bottom rounded-0">
-                                                <div class="panel-heading pb-2" role="tab" id="headingTwo">
-                                                    <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Email người gửi</span>
-                                                </div>
-                                                <div id="collapseTwo" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingTwo">
-                                                    <input type="email" name="from" class="form-control mb-3 border-0" placeholder="Nhập email người gửi" required>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default p-0 bg-transparent border-bottom rounded-0">
-                                                <div class="panel-heading pb-2" role="tab" id="headingOne">
-                                                    <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Chủ đề</span>
-                                                </div>
-                                                <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
-                                                    <input type="text" name="subject" class="form-control mb-3 border-0" placeholder="Nhập chủ đề" required>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default p-0 bg-transparent border-bottom rounded-0">
-                                                <div class="panel-heading pb-2" role="tab" id="headingThree">
-                                                    <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Email người nhận</span>
-                                                </div>
-                                                <div id="collapseThree" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingThree">
-                                                    <input type="email" name="to" class="form-control mb-3 border-0" placeholder="Email người nhận sẽ được tự động điền" required readonly>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default p-0 bg-transparent rounded-0">
-                                                <div class="panel-heading pb-2" role="tab" id="headingThree">
-                                                    <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Nội dung</span>
-                                                </div>
-                                                <div id="collapseFour" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingFour">
-                                                    <textarea id="emailContent" name="content" class="form-control mb-5 p-3 h100 bg-greylight lh-16 border-0" rows="5" placeholder="Nhập nội dung email" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default p-0 bg-transparent rounded-0 me-2 d-flex">
-                                                <div class="d-flex">
-                                                    <label class="btn bg-dark border-0 btn-round-md ms-1 float-left">
-                                                        <i class="ti-clip text-white lh-4 font-xs"></i>
-                                                        <input type="file" name="attachment" class="d-none">
-                                                    </label>
-                                                </div>
-                                                <div class="d-flex">
-                                                    <label class="btn bg-dark border-0 btn-round-md ms-1 float-left">
-                                                        <i class="ti-image text-white lh-4 font-xs lh-4 font-xs"></i>
-                                                        <input type="file" name="attachment" class="d-none">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="" style="width: 98%; height: 50px;">
-                                                <button type="submit" class="btn bg-current">Send</button>
-                                            </div> 
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
+        <%}%>
     </div>
 
     <style>
@@ -228,18 +258,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
 
-    <script>
-        // Tạo danh sách email người nhận từ các checkbox đã được chọn
-        document.getElementById('emailForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const emails = [];
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(checkbox) {
-                emails.push(checkbox.value);
-            });
-            this.to.value = emails.join(',');
-            this.submit();
-        });
-    </script>
 </body>
 
 </html>

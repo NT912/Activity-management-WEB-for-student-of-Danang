@@ -62,4 +62,6 @@ router.get("/:activity_id/delete", controller.delete);
 
 router.get("/:activity_id/confirm", controller.confirm);
 
+router.post("/:activity_id/sendemail",upload.fields([{ name: 'attachment' }, { name: 'imageAttachment' }]), controller.send_email);
+
 module.exports = router;
