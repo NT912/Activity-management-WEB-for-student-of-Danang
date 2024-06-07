@@ -123,7 +123,7 @@ activityController.getView = async (req, res) => {
       });
     } else 
     if (userss.role == roles.ADMIN){
-      return redirect('/amin');
+      return res.redirect('/amin');
     }
   } catch (err){
     console.log(err);
@@ -378,25 +378,28 @@ activityController.post_edit = async (req, res) => {
     //     res.redirect(`/activity/${req.params.activity_id}/edit`);
     // }
 
-    const backup_acticity = {
-      activity_id: activity.id,
-      name: activity.name,
-      description: activity.description,
-      start_date: activity.start_date,
-      end_date: activity.end_date,
-      registration_start_date: activity.registration_start_date,
-      registration_end_date: activity.registration_end_date,
-      location: activity.location,
-      number: activity.maxnumber,
-      image: activity.image,
-      confirm: activity.Confirm,
+    if (activity.Confirm != 'yet'){
+      const backup_acticity = {
+        activity_id: activity.id,
+        name: activity.name,
+        description: activity.description,
+        start_date: activity.start_date,
+        end_date: activity.end_date,
+        registration_start_date: activity.registration_start_date,
+        registration_end_date: activity.registration_end_date,
+        location: activity.location,
+        number: activity.maxnumber,
+        image: activity.image,
+        confirm: activity.Confirm,
+      }
+  
+      const result_backup = await activityModel.backup(backup_acticity);
+  
+      if (!result_backup){
+        throw Error('Loi backup');
+      }
     }
-
-    const result_backup = await activityModel.backup(backup_acticity);
-
-    if (!result_backup){
-      throw Error('Loi backup');
-    }
+    
 
     const updatedActivity = {
         name: name,
@@ -410,6 +413,10 @@ activityController.post_edit = async (req, res) => {
     };
 
     const result = await activityModel.update(activity_id, updatedActivity);
+    if (activity.Confirm == 'yet')
+    {
+      await activityModel.ChangeState('yet',activity_id);
+    }
     if (!result){
       throw Error('loi khi sua hoat dong');
     }

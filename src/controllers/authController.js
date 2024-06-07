@@ -11,6 +11,11 @@ const { roles } = require('../constants');
 const authController = module.exports;
 
 authController.getLogin = (req, res) => {
+  const userss = req.session.user;
+  if (userss)
+  {
+    return res.redirect('/');
+  }
   res.render('auth/login',{
     error: req.flash('error'),
     announc: req.flash('announc'),
@@ -58,7 +63,6 @@ authController.login = async (req, res) => {
     req.session.user = userss;
     req.session.save();
 
-    console.log(userss);
     if (userss.role == roles.ADMIN){
       return res.redirect('/admin/');
     }
@@ -190,7 +194,7 @@ authController.registerOrganization = async (req, res) => {
       throw Error('Có lỗi xảy ra khi đăng ký thông tin tổ chức');
     }
     req.flash('announc','Đăng ký tài khoản mới thành công ');
-    return res.redirect('/auth/login');
+    return res.redirect('/');
     
   } catch (error) {
     return res.render('auth/registerNTC',{
