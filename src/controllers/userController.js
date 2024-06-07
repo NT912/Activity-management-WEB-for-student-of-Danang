@@ -491,6 +491,8 @@ userController.Post_avt = async (req, res) => {
 
     var result = false;
     if (url){
+      req.session.user.avt = url;
+      req.session.save();
       if (userss.role == roles.STUDENT){
         result = await userModel.updateAvtSV(url,userss.id);
       } else 

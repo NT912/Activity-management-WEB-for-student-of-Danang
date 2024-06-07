@@ -52,7 +52,7 @@ adminController.Get_Home = async (req, res) => {
         if (mod == 'wait'){
             activities = await activityModel.GetAllWaitConfirm(0);
             state = 'wait';
-        } 
+        } else
         if (mod == 'account'){
             student_users = await userModel.getByRole(roles.STUDENT);
             organization_users = await userModel.getByRole(roles.ORGANIZATION);
@@ -134,7 +134,7 @@ adminController.post_ConfirmActivity = async (req, res) => {
             throw Error('Sai sai roi');
         }
         req.flash('announc','Duyet hoat dong thanh cong');
-        req.redirect(`/admin/${activity_id}/view`);
+        res.redirect(`/admin/activity/${activity_id}/view`);
     } catch (err){
         console.log(err);
         req.flash('announc',err.message);
@@ -165,10 +165,9 @@ adminController.post_RejectActivity = async (req, res) => {
         } else 
         if (stateact == 'update') {
             const activity_backup = await activityModel.GetBackupActivity(activity_id);
-
             if (activity_backup){
-                const result_backup = activityModel.update(activity_id,activity_backup);
-                if (!result_backup){
+                result = activityModel.update(activity_id,activity_backup);
+                if (!result){
                     throw Error('Loi backup');
                 }
             }

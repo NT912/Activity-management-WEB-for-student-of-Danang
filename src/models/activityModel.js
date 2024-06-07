@@ -128,8 +128,9 @@ activityModel.GetActNTCWait = async (organization_id) => {
   SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
   FROM activities A
   INNER JOIN users U ON U.id = A.organization_id
-  WHERE (A.Confirm = 'yet' || A.Confirm = 'confirm') and CURRENT_TIME() > A.end_date AND A.organization_id = ?
-  `;
+  WHERE (A.Confirm = 'yet' || A.Confirm = 'confirm' || A.Confirm = 'reject') and CURRENT_TIME() < A.end_date AND A.organization_id = ?
+  `
+  ;
   const values = organization_id;
   const [result] = await pool.query(query, values);
   return result;
@@ -140,7 +141,7 @@ activityModel.GetActNTCProcess = async (organization_id) => {
   SELECT A.id, A.name, A.description,  A.image, U.username, U.id as idUser
   FROM activities A
   INNER JOIN users U ON U.id = A.organization_id
-  WHERE A.Confirm = 'confirm' and CURRENT_TIME() < A.start_date AND A.organization_id = ?
+  WHERE A.Confirm = 'done' and CURRENT_TIME() <= A.end_date AND A.organization_id = ?
   `;
   const values = organization_id;
   const [result] = await pool.query(query, values);

@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node --stack-size=2048 index.js",
-    "start:monitor": "nodemon --inspect=0.0.0.0 --stack-size=2048 index.js",
+    
+    "start": "nodemon --stack-size=2048 index.js",
     "create_admin": "node --stack-size=2048 src/scripts/create_super_user.js"
   },
   "devDependencies": {
