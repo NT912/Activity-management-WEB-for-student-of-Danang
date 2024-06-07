@@ -253,6 +253,7 @@ authController.Post_forgot = async (req, res) => {
 };
 
 authController.Get_ResetPass = async (req, res) => {
+  console.log(req.params.token);
   const user = await userModel.getUserByResetToken(req.params.token);
     if (!user) {
         req.flash('error', 'Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.');
@@ -263,14 +264,13 @@ authController.Get_ResetPass = async (req, res) => {
 };
 
 authController.Post_ResetPass = async (req, res) => {
-  const user = await userModel.getUserByResetToken({
-      resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }
-  });
+  console.log(req.params.token);
+  const user = await userModel.getUserByResetToken(req.params.token);
+
 
   if (!user) {
       req.flash('error', 'Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.');
-      return res.redirect('/auth/forgot');
+      return res.redirect('/auth/fogot');
   }
 
   // Cập nhật mật khẩu mới

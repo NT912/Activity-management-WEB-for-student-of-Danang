@@ -148,17 +148,20 @@ userModel.update = async (user_id, user) => {
 }
 
 userModel.getUserByResetToken = async (token) => {
-      const query = 'SELECT * FROM users WHERE resetPasswordToken = ? AND resetPasswordExpires > NOW()';
-      console.log(query);
-      const [rows] = await pool.query(query, [token.resetPasswordToken]);
-    return rows[0] ? rows[0] : null;
+      const query = `
+      SELECT * FROM users WHERE resetPasswordToken = ?
+      `;
+      console.log(query,"    ",token.resetPasswordToken);
+      const [rows] = await pool.query(query, token);
+      console.log(rows);
+      return rows[0] ? rows[0] : null;
       
 };
 
 
 userModel.updateToken = async (user) => {
-  const query = 'UPDATE users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE id = ?';
-  const values = [user.resetPasswordToken, user.resetPasswordExpires, user.id];
+  const query = 'UPDATE users SET resetPasswordToken = ? WHERE id = ?';
+  const values = [user.resetPasswordToken, user.id];
   
   const [result] = await pool.query(query, values);
 
@@ -172,7 +175,7 @@ userModel.updateToken = async (user) => {
 userModel.updatePass = async (pass, id_user) => {
   const hashed_password = md5(pass);
   const query = `
-  UPDATE users SET hashed_passed = ? WHERE id = ?
+  UPDATE users SET hashed_password = ? WHERE id = ?
   `;
   const values = [hashed_password, id_user];
   
