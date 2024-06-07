@@ -60,8 +60,8 @@ adminController.Get_Home = async (req, res) => {
       activities = await activityModel.GetAllWaitConfirm(0);
       state = "wait";
     } else if (mod == "systems") {
-      student_users = await userModel.getByRole(roles.STUDENT);
-      organization_users = await userModel.getByRole(roles.ORGANIZATION);
+      student_users_count = await userModel.getByRole(roles.STUDENT);
+      organization_users_count = await userModel.getByRole(roles.ORGANIZATION);
       state = "account";
     } else {
       activities = await activityModel.GetAll(0);
@@ -75,6 +75,8 @@ adminController.Get_Home = async (req, res) => {
       state: state,
       student_users,
       organization_users,
+      student_users_count,
+      organization_users_count,
     });
   } catch (err) {
     console.log(err);

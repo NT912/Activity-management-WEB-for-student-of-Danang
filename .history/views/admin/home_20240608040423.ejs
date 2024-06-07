@@ -10,7 +10,7 @@
         </style>
 </head>
 
-<body class="mont-font">
+<body class="color-theme-blue mont-font">
     <div class="main-wrapperr">
         <!-- navigation top-->
         <%- include('../includes/header.ejs', { userss: userss }) %>
@@ -51,7 +51,7 @@
                         </div>
                         <%} else {%>
                 </div>
-                <div class="main-content d-flex justify-content-center">
+                <div class="main-content justify-content-center">
                     <div class="row" style="width: 90%;">
                         <div class="dash-content">
                             <div class="title">
@@ -268,66 +268,6 @@
             })
         </script>
         <% } %>
-            <script>
-                $(document).ready(function () {
-                    $.ajax({
-                        url: '/admin/api/student-count',
-                        method: 'GET',
-                        success: function (response) {
-                            $('.box1 .number').text(response.count); // Cập nhật số lượng sinh viên trong box1
-                        },
-                        error: function (err) {
-                            console.log('Error fetching student count:', err);
-                        }
-                    });
-                });
-            </script>
-
-            <!-- đếm số lượng bài viết chưa duyệt -->
-            <script>
-                $(document).ready(function () {
-                    $.ajax({
-                        url: '/admin/api/unapproved-posts-count',
-                        method: 'GET',
-                        success: function (response) {
-                            $('.box2 .number').text(response.count); // Cập nhật số lượng bài viết chưa duyệt trong box2
-                        },
-                        error: function (err) {
-                            console.log('Error fetching unapproved posts count:', err);
-                        }
-                    });
-                });
-            </script>
-
-            <script>
-                $(document).ready(function () {
-                    $.ajax({
-                        url: '/admin/api/upcoming-activities-count',
-                        method: 'GET',
-                        success: function (response) {
-                            $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
-                        },
-                        error: function (err) {
-                            console.log('Error fetching upcoming activities count:', err);
-                        }
-                    });
-                });
-            </script>
-
-            <script>
-                $(document).ready(function () {
-                    $.ajax({
-                        url: '/admin/api/organization-count',
-                        method: 'GET',
-                        success: function (response) {
-                            $('.box4 .number').text(response.count);
-                        },
-                        error: function (err) {
-                            console.log('Error fetching organization count:', err);
-                        }
-                    });
-                });
-            </script>
 </body>
 
 </html>

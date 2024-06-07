@@ -54,8 +54,6 @@ adminController.Get_Home = async (req, res) => {
     var state = "";
     var student_users;
     var organization_users;
-    var student_users_count;
-    var organization_users_count;
     if (mod == "wait") {
       activities = await activityModel.GetAllWaitConfirm(0);
       state = "wait";

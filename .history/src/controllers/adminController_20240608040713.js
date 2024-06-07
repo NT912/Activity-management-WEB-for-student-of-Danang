@@ -75,6 +75,8 @@ adminController.Get_Home = async (req, res) => {
       state: state,
       student_users,
       organization_users,
+      student_users_count,
+      organization_users_count,
     });
   } catch (err) {
     console.log(err);

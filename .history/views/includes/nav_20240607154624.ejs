@@ -9,7 +9,7 @@
                         <a href="/" class="nav-content-bttn open-font">
                             <i class="feather-tv btn-round-md bg-blue-gradiant me-3"></i>
                             <span>
-                                Trang chủ
+                                Trang chủ 
                             </span>
                         </a>
                     </li>
@@ -23,9 +23,9 @@
                     </li>
                 </ul>
 
-
+                
             </div>
-            <% if (userss && userss.role=='admin' ){ %>
+            <% if (userss && userss.role == 'admin'){ %>
                 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
                     <div class="nav-caption fw-600 font-xssss text-grey-500"><span>chuyển </span>hướng</div>
                     <ul class="mb-1 top-content">
@@ -39,7 +39,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/?mod=systems" class="nav-content-bttn open-font">
+                            <a href="/admin/?mod=account" class="nav-content-bttn open-font">
                                 <i class="feather-tv btn-round-md bg-blue-gradiant me-3"></i>
                                 <span>
                                     Tai khoan
@@ -48,7 +48,7 @@
                         </li>
                     </ul>
                 </div>
-                <%}%>
+            <%}%>
         </div>
     </div>
 </nav>
