@@ -104,3 +104,10 @@ activityModel.getUpcomingActivitiesCount = async () => {
   );
   return rows[0].count || 0;
 };
+
+adminModel.getOrganizationCount = async () => {
+  const [rows] = await pool.query(
+    "SELECT COUNT(*) AS count FROM organizations"
+  );
+  return rows[0].count;
+};

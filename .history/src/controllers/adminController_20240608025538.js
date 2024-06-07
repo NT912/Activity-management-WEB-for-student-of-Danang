@@ -368,14 +368,22 @@ adminController.getUpcomingActivitiesCount = async (req, res) => {
   }
 };
 
-adminController.getOrganizationCount = async (req, res) => {
+adminController.getStudentCount = async (req, res) => {
   try {
-    const organizationCount = await userModel.getCountByRole(
-      roles.ORGANIZATION
-    );
-    res.status(200).json({ count: organizationCount });
+    const studentCount = await userModel.getCountByRole(roles.STUDENT);
+    res.status(200).json({ count: studentCount });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Lỗi khi lấy số lượng sinh viên" });
+  }
+};
+
+adminController.getOrganizationCount = async (req, res) => {
+  try {
+    const count = await adminModel.getOrganizationCount();
+    res.json({ count });
+  } catch (error) {
+    console.error("Error getting organization count:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -140,7 +140,7 @@
                                     <div class="box box4">
                                         <i class="uil uil-building icon"></i>
                                         <span class="text">Nhà tổ chức</span>
-                                        <span class="number">...</span>
+                                        <span class="number" id="organizationCount">...</span>
                                     </div>
                                 </div>
                                 <div class="activity">
@@ -313,13 +313,23 @@
                 url: '/admin/api/organization-count',
                 method: 'GET',
                 success: function (response) {
-                    $('.box4 .number').text(response.count);
+                    $('.box4 .number').text(response.count); // Cập nhật số lượng tổ chức trong box4
                 },
                 error: function (err) {
                     console.log('Error fetching organization count:', err);
                 }
             });
         });
+    </script>
+
+    <script>
+        fetch('/api/organization-count')
+            .then(response => response.json())
+            .then(data => {
+                const organizationCount = data.count;
+                document.getElementById('organizationCount').textContent = organizationCount;
+            })
+            .catch(error => console.error('Error fetching organization count:', error));
     </script>
 </body>
 

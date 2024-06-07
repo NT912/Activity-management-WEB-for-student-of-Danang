@@ -53,13 +53,7 @@ router.get(
 
 router.get(
   "/api/upcoming-activities-count",
-  controller.getUpcomingActivitiesCount
-);
-
-router.get(
-  "/api/organization-count",
-  authMiddleware.isAdmin,
-  controller.getOrganizationCount
+  adminController.getUpcomingActivitiesCount
 );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

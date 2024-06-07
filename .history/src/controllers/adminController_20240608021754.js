@@ -357,25 +357,3 @@ adminController.getUnapprovedPostsCount = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-adminController.getUpcomingActivitiesCount = async (req, res) => {
-  try {
-    const upcomingActivitiesCount =
-      await activityModel.getUpcomingActivitiesCount();
-    res.json({ count: upcomingActivitiesCount });
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-adminController.getOrganizationCount = async (req, res) => {
-  try {
-    const organizationCount = await userModel.getCountByRole(
-      roles.ORGANIZATION
-    );
-    res.status(200).json({ count: organizationCount });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Lỗi khi lấy số lượng sinh viên" });
-  }
-};

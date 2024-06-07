@@ -38,28 +38,11 @@ router.post(
 
 router.get("/profile", controller.Get_Profile);
 
-// Các xử lý ở trang profile
+// Trang profile
 router.get(
   "/api/student-count",
   authMiddleware.isAdmin,
   controller.getStudentCount
-);
-
-router.get(
-  "/api/unapproved-posts-count",
-  authMiddleware.isAdmin,
-  controller.getUnapprovedPostsCount
-);
-
-router.get(
-  "/api/upcoming-activities-count",
-  controller.getUpcomingActivitiesCount
-);
-
-router.get(
-  "/api/organization-count",
-  authMiddleware.isAdmin,
-  controller.getOrganizationCount
 );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

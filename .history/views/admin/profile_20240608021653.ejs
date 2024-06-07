@@ -135,12 +135,12 @@
                                     <div class="box box3">
                                         <i class="uil uil-file-alt icon"></i>
                                         <span class="text">Bài viết sắp diễn ra</span>
-                                        <span class="number">0</span>
+                                        <span class="number">30</span>
                                     </div>
                                     <div class="box box4">
                                         <i class="uil uil-building icon"></i>
                                         <span class="text">Nhà tổ chức</span>
-                                        <span class="number">...</span>
+                                        <span class="number">10</span>
                                     </div>
                                 </div>
                                 <div class="activity">
@@ -260,7 +260,6 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- đếm số lượng sinh viên -->
     <script>
         $(document).ready(function () {
             $.ajax({
@@ -271,52 +270,6 @@
                 },
                 error: function (err) {
                     console.log('Error fetching student count:', err);
-                }
-            });
-        });
-    </script>
-
-    <!-- đếm số lượng bài viết chưa duyệt -->
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/unapproved-posts-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box2 .number').text(response.count); // Cập nhật số lượng bài viết chưa duyệt trong box2
-                },
-                error: function (err) {
-                    console.log('Error fetching unapproved posts count:', err);
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/upcoming-activities-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
-                },
-                error: function (err) {
-                    console.log('Error fetching upcoming activities count:', err);
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/organization-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box4 .number').text(response.count);
-                },
-                error: function (err) {
-                    console.log('Error fetching organization count:', err);
                 }
             });
         });

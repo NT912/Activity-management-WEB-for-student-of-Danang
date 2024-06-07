@@ -59,7 +59,7 @@ router.get(
 router.get(
   "/api/organization-count",
   authMiddleware.isAdmin,
-  controller.getOrganizationCount
+  organizationController.getOrganizationCount
 );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

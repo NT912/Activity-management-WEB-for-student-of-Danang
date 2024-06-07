@@ -51,16 +51,11 @@ router.get(
   controller.getUnapprovedPostsCount
 );
 
-router.get(
-  "/api/upcoming-activities-count",
-  controller.getUpcomingActivitiesCount
-);
-
-router.get(
-  "/api/organization-count",
-  authMiddleware.isAdmin,
-  controller.getOrganizationCount
-);
+// router.get(
+//   "/upcoming-posts/count",
+//   authMiddleware.isAdmin,
+//   controller.Get_Home
+// );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);
 // router.get('/:activity_id/view', controller.getView);

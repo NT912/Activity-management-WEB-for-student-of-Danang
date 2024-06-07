@@ -55,11 +55,10 @@ router.get(
   "/api/upcoming-activities-count",
   controller.getUpcomingActivitiesCount
 );
-
 router.get(
   "/api/organization-count",
   authMiddleware.isAdmin,
-  controller.getOrganizationCount
+  adminController.getOrganizationCount
 );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

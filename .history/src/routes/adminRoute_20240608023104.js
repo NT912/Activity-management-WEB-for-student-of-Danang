@@ -52,14 +52,9 @@ router.get(
 );
 
 router.get(
-  "/api/upcoming-activities-count",
-  controller.getUpcomingActivitiesCount
-);
-
-router.get(
-  "/api/organization-count",
+  "/upcoming-posts/count",
   authMiddleware.isAdmin,
-  controller.getOrganizationCount
+  controller.Get_Home
 );
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

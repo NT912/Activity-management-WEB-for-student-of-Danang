@@ -62,6 +62,7 @@ adminModel.update = async (admin_id, admin) => {
 
 // Các xử lý ở trang profile
 userModel.getCountByRole = async (role) => {
+  if (role == roles.STUDENT)
   const [rows] = await pool.query(
     "SELECT COUNT(*) AS count FROM users WHERE role = ?",
     [role]
@@ -103,4 +104,11 @@ activityModel.getUpcomingActivitiesCount = async () => {
     [currentDate]
   );
   return rows[0].count || 0;
+};
+
+adminModel.getOrganizationCount = async () => {
+  const [rows] = await pool.query(
+    "SELECT COUNT(*) AS count FROM organizations"
+  );
+  return rows[0].count;
 };

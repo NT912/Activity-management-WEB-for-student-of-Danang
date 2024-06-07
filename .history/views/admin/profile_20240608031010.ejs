@@ -313,10 +313,10 @@
                 url: '/admin/api/organization-count',
                 method: 'GET',
                 success: function (response) {
-                    $('.box4 .number').text(response.count);
+                    $('.box4 .number').text(response.count); /
                 },
                 error: function (err) {
-                    console.log('Error fetching organization count:', err);
+                    console.log('Error fetching student count:', err);
                 }
             });
         });

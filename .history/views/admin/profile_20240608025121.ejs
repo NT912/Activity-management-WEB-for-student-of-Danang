@@ -140,7 +140,7 @@
                                     <div class="box box4">
                                         <i class="uil uil-building icon"></i>
                                         <span class="text">Nhà tổ chức</span>
-                                        <span class="number">...</span>
+                                        <span class="number" id="organizationCount">Loading...</span>
                                     </div>
                                 </div>
                                 <div class="activity">
@@ -308,18 +308,19 @@
     </script>
 
     <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/organization-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box4 .number').text(response.count);
-                },
-                error: function (err) {
-                    console.log('Error fetching organization count:', err);
-                }
+        // Sử dụng fetch để gọi endpoint và lấy số lượng tổ chức
+        fetch('/admin/api/getOrganizationCount')
+            .then(response => response.json())
+            .then(data => {
+                // Lấy phần tử hiển thị số lượng tổ chức
+                const organizationCountElement = document.getElementById('organizationCount');
+                // Cập nhật nội dung của phần tử số lượng tổ chức
+                organizationCountElement.textContent = data.count;
+            })
+            .catch(error => {
+                console.error('Error fetching organization count:', error);
+                // Trường hợp xảy ra lỗi, bạn có thể hiển thị một thông báo hoặc xử lý theo cách bạn muốn
             });
-        });
     </script>
 </body>
 

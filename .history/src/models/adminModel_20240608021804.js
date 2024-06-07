@@ -1,5 +1,4 @@
 const pool = require("../database");
-const activityModel = require("./activityModel");
 
 const adminModel = module.exports;
 
@@ -80,27 +79,4 @@ activityModel.getUnapprovedPostsCount = async () => {
     console.error("Error getting unapproved posts count:", error);
     throw error;
   }
-};
-
-adminModel.getUpcomingPostsCount = async () => {
-  try {
-    const currentDate = new Date().toISOString().split("T")[0];
-    const [rows] = await pool.query(
-      "SELECT COUNT(*) AS upcomingCount FROM activities WHERE Confirm = ? AND start_date > ?",
-      ["done", currentDate]
-    );
-    return rows[0].upcomingCount || 0;
-  } catch (error) {
-    console.error("Error getting upcoming posts count:", error);
-    throw error;
-  }
-};
-
-activityModel.getUpcomingActivitiesCount = async () => {
-  const currentDate = new Date().toISOString().split("T")[0]; // Lấy ngày hiện tại
-  const [rows] = await pool.query(
-    'SELECT COUNT(*) AS count FROM activities WHERE confirm = "done" AND start_date > ?',
-    [currentDate]
-  );
-  return rows[0].count || 0;
 };

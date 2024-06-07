@@ -62,8 +62,9 @@ adminModel.update = async (admin_id, admin) => {
 
 // Các xử lý ở trang profile
 userModel.getCountByRole = async (role) => {
+  console.log("@@@@", role);
   const [rows] = await pool.query(
-    "SELECT COUNT(*) AS count FROM users WHERE role = ?",
+    "SELECT COUNT(*) AS count FROM users WH)ERE role = ?",
     [role]
   );
   return rows[0].count;

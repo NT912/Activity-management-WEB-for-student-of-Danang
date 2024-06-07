@@ -371,7 +371,7 @@ adminController.getUpcomingActivitiesCount = async (req, res) => {
 adminController.getOrganizationCount = async (req, res) => {
   try {
     const organizationCount = await userModel.getCountByRole(
-      roles.ORGANIZATION
+      roles.organization
     );
     res.status(200).json({ count: organizationCount });
   } catch (error) {

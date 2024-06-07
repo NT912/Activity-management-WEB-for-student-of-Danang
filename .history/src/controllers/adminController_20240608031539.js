@@ -373,6 +373,7 @@ adminController.getOrganizationCount = async (req, res) => {
     const organizationCount = await userModel.getCountByRole(
       roles.ORGANIZATION
     );
+    console.log(organizationCount);
     res.status(200).json({ count: organizationCount });
   } catch (error) {
     console.log(error);

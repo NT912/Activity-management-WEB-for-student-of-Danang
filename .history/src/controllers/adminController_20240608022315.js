@@ -358,24 +358,14 @@ adminController.getUnapprovedPostsCount = async (req, res) => {
   }
 };
 
-adminController.getUpcomingActivitiesCount = async (req, res) => {
+adminController.getUpcomingPostsCount = async (req, res) => {
   try {
-    const upcomingActivitiesCount =
-      await activityModel.getUpcomingActivitiesCount();
-    res.json({ count: upcomingActivitiesCount });
+    // Thực hiện truy vấn SQL để đếm số lượng bài viết sắp diễn ra
+    const count = await activityModel.getUpcomingPostsCount();
+    // Gửi kết quả về client
+    res.json({ count });
   } catch (error) {
+    console.error("Error getting upcoming posts count:", error);
     res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-adminController.getOrganizationCount = async (req, res) => {
-  try {
-    const organizationCount = await userModel.getCountByRole(
-      roles.ORGANIZATION
-    );
-    res.status(200).json({ count: organizationCount });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Lỗi khi lấy số lượng sinh viên" });
   }
 };

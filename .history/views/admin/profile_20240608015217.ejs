@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="/css/admin.css">
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
         <style>
-            /* CSS tùy chỉnh để tạo kiểu cho hộp tìm kiếm và bộ lọc */
+            /* Custom CSS to style the search box and filters */
             .search-box input.form-control {
                 border-radius: 25px;
                 padding: 10px 20px;
@@ -23,13 +23,13 @@
                 padding: 10px 20px;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 appearance: none;
-                /* Ẩn mũi tên mặc định */
+                /* Hide default arrow */
             }
 
-            /* Mũi tên tùy chỉnh cho hộp chọn */
+            /* Custom arrow for select boxes */
             .filter-box::after {
                 content: '\25BC';
-                /* Unicode cho mũi tên xuống */
+                /* Unicode for down arrow */
                 position: absolute;
                 top: 50%;
                 right: 20px;
@@ -47,71 +47,20 @@
             .d-flex .filter-box {
                 flex: 1;
             }
-
-            /* CSS tùy chỉnh cho các hộp */
-            .boxes {
-                display: flex;
-                gap: 15px;
-                margin-bottom: 20px;
-            }
-
-            .box {
-                flex: 1;
-                padding: 20px;
-                border-radius: 15px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                color: #fff;
-                transition: transform 0.2s ease-in-out;
-            }
-
-            .box:hover {
-                transform: scale(1.05);
-            }
-
-            .box1 {
-                background-color: #ff6b6b;
-            }
-
-            .box2 {
-                background-color: #4caf50;
-            }
-
-            .box3 {
-                background-color: #2196f3;
-            }
-
-            .box4 {
-                background-color: #ff9800;
-            }
-
-            .box .icon {
-                font-size: 2em;
-            }
-
-            .box .text {
-                font-size: 1.2em;
-            }
-
-            .box .number {
-                font-size: 1.5em;
-            }
         </style>
 </head>
 
 <body class="color-theme-blue mont-font">
     <div class="main-wrapper">
-        <!-- điều hướng trên cùng -->
+        <!-- navigation top-->
         <%- include('../includes/header.ejs', { isLogin: true }) %>
-            <!-- điều hướng trên cùng -->
+            <!-- navigation top -->
 
-            <!-- điều hướng bên trái -->
+            <!-- navigation left -->
             <%- include('../includes/nav.ejs') %>
-                <!-- điều hướng bên trái -->
+                <!-- navigation left -->
 
-                <!-- nội dung chính -->
+                <!-- main content -->
                 <div class="main-content right-chat-active">
                     <div class="middle-sidebar-left">
                         <div class="row">
@@ -125,32 +74,32 @@
                                     <div class="box box1">
                                         <i class="uil uil-user icon"></i>
                                         <span class="text">Sinh viên</span>
-                                        <span class="number">...</span>
+                                        <span class="number">254</span>
                                     </div>
                                     <div class="box box2">
                                         <i class="uil uil-file-alt icon"></i>
                                         <span class="text">Bài viết chưa duyệt</span>
-                                        <span class="number">0</span>
+                                        <span class="number">30</span>
                                     </div>
                                     <div class="box box3">
                                         <i class="uil uil-file-alt icon"></i>
-                                        <span class="text">Bài viết sắp diễn ra</span>
-                                        <span class="number">0</span>
+                                        <span class="text">Bài viết chưa duyệt</span>
+                                        <span class="number">30</span>
                                     </div>
                                     <div class="box box4">
                                         <i class="uil uil-building icon"></i>
                                         <span class="text">Nhà tổ chức</span>
-                                        <span class="number">...</span>
+                                        <span class="number">10</span>
                                     </div>
                                 </div>
                                 <div class="activity">
                                     <div class="title">
                                         <i class="uil uil-clock-three"></i>
-                                        <span class="text">Hoạt động gần đây</span>
+                                        <span class="text">Recent Activity</span>
                                     </div>
                                 </div>
 
-                                <!-- Hộp tìm kiếm và bộ lọc -->
+                                <!-- Search and Filter Box -->
                                 <div class="d-flex mb-4">
                                     <div class="search-box">
                                         <input type="text" class="form-control" id="searchInput"
@@ -256,71 +205,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- nội dung chính -->
+                <!-- main content -->
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- đếm số lượng sinh viên -->
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/student-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box1 .number').text(response.count); // Cập nhật số lượng sinh viên trong box1
-                },
-                error: function (err) {
-                    console.log('Error fetching student count:', err);
-                }
-            });
-        });
-    </script>
-
-    <!-- đếm số lượng bài viết chưa duyệt -->
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/unapproved-posts-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box2 .number').text(response.count); // Cập nhật số lượng bài viết chưa duyệt trong box2
-                },
-                error: function (err) {
-                    console.log('Error fetching unapproved posts count:', err);
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/upcoming-activities-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
-                },
-                error: function (err) {
-                    console.log('Error fetching upcoming activities count:', err);
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/organization-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box4 .number').text(response.count);
-                },
-                error: function (err) {
-                    console.log('Error fetching organization count:', err);
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

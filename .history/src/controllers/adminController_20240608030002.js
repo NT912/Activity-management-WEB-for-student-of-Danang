@@ -370,12 +370,10 @@ adminController.getUpcomingActivitiesCount = async (req, res) => {
 
 adminController.getOrganizationCount = async (req, res) => {
   try {
-    const organizationCount = await userModel.getCountByRole(
-      roles.ORGANIZATION
-    );
+    const organizationCount = await adminModel.getOrganizationCount();
     res.status(200).json({ count: organizationCount });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Lỗi khi lấy số lượng sinh viên" });
+    res.status(500).json({ message: "Lỗi khi lấy số lượng tổ chức" });
   }
 };

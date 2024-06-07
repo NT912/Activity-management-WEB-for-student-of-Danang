@@ -132,15 +132,17 @@
                                         <span class="text">Bài viết chưa duyệt</span>
                                         <span class="number">0</span>
                                     </div>
-                                    <div class="box box3">
+                                    <!-- <div class="box box3">
                                         <i class="uil uil-file-alt icon"></i>
                                         <span class="text">Bài viết sắp diễn ra</span>
-                                        <span class="number">0</span>
-                                    </div>
+                                        <span class="number">
+                                            <%= upcomingPostsCount %>
+                                        </span>
+                                    </div> -->
                                     <div class="box box4">
                                         <i class="uil uil-building icon"></i>
                                         <span class="text">Nhà tổ chức</span>
-                                        <span class="number">...</span>
+                                        <span class="number">10</span>
                                     </div>
                                 </div>
                                 <div class="activity">
@@ -292,35 +294,7 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/upcoming-activities-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
-                },
-                error: function (err) {
-                    console.log('Error fetching upcoming activities count:', err);
-                }
-            });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '/admin/api/organization-count',
-                method: 'GET',
-                success: function (response) {
-                    $('.box4 .number').text(response.count);
-                },
-                error: function (err) {
-                    console.log('Error fetching organization count:', err);
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

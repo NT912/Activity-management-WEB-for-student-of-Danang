@@ -95,12 +95,3 @@ adminModel.getUpcomingPostsCount = async () => {
     throw error;
   }
 };
-
-activityModel.getUpcomingActivitiesCount = async () => {
-  const currentDate = new Date().toISOString().split("T")[0]; // Lấy ngày hiện tại
-  const [rows] = await pool.query(
-    'SELECT COUNT(*) AS count FROM activities WHERE confirm = "done" AND start_date > ?',
-    [currentDate]
-  );
-  return rows[0].count || 0;
-};
