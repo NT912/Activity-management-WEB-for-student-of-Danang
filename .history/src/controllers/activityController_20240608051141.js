@@ -13,8 +13,6 @@ const firebase = require("../utils/firebase");
 const multer = require("multer");
 const { error } = require("console");
 const bodyParser = require("body-parser");
-const nodemailer = require('nodemailer');
-
 const {
   getStorage,
   ref,
@@ -773,10 +771,7 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
+    console.log("Checking attendance for activity", req.params.activity_id);
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -784,6 +779,14 @@ activityController.attendance = async (req, res) => {
     }
 
     const now = new Date();
+    console.log(
+      "Current time:",
+      now,
+      "Activity start:",
+      activity.start_date,
+      "Activity end:",
+      activity.end_date
+    );
 
     if (
       now < new Date(activity.start_date) ||
@@ -792,21 +795,21 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    console.log(req.params.activity_id, "    ", req.session.user.id);
     const result = await registrationModel.attendent(
       req.params.activity_id,
       req.session.user.id
     );
+    console.log("Attendance result:", result);
 
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+
+    res.json({ success: true, message: "Điểm danh thành công" });
   } catch (error) {
-    console.log(error);
-    req.flash("error", error.message);
-    res.redirect(`/activity/${req.params.activity_id}/view`);
+    console.error("Error during attendance:", error);
+    res.json({ success: false, message: error.message });
   }
-  res.redirect(`/activity/${req.params.activity_id}/view`);
 };
 
 activityController.my_activity = async (req, res) => {
@@ -928,58 +931,3 @@ activityController.saveActivity = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-activityController.send_email = async  (req, res) => {
-    const activity_id = req.params.activity_id;
-    const { senderType, subject, content } = req.body;
-    const attachments = [];
-
-    if (req.files['attachment']) {
-        attachments.push({
-            filename: req.files['attachment'][0].originalname,
-            path: req.files['attachment'][0].path
-        });
-    }
-
-    if (req.files['imageAttachment']) {
-        attachments.push({
-            filename: req.files['imageAttachment'][0].originalname,
-            path: req.files['imageAttachment'][0].path
-        });
-    }
-
-    var recipientEmails;
-    if (senderType == 'confirm'){
-     recipientEmails = await activityModel.Get_EmailByACtConfirm(activity_id);
-    } else {
-     recipientEmails = await activityModel.Get_EmailByACtAttendance(activity_id);
-     
-    }
-      const emailList = recipientEmails.map(recipient => recipient.email);
-
-      let transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-              user: 'phanduclam02@gmail.com',
-              pass: 'qoqh nvvq wvlm rzin'
-          }
-      });
-
-      let mailOptions = {
-          from: from,
-          to: emailList.join(','), 
-          subject: subject,
-          text: content,
-          attachments: attachments
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-              console.log(error);
-              res.status(500).send('Error sending email');
-          } else {
-              console.log('Email sent: ' + info.response);
-              res.send('Email sent successfully');
-          }
-      });
-}
