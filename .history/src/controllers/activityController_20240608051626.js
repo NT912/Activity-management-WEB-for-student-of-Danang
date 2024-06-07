@@ -738,6 +738,17 @@ activityController.search = async (req, res) => {
   });
 };
 
+activityController.checkAttendance = async (req, res) => {
+  if (!req.session.user) {
+    // Nếu chưa đăng nhập, lưu URL hiện tại và chuyển hướng đến trang đăng nhập
+    req.session.redirectTo = req.originalUrl;
+    res.redirect("/login");
+  } else {
+    // Nếu đã đăng nhập, tiếp tục điểm danh
+    res.redirect(`/activity/${req.params.activity_id}/attendance`);
+  }
+};
+
 activityController.qrcode_attendance = async (req, res) => {
   const activity = await activityModel.GetById(req.params.activity_id);
 
@@ -747,7 +758,7 @@ activityController.qrcode_attendance = async (req, res) => {
     return;
   }
 
-  const qrcodeContent = `${public_domain}/activity/${req.params.activity_id}/attendance`;
+  const qrcodeContent = `${public_domain}/activity/${req.params.activity_id}/check-attendance`;
   const filePath = `public/qrcodes/${req.params.activity_id}.png`;
 
   if (!fs.existsSync("public/qrcodes")) {
@@ -771,10 +782,6 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -790,7 +797,6 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    console.log(req.params.activity_id, "    ", req.session.user.id);
     const result = await registrationModel.attendent(
       req.params.activity_id,
       req.session.user.id
@@ -799,12 +805,11 @@ activityController.attendance = async (req, res) => {
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+
+    res.json({ success: true, message: "Điểm danh thành công" });
   } catch (error) {
-    console.log(error);
-    req.flash("error", error.message);
-    res.redirect(`/activity/${req.params.activity_id}/view`);
+    res.json({ success: false, message: error.message });
   }
-  res.redirect(`/activity/${req.params.activity_id}/view`);
 };
 
 activityController.my_activity = async (req, res) => {

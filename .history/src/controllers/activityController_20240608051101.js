@@ -771,10 +771,7 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
+    console.log("Checking attendance for activity", req.params.activity_id);
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -782,6 +779,14 @@ activityController.attendance = async (req, res) => {
     }
 
     const now = new Date();
+    console.log(
+      "Current time:",
+      now,
+      "Activity start:",
+      activity.start_date,
+      "Activity end:",
+      activity.end_date
+    );
 
     if (
       now < new Date(activity.start_date) ||
@@ -790,21 +795,21 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    console.log(req.params.activity_id, "    ", req.session.user.id);
     const result = await registrationModel.attendent(
       req.params.activity_id,
       req.session.user.id
     );
+    console.log("Attendance result:", result);
 
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+
+    res.json({ success: true, message: "Điểm danh thành công" });
   } catch (error) {
-    console.log(error);
-    req.flash("error", error.message);
-    res.redirect(`/activity/${req.params.activity_id}/view`);
+    console.error("Error during attendance:", error);
+    res.json({ success: false, message: error.message });
   }
-  res.redirect(`/activity/${req.params.activity_id}/view`);
 };
 
 activityController.my_activity = async (req, res) => {

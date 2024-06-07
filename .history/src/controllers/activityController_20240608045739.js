@@ -771,10 +771,6 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -790,7 +786,6 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    console.log(req.params.activity_id, "    ", req.session.user.id);
     const result = await registrationModel.attendent(
       req.params.activity_id,
       req.session.user.id
@@ -799,8 +794,9 @@ activityController.attendance = async (req, res) => {
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+
+    res.json({ success: true, message: "Điểm danh thành công" });
   } catch (error) {
-    console.log(error);
     req.flash("error", error.message);
     res.redirect(`/activity/${req.params.activity_id}/view`);
   }

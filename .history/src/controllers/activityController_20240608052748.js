@@ -771,12 +771,9 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
     const activity = await activityModel.GetById(req.params.activity_id);
 
+    console.log(activity);
     if (!activity) {
       throw new Error("Hoạt động không tồn tại");
     }

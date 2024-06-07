@@ -14,15 +14,14 @@
                         </a>
                     </li>
                     <li>
-                        <% if (userss !=null && userss.role !='admin' ) { %>
-                            <a href="<%- userss.role == 'admin' ? '/admin/profile' : '/user/profile'%>"
-                                class="nav-content-bttn open-font">
-                                <i class="feather-award btn-round-md bg-red-gradiant me-3"></i>
-                                <span>
-                                    Của tôi
-                                </span>
-                            </a>
-                            <%}%>
+
+                        <a href="<%- userss.role == 'admin' ? '/admin/profile' : '/user/profile'%>"
+                            class="nav-content-bttn open-font">
+                            <i class="feather-award btn-round-md bg-red-gradiant me-3"></i>
+                            <span>
+                                Của tôi
+                            </span>
+                        </a>
                     </li>
                 </ul>
 

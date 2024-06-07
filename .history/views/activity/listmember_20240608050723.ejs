@@ -323,6 +323,26 @@
                         this.submit();
                     });
                 </script>
+
+                <script>
+                    async function handleQRCodeScan(activityId, userId) {
+                        try {
+                            const response = await axios.post(`/activity/${activityId}/attendance`, {
+                                userId: userId
+                            });
+
+                            if (response.data.success) {
+                                alert("Điểm danh thành công");
+                                // Cập nhật trạng thái checkbox nếu có
+                                document.querySelector(`#checkbox-${activityId}`).checked = true;
+                            } else {
+                                alert(response.data.message);
+                            }
+                        } catch (error) {
+                            alert("Có lỗi xảy ra khi điểm danh");
+                        }
+                    }
+                </script>
     </body>
 
 </html>

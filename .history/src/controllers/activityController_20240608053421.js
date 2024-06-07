@@ -771,10 +771,6 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -788,6 +784,10 @@ activityController.attendance = async (req, res) => {
       now > new Date(activity.end_date)
     ) {
       throw new Error("Đã hết thời gian điểm danh");
+    }
+
+    if (!req.session.user) {
+      return res.redirect("/auth/login");
     }
 
     console.log(req.params.activity_id, "    ", req.session.user.id);

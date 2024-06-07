@@ -771,10 +771,6 @@ activityController.qrcode_attendance = async (req, res) => {
 
 activityController.attendance = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/auth/login");
-    }
-
     const activity = await activityModel.GetById(req.params.activity_id);
 
     if (!activity) {
@@ -800,7 +796,6 @@ activityController.attendance = async (req, res) => {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
   } catch (error) {
-    console.log(error);
     req.flash("error", error.message);
     res.redirect(`/activity/${req.params.activity_id}/view`);
   }
