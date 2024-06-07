@@ -202,6 +202,11 @@ adminController.Get_EditUser = async (req, res) => {
       const user_id = req.params.user_id;
 
         const user = await userModel.getById(user_id);
+
+        if (!user){
+          throw Error('tai khoan khong ton tai');
+        }
+
         if (user.role == roles.STUDENT){
           const user = await studentModel.GetProfileById(user_id);
           const faculty = await facultyModel.getAllFaculty();
@@ -218,7 +223,6 @@ adminController.Get_EditUser = async (req, res) => {
         if (user.role == roles.ORGANIZATION){
           const user = await organizationModel.GetProfileById(user_id);
           user.role = 'organization';
-          console.log(user);
           return res.render('admin/editUser', {
             userss: userss,
             error: '',
@@ -236,7 +240,6 @@ adminController.Get_EditUser = async (req, res) => {
   adminController.Get_Profile = async (req, res) => {
     try {
         const userss = req.session.user;
-
         
           return res.render('admin/profile',{
             userss: userss,
@@ -247,5 +250,81 @@ adminController.Get_EditUser = async (req, res) => {
       res.redirect('/user/profile');
     }
   }
+  adminController.Post_editacaount = async (req, res) => {
+    try {
+      const userss = req.session.user;
+      const user_id = req.params.user_id;
+      const user = await userModel.getById(user_id);
+      if (!user){
+          throw Error('tai khoan khong ton tai');
+      }
+        
+      if (user.role == roles.STUDENT){
+        const {username, masv, faculty, classs, email, phone} = req.body;
+        if (!username || !masv || !faculty || !classs || !email || !phone){
+            throw new Error(`Vui lòng nhập đầy đủ thông tin`);
+        }
+        
+        const student_msv = await studentModel.getByMasv(masv);
+        if (student_msv && student_msv.user_id != user.id){
+          throw new Error(`Mã sinh viên đã tồn tại`);
+        }
+  
+        const student_email = await studentModel.getByEmail(email);
+        if (student_email && student_email.user_id != user_id){
+          throw new Error(`Email đã tồn tại`);
+        }
+        const student = await studentModel.update(user_id, {
+          name: username,
+          email: email,
+          phone: phone,
+          faculty: faculty,
+          classs: classs,
+          masv: masv,
+        });
+        if (!student){
+          throw new Error(`Cập nhật thông tin không thành công`);
+        }
+        req.flash('success', `Sinh viên ${student.fullname} | ${student.id} đã được cập nhật`);
+        res.redirect(`/user/${user_id}/view`);
+      } else 
+      if (user.role === roles.ORGANIZATION) {
+        console.log('here');
+        const organization = await organizationModel.getByUserId(user.id);
 
+        if (!organization) {
+          throw new Error(`Tài khoản đã bị xóa hoặc không tồn tại `);
+        }
 
+        const {username, email, address, phone, description} = req.body;
+
+        if (!username || !email || !address || !phone || !description || !phone){
+            throw new Error(`Vui lòng nhập đầy đủ thông tin`);
+        }
+
+        const organization_email = await organizationModel.getByEmail(email);
+        if (organization_email && organization_email.user_id != user_id){
+          throw new Error(`Email đã tồn tại`);
+        }
+
+        const check = await organizationModel.update(user_id, {
+          name: username,
+          description: description,
+          email: email,
+          phone: phone,
+          address: address
+        });
+
+        if (!check){
+          throw new Error(`Cập nhật thông tin không thành công`);
+        }
+
+        req.flash('success', `Tổ chức ${organization.name} đã được cập nhật`);
+        res.redirect(`/user/${user_id}/view`);
+      }
+    } catch (error) {
+      console.log(error);
+      req.flash('error', error.message);
+      res.redirect(`/admin/${req.params/user_id}/edit`);
+    }
+  }

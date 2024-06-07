@@ -17,7 +17,9 @@ router.get('/activity/:activity_id/view', authMiddleware.isAdmin, controller.get
 router.post('/activity/:activity_id/confirm', authMiddleware.isAdmin, controller.post_ConfirmActivity);
 router.post('/activity/:activity_id/reject', authMiddleware.isAdmin, controller.post_RejectActivity);
 
-router.get('/:user_id/edit',controller.Get_EditUser);
+router.get('/:user_id/edit',authMiddleware.isAdmin, controller.Get_EditUser);
+router.post('/:user_id/edit',authMiddleware.isAdmin, controller.Post_editacaount);
+
 router.get('/profile',controller.Get_Profile);
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);

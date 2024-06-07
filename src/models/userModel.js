@@ -21,6 +21,8 @@ userModel.getByUserEmail = async (email) => {
   return rows[0] ? rows[0] : null;
 }
 
+
+
 userModel.getByUserMasv = async (masv) => {
   const [rows] = await pool.query(`SELECT * FROM users U
   INNER JOIN students S ON U.id = S.user_id
@@ -32,6 +34,17 @@ userModel.GetOrganiAcByEmail = async (email) => {
   const [rows] = await pool.query(`SELECT * FROM users U
   INNER JOIN organizations O ON U.id = O.user_id
   WHERE O.email = ?`, [email]);
+  return rows[0] ? rows[0] : null;
+}
+
+userModel.GetSvByEmail = async (email) => {
+  const query = `
+  SELECT * FROM users U
+  INNER JOIN students S ON U.id = S.user_id
+  WHERE S.email = ?
+  `
+  const [rows] = await pool.query(query, [email]);
+
   return rows[0] ? rows[0] : null;
 }
 
@@ -133,3 +146,44 @@ userModel.update = async (user_id, user) => {
 
   return null;
 }
+
+userModel.getUserByResetToken = async (token) => {
+      const query = `
+      SELECT * FROM users WHERE resetPasswordToken = ?
+      `;
+      console.log(query,"    ",token.resetPasswordToken);
+      const [rows] = await pool.query(query, token);
+      console.log(rows);
+      return rows[0] ? rows[0] : null;
+      
+};
+
+
+userModel.updateToken = async (user) => {
+  const query = 'UPDATE users SET resetPasswordToken = ? WHERE id = ?';
+  const values = [user.resetPasswordToken, user.id];
+  
+  const [result] = await pool.query(query, values);
+
+  if (result.affectedRows) {
+    return true
+  }
+
+  return false;
+};
+
+userModel.updatePass = async (pass, id_user) => {
+  const hashed_password = md5(pass);
+  const query = `
+  UPDATE users SET hashed_password = ? WHERE id = ?
+  `;
+  const values = [hashed_password, id_user];
+  
+  const [result] = await pool.query(query, values);
+
+  if (result.affectedRows) {
+    return true
+  }
+
+  return false;
+};

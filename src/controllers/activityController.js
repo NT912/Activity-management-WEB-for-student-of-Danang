@@ -794,10 +794,20 @@ activityController.attendance = async (req, res) => {
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+<<<<<<< HEAD
   } catch (error) {
     req.flash("error", error.message);
     res.redirect(`/activity/${req.params.activity_id}/view`);
   }
+=======
+
+    req.flash("success", `Điểm danh hoạt động ${activity.name} thành công`);
+  } catch (error) {
+    req.flash("error", error.message);
+  }
+
+  res.redirect(`/activity/${req.params.activity_id}/view`);
+>>>>>>> db30fb05f0c3cc34a1c9afb1a1a2f43c36d6926b
 };
 
 activityController.my_activity = async (req, res) => {
