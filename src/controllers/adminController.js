@@ -106,84 +106,95 @@ adminController.get_ViewActivity = async (req, res) => {
 }
 
 adminController.post_ConfirmActivity = async (req, res) => {
-    try{
-        const userss = req.session.user;
-        const activity_id = req.params.activity_id;
+  try {
+      const userss = req.session.user;
+      const activity_id = req.params.activity_id;
+      const adminFeedback = req.body.adminFeedback;
 
-        const activity = await activityModel.GetById(activity_id);
-        
-        if (!activity) {
-            req.flash('announc', 'Hoạt động không tồn tại');
-            res.redirect('/admin/');
-            return;
-        }
+      const activity = await activityModel.GetById(activity_id);
 
-        const stateact = activity.Confirm.toString();
-        var result = false;
-        if (stateact == 'yet'){
-            result = await activityModel.ChangeState('confirm',activity_id);
-        } else 
-        if (stateact == 'reject') {
-            result = await activityModel.ChangeState('confirm',activity_id);
-        } else 
-        if (stateact == 'update') {
-            result = await activityModel.ChangeState('confirm',activity_id);
-        }
 
-        if (!result){
-            throw Error('Sai sai roi');
-        }
-        req.flash('announc','Duyet hoat dong thanh cong');
-        res.redirect(`/admin/activity/${activity_id}/view`);
-    } catch (err){
-        console.log(err);
-        req.flash('announc',err.message);
-        res.redirect(`/admin/activity/${req.params.activity_id}/view`);
-    }
-}
+      if (!activity) {
+          return res.status(404).json({ message: 'Hoạt động không tồn tại' });
+      }
+
+      const stateact = activity.Confirm.toString();
+      let result = false;
+
+      console.log(stateact);
+      if (stateact === 'yet' || stateact === 'reject' || stateact === 'update') {
+          result = await activityModel.ChangeState('confirm', activity_id);
+      }
+
+      if (!result) {
+          throw new Error('Cập nhật trạng thái thất bại');
+      }
+
+      const commentResult = await activityModel.Changecomment(adminFeedback, activity_id);
+
+      if (!commentResult) {
+          throw new Error('Cập nhật phản hồi thất bại');
+      }
+
+      res.status(200).json({ message: 'Duyệt hoạt động thành công' });
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+  }
+};
+
+
 
 adminController.post_RejectActivity = async (req, res) => {
-    try{
-        const userss = req.session.user;
-        const activity_id = req.params.activity_id;
+  try {
+      const userss = req.session.user;
+      const activity_id = req.params.activity_id;
+      const adminFeedback = req.body.adminFeedback; // Lấy phản hồi của admin từ body của request
 
-        const activity = await activityModel.GetById(activity_id);
-        
-        if (!activity) {
-            req.flash('announc', 'Hoạt động không tồn tại');
-            res.redirect('/admin/');
-            return;
-        }
+      const activity = await activityModel.GetById(activity_id);
 
-        const stateact = activity.Confirm.toString();
-        var result = false;
-        if (stateact == 'yet'){
-            result = await activityModel.ChangeState('reject',activity_id);
-        } else 
-        if (stateact == 'confirm') {
-            result = await activityModel.ChangeState('yet',activity_id);
-        } else 
-        if (stateact == 'update') {
-            const activity_backup = await activityModel.GetBackupActivity(activity_id);
-            if (activity_backup){
-                result = activityModel.update(activity_id,activity_backup);
-                if (!result){
-                    throw Error('Loi backup');
-                }
-            }
-        }
+      if (!activity) {
+          req.flash('announc', 'Hoạt động không tồn tại');
+          res.redirect('/admin/');
+          return;
+      }
 
-        if (!result){
-            throw Error('Sai sai roi');
-        }
-        req.flash('announc','Ban da tu choi hoat dong');
-        res.redirect(`/admin/activity/${activity_id}/view`);
-    } catch (err){
-        console.log(err);
-        req.flash('announc',err.message);
-        res.redirect(`/admin/activity/${req.params.activity_id}/view`);
-    }
+      const stateact = activity.Confirm.toString();
+      let result = false;
+
+      if (stateact == 'yet') {
+          result = await activityModel.ChangeState('reject', activity_id);
+      } else if (stateact == 'confirm') {
+          result = await activityModel.ChangeState('reject', activity_id);
+      } else if (stateact == 'update') {
+          const activity_backup = await activityModel.GetBackupActivity(activity_id);
+          if (activity_backup) {
+              result = await activityModel.update(activity_id, activity_backup);
+              if (!result) {
+                  throw Error('Lỗi backup');
+              }
+          }
+      }
+
+      if (!result) {
+          throw Error('Sai sai rồi');
+      }
+
+      // Cập nhật phản hồi của admin
+      const commentResult = await activityModel.Changecomment(adminFeedback, activity_id);
+      if (!commentResult) {
+          throw new Error('Cập nhật phản hồi thất bại');
+      }
+
+      req.flash('announc', 'Bạn đã từ chối hoạt động');
+      res.redirect(`/admin/activity/${activity_id}/view`);
+  } catch (err) {
+      console.log(err);
+      req.flash('announc', err.message);
+      res.redirect(`/admin/activity/${req.params.activity_id}/view`);
+  }
 }
+
 
 adminController.Get_EditUser = async (req, res) => {
     try {

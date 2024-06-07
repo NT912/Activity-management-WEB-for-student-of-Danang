@@ -24,8 +24,8 @@
         <!-- navigation left -->
 
         <!-- main content -->
-        <div class="main-content d-flex" style="margin-right: 0;">
-            <div class="col-xl-6 d-flex" style="margin-right: 20px;">
+        <div class="main-content flex-wrap" style="margin-right: 0;">
+            <div class="col-xl-6 d-flex" style="margin-right: 20px; min-width: 700px;">
                 <div class="col-xl-12" style="max-width: 1000px;">
                     <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
                         <div class="card-header d-flex align-items-center p-4">
@@ -92,61 +92,36 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-5 bg-greylight" style="max-width: 900px;">
+            <div class="col-xl-5 bg-greylight" style="max-width: 700px;">
                 <div class="feedback-section">
                     <h4 class="font-xssss fw-600 text-center">Phản hồi từ admin</h4>
                     <div class="col-xl-12 mb-3">
-                        <textarea id="adminFeedback" name="adminFeedback" class="style2-input ps-5 form-control text-grey-900 fw-60" readonly>
-                            <%= activity.comment != null ? activity.comment : 'Chưa phản hồi' %>
+                        <textarea id="adminFeedback" name="adminFeedback" class="col-xl-12" placeholder="Nội dung hoạt động" style="height: 400px;">
+                            <%= activity.comment %>
                         </textarea>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <% if (stateact == 'yet' || stateact == 'update') {%>
-                        <a href="/admin/activity/<%= activity.id %>/confirm" 
-                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyệt
-                        </a>
-                        <a href="/admin/activity/<%= activity.id %>/reject" class="p-2 lh-20 w100 bg-danger me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Từ chối
-                        </a>
-                    <%} else 
-                    if (stateact == 'reject'){%>
-                        <a href="/admin/activity/<%= activity.id %>/confirm" 
-                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyệt 
-                        </a>
-                    <%} else 
-                    if (stateact == 'confirm'){%>
-                        <a href="/admin/activity/<%= activity.id %>/reject" 
-                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Hủy duyệt
-                        </a>
-                    <%} else 
-                    if (stateact == 'reject'){%>
-                        <a href="/admin/activity/<%= activity.id %>/confirm" 
-                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Duyệt
-                        </a>
-                    <%}else 
-                    if (stateact == 'done'){%>
-                        <a href="/activity/<%= activity.id %>/delete" 
-                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                            Xóa
-                        </a>
-                    <%}%>
+                    <% if (stateact == 'yet' || stateact == 'update') { %>
+                        <button id="confirmButton" type="button" class="btn btn-success" onclick="AdminReplyPost('confirm')">Duyệt</button>
+                        <button id="rejectButton" type="button" class="btn btn-warning" onclick="AdminReplyPost('reject')">Từ chối</button>
+                    <% } else if (stateact == 'reject') { %>
+                        <button id="confirmButton" type="button" class="btn btn-success" onclick="AdminReplyPost('confirm')">Duyệt</button>
+                    <% } else if (stateact == 'confirm') { %>
+                        <button id="rejectButton" type="button" class="btn btn-warning" onclick="AdminReplyPost('reject')">Hủy duyệt</button>
+                    <% } else if (stateact == 'done') { %>
+                        <a href="/activity/<%= activity.id %>/delete" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Xóa</a>
+                    <% } %>
                 </div>
-                
             </div>
-                
-        </div>
-    </div>
-
-    
-
-    <script src="/js/plugin.js"></script>
-    <script src="/js/lightbox.js"></script>
-    <script src="/js/scripts.js"></script>
+            
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
+            <script src="/js/action.js"></script>
+            <script src="/js/lightbox.js"></script>
+            <script src="/js/scripts.js"></script>
+            
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <% if (announc != '') {%>
         <script>
@@ -171,7 +146,43 @@
                 toastr.info('<%- announc %>');
             })
         </script>
-        <%}%>
+    <%}%>
+        <script>
+            async function AdminReplyPost(mod) {
+                try {
+                    const feedback = document.getElementById('adminFeedback').value;
+                    const response = await fetch(`/admin/activity/<%= activity.id %>/${mod}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ adminFeedback: feedback })
+                    });
+    
+                    if (response.ok) {
+                        if (mod == 'confirm'){
+                            toastr.success('duyet hoạt động thành công!');
+                        } else {
+                            toastr.success('Xoa hoạt động thành công!');
+                        }
+                        setTimeout(() => {
+                            window.location.reload(); // Tải lại trang sau khi lưu thành công
+                        }, 1500);
+                    } else {
+                        const errorData = await response.json();
+                        if (mod == 'confirm'){
+                            toastr.success('duyet hoạt động thất bại!!');
+                        } else {
+                            toastr.success('Xoa hoạt động thất bại!!');
+                        }
+                        toastr.error(errorData.message || 'Lưu hoạt động ');
+                    }
+                } catch (error) {
+                    console.error('Error saving activity:', error);
+                    toastr.error('Đã xảy ra lỗi khi lưu hoạt động!');
+                }
+            }
+        </script>
     <style>
         #adminFeedback {
             line-height: 1.5;
