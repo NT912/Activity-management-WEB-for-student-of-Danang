@@ -1,8 +1,6 @@
 const qrcode = require("qrcode");
 const fs = require("fs");
 
-const registrationModel = require("../models/registrationModel");
-
 const organizationModel = require("../models/organizationModel");
 const ExcelJS = require("exceljs");
 const activityModel = require("../models/activityModel");
@@ -759,7 +757,7 @@ activityController.qrcode_attendance = async (req, res) => {
   res.render("activity/qrcode_attendance", {
     success: req.flash("success"),
     error: req.flash("error"),
-    userss: req.session.user,
+    user: req.session.user,
     student: req.session.student,
     admin: req.session.admin,
     organization: req.session.organization,
@@ -786,9 +784,27 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    const result = await registrationModel.attendent(
+    const registered = await activityModel.isRegistered(
       req.params.activity_id,
-      req.session.user.id
+      req.session.student.id
+    );
+
+    if (!registered) {
+      throw new Error("Bạn chưa đăng ký hoạt động này");
+    }
+
+    const attendanced = await activityModel.isAttendanced(
+      req.params.activity_id,
+      req.session.student.id
+    );
+
+    if (attendanced) {
+      throw new Error("Bạn đã điểm danh rồi");
+    }
+
+    const result = await activityModel.attendance(
+      req.params.activity_id,
+      req.session.student.id
     );
 
     if (!result) {
