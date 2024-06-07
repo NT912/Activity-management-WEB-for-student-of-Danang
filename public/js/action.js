@@ -79,14 +79,35 @@ async function SavePost(activityId) {
       });
   
       if (response.ok) {
-        toastr.success('Lưu hoạt động thành công!');
+        toastr.success('Duyet hoạt động thành công!');
       } else {
         const errorData = await response.json();
-        toastr.error(errorData.message || 'Lưu hoạt động thất bại!');
+        toastr.error(errorData.message || 'Duyet hoạt động thất bại!');
       }
     } catch (error) {
       console.error('Error saving activity:', error);
       toastr.error('Đã xảy ra lỗi khi lưu hoạt động!');
     }
   }
+  
+//   async function AdminReplyPost(mod) {
+//     try {
+//       const response = await fetch(`/admin/activity/<%= activity.id %>/${mod}`, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       });
+  
+//       if (response.ok) {
+//         toastr.success('Lưu hoạt động thành công!');
+//       } else {
+//         const errorData = await response.json();
+//         toastr.error(errorData.message || 'Lưu hoạt động thất bại!');
+//       }
+//     } catch (error) {
+//       console.error('Error saving activity:', error);
+//       toastr.error('Đã xảy ra lỗi khi lưu hoạt động!');
+//     }
+//   }
   

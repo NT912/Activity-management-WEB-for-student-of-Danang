@@ -254,6 +254,23 @@ activityModel.ChangeState = async (newstate, activity_id) => {
   return false;
 }
 
+activityModel.Changecomment = async (comment, activity_id) => {
+  const queryText = 
+  `
+    UPDATE activities
+    SET comment = ?
+    WHERE id = ?
+  `;
+
+  const [result] = await pool.query(queryText, [comment, activity_id]);
+
+  if (result.affectedRows) {
+    return true;
+  }
+
+  return false;
+}
+
 activityModel.register = async (activity_id, student_id, email, phone_number, wish) => {
   const queryText = `
     INSERT INTO registrations(activity_id, student_id, email, phone_number, wish)
