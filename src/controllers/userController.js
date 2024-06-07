@@ -330,22 +330,22 @@ userController.Post_Edit = async (req, res) => {
       const _student = await studentModel.getByUserId(userss.id);
 
       if (!_student) {
-        throw new Error(`Tai khoan khong ton tai`);
+        throw new Error(`Tài khoản không tồn tại`);
       }
 
       const {username, masv, faculty, classs, email, phone} = req.body;
       if (!username || !masv || !faculty || !classs || !email || !phone){
-          throw new Error(`Vui long nhap day du thong tin`);
+          throw new Error(`Vui lòng nhập đầy đủ thông tin`);
       }
       
       const student_msv = await studentModel.getByMasv(masv);
       if (student_msv && student_msv.user_id != userss.id){
-        throw new Error(`Ma sinh vien da ton tai`);
+        throw new Error(`Mã sinh viên đã tồn tại`);
       }
 
       const student_email = await studentModel.getByEmail(email);
       if (student_email && student_email.user_id != userss.id){
-        throw new Error(`Email da ton tai`);
+        throw new Error(`Email đã tồn tại`);
       }
       const student = await studentModel.update(userss.id, {
         name: username,
@@ -357,7 +357,7 @@ userController.Post_Edit = async (req, res) => {
       });
 
       if (!student){
-          throw new Error(`Cap nhat thong tin khong thanh cong`);
+          throw new Error(`Cập nhật thông tin không thành công`);
       }
       req.flash('success', `Sinh viên ${student.fullname} | ${student.id} đã được cập nhật`);
       res.redirect('/user/profile');
@@ -366,17 +366,17 @@ userController.Post_Edit = async (req, res) => {
       const organization = await organizationModel.getByUserId(userss.id);
 
       if (!organization) {
-        throw new Error(`Tai khoan da bi xoa hoac khong ton tai`);
+        throw new Error(`Tài khoản đã bị xóa hoặc không tồn tại `);
       }
 
       const {username, email, address, phone, description} = req.body;
       if (!username || !email || !address || !phone || !description || !phone){
-          throw new Error(`Vui long nhap day du thong tin`);
+          throw new Error(`Vui lòng nhập đầy đủ thông tin`);
       }
 
       const organization_email = await organizationModel.getByEmail(email);
       if (organization_email && organization_email.user_id != userss.id){
-        throw new Error(`Email da ton tai`);
+        throw new Error(`Email đã tồn tại`);
       }
 
       const check = await organizationModel.update(userss.id, {
@@ -388,7 +388,7 @@ userController.Post_Edit = async (req, res) => {
       });
 
       if (!check){
-        throw new Error(`Cap nhat thong tin khong thanh cong`);
+        throw new Error(`Cập nhật thông tin không thành công`);
       }
 
       req.flash('success', `Tổ chức ${organization.name} đã được cập nhật`);
@@ -477,7 +477,7 @@ userController.Post_avt = async (req, res) => {
     const userss = req.session.user;
 
     if (!userss){
-      throw Error('Ban chua dang nhap');
+      throw Error('Bạn chưa đăng nhập');
     }
 
     const firebaseStore = getStorage();
@@ -498,11 +498,11 @@ userController.Post_avt = async (req, res) => {
         result = await userModel.updateAvtNTC(url,userss.id);
       } 
     } else {
-      throw Error('Loi up anh len firebase');
+      throw Error('lỗi tải ảnh lên firebase');
     }
 
     if (!result){
-      throw Error('Loi up anh len databse');
+      throw Error('lỗi tải ảnh lên databse');
     }
 
     return res.status(200).json({ newAvatarUrl: url });

@@ -2,14 +2,13 @@
     <div class="nav-top">
         <a href="/"> <img src="https://firebasestorage.googleapis.com/v0/b/web-doan-44696.appspot.com/o/defaut%2FLOGO.png?alt=media&token=07eed475-fe8f-42fe-9bb7-b674b26cd77d" alt="Logopage" class="logo-img"> </a>
     </div>
-    <!-- Search -->
-    <form action="#" class="float-left header-search">
-        <div class="form-group mb-0 icon-input">
-            <i class="feather-search font-sm text-grey-400"></i>
-            <input type="text" placeholder="Tìm kiếm ..." class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
-        </div>
-    </form>
-
+<!-- Search -->
+<form action="/activity/search" method="GET" class="float-left header-search">
+    <div class="form-group mb-0 icon-input">
+      <i class="feather-search font-sm text-grey-400"></i>
+      <input type="text" name="q" placeholder="Tìm kiếm ..." class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
+    </div>
+  </form>
     <!-- Notification -->
     <a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false"><span class="dot-count bg-warning"></span><i class="feather-bell font-xl text-current"></i></a>
     <div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">

@@ -18,7 +18,7 @@ module.exports = {
     yet: 'Chưa duyệt ',
     reject: 'Bài viết đã từ chối',
     confirm: 'Đã phản hồi',
-    update: 'Đang chờ thay đổi',
-    done: 'Đã duyệt',
+    update: 'Đang chờ duyệt thay đổi',
+    done: 'Đã được công khai',
   }
 }

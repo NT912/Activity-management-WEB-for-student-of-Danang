@@ -30,7 +30,7 @@ authController.login = async (req, res) => {
     }
 
     if (!user){
-      throw Error("Tai khoan khong ton tai")
+      throw Error("Tài khoản không tồn tại")
     } 
 
     if (user.hashed_password !== md5(password)) {
@@ -39,7 +39,7 @@ authController.login = async (req, res) => {
 
     let avt;
     if (user.role === roles.STUDENT) {
-      req.flash('announc', `Chao sinh vien ${user.username}`);
+      req.flash('announc', `Chào mừng sinh viên ${user.username}`);
       avt = await studentModel.GetAvtByMasv(userID);
     } else 
     if (user.role === roles.ORGANIZATION) {
@@ -134,7 +134,7 @@ authController.registerStudent = async (req, res) => {
       await userModel.delete(user.id);
       err = 'Có lỗi xảy ra khi đăng ký thông tin sinh viên';
     }
-    req.flash('announc','Dang ky tai khoan moi thanh cong');
+    req.flash('announc','Đăng ký tài khoản mới thành công');
     return res.redirect('/auth/login');
   }
 
@@ -153,21 +153,21 @@ authController.registerOrganization = async (req, res) => {
    
     const _user = await userModel.getByUsername(username);
     if (_user) {
-      throw Error('Ten nha to chuc da ton tai');
+      throw Error('Tên nhà tổ chức đã tồn tại');
     } 
 
     const _organization = await userModel.getByUserEmail(email);  
     if (_organization) {
-      throw Error('Email da duoc dang ky tai khoan');
+      throw Error('Email đã đucợ đăng ký tài khoản');
     } 
 
     const admin = await userModel.GetAdminByemail(email);
     if (admin) {
-      throw Error('Email da duoc dang ky tai khoan');
+      throw Error('Email đã đucợ đăng ký tài khoản');
     } 
 
     if (password != confirmpassword){
-      throw Error('Mat khau phai trung nhau');
+      throw Error('Mật khẩu phải trùng nhau');
     } 
 
     const user = await userModel.create({
@@ -189,7 +189,7 @@ authController.registerOrganization = async (req, res) => {
       await userModel.delete(user.id);
       throw Error('Có lỗi xảy ra khi đăng ký thông tin tổ chức');
     }
-    req.flash('announc','Dang ky tai khoan moi thanh cong');
+    req.flash('announc','Đăng ký tài khoản mới thành công ');
     return res.redirect('/auth/login');
     
   } catch (error) {
