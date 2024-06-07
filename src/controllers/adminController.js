@@ -222,3 +222,19 @@ adminController.Get_EditUser = async (req, res) => {
     }
   }
 
+  adminController.Get_Profile = async (req, res) => {
+    try {
+        const userss = req.session.user;
+
+        
+          return res.render('admin/profile',{
+            userss: userss,
+          });
+    } catch (error) {
+      console.log(error);
+      req.flash('error', error.message);
+      res.redirect('/user/profile');
+    }
+  }
+
+

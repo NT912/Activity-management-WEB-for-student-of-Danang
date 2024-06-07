@@ -105,7 +105,8 @@ activityModel.GetActSVJoined = async (student_id) => {
   FROM registrations R
   INNER JOIN activities A ON R.activity_id = A.id
   INNER JOIN users U ON U.id = A.organization_id
-  WHERE R.student_id = ? AND R.isAttendance = true`;
+  WHERE R.student_id = ? AND R.isAttendance = true
+  `;
   const values = student_id;
   const [result] = await pool.query(query, values);
   return result;
@@ -308,7 +309,7 @@ activityModel.ChangeConfirmRegister = async (activity_id, student_id, isConfirm)
 
 activityModel.GetListRegistationOfActivity = async (activity_id) => {
   const queryText = `
-  SELECT R.id, R.student_id, U.username, R.email, R.phone_number, R.isComfirm, S.masv, S.class, F.name as faculty, R.isComfirm, R.isAttendance, R.wish
+  SELECT R.id, R.student_id, U.username, U.id, R.email, R.phone_number, R.isComfirm, S.masv, S.class, F.name as faculty, R.isComfirm, R.isAttendance, R.wish
   FROM registrations R
   INNER JOIN students S ON S.user_id = R.student_id
   INNER JOIN users U ON S.user_id = U.id
@@ -398,5 +399,22 @@ activityModel.delete = async (activity_id) => {
 
   const [result] = await pool.query(queryText, [activity_id]);
 
+  return result.affectedRows || null;
+}
+
+activityModel.isSaved = async (activity_id, user_id) => {
+  const queryText = 
+  `SELECT * FROM saved WHERE user_id = ? AND activity_id = ?`;
+
+  const [result] = await pool.query(queryText, [user_id, activity_id]);
+  return result || null;
+}
+
+activityModel.save = async (user_id, activity_id) => {
+  const queryText = `
+    INSERT INTO saved (user_id, activity_id) VALUES (?, ?)
+  `;
+
+  const [result] = await pool.query(queryText, [user_id, activity_id]);
   return result.affectedRows || null;
 }

@@ -33,7 +33,8 @@ router.get('/:activity_id/registration/', controller.registration);
 router.get('/:activity_id/download-excel/', controller.DownloadExcel);
 
 router.post('/confirmStudentRegister', controller.ConfirmRegisterSV);
-// router.get('/:activity_id/unregister', authMiddleware.isStudent, controller.unregister);
+
+router.post('/:activity_id/save', controller.saveActivity);
 
 router.get('/search', controller.search);
 router.get('/my_activity', authMiddleware.isStudent, controller.my_activity);

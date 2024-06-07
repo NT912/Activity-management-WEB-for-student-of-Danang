@@ -69,3 +69,24 @@ async function uploadAvatar() {
     }
 }
 
+async function SavePost(activityId) {
+    try {
+      const response = await fetch(`/activity/${activityId}/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.ok) {
+        toastr.success('Lưu hoạt động thành công!');
+      } else {
+        const errorData = await response.json();
+        toastr.error(errorData.message || 'Lưu hoạt động thất bại!');
+      }
+    } catch (error) {
+      console.error('Error saving activity:', error);
+      toastr.error('Đã xảy ra lỗi khi lưu hoạt động!');
+    }
+  }
+  
