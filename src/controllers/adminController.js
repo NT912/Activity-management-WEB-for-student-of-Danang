@@ -250,8 +250,10 @@ adminController.Get_EditUser = async (req, res) => {
       res.redirect('/user/profile');
     }
   }
+  
   adminController.Post_editacaount = async (req, res) => {
     try {
+      console.log("here");
       const userss = req.session.user;
       const user_id = req.params.user_id;
       const user = await userModel.getById(user_id);

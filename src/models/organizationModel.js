@@ -70,7 +70,7 @@ organizationModel.update = async (organization_id, organization) => {
 }
 
 organizationModel.delete = async (id) => {
-  const [result] = await pool.query("DELETE FROM organizations WHERE id = ?", [id]);
+  const [result] = await pool.query("DELETE FROM organizations WHERE user_id = ?", [id]);
 
   if (result.affectedRows) {
     return true;

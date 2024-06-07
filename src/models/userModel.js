@@ -73,6 +73,7 @@ userModel.create = async (user) => {
 }
 
 userModel.delete = async (id) => {
+  console.log("herer");
   const [result] = await pool.query("DELETE FROM users WHERE id = ?", [id]);
 
   if (result.affectedRows) {

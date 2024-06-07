@@ -121,9 +121,7 @@ studentModel.update = async (student_id, student) => {
 };
 
 studentModel.delete = async (id) => {
-  const [result] = await pool.query("DELETE FROM students WHERE id = ?", [
-    id.toString(),
-  ]);
+  const [result] = await pool.query("DELETE FROM students WHERE user_id = ?", id);
 
   if (result.affectedRows) {
     return true;
