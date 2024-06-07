@@ -130,7 +130,7 @@ activityController.getView = async (req, res) => {
         announc: req.flash("announc"),
       });
     } else if (userss.role == roles.ADMIN) {
-      return res.redirect("/amin");
+      return res.redirect(`/admin/activity/${activity_id}/view`);
     }
   } catch (err) {
     console.log(err);
