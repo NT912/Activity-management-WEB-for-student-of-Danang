@@ -62,7 +62,7 @@
                                 <i class="fas fa-file-excel"></i> Excel
                             </a>
                             <% } %>
-                                <% if (activity.organization_id==userss.id) { %>
+                                <% if (organization) { %>
                                     <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                                         data-bs-target="#modal_activity_attendance_<%- activity.id %>">
                                         Tạo QR Code điểm danh

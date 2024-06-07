@@ -785,7 +785,7 @@ activityController.qrcode_attendance = async (req, res) => {
 
   await qrcode.toFile(filePath, qrcodeContent);
 
-  res.render("activity/qrcode_attendance", {
+  res.render("/:activity_id/qrcode_attendance", {
     success: req.flash("success"),
     error: req.flash("error"),
     user: req.session.user,
