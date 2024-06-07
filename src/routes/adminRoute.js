@@ -15,7 +15,10 @@ router.get('/', authMiddleware.isAdmin, controller.Get_Home);
 router.get('/activity/:activity_id/view', authMiddleware.isAdmin, controller.get_ViewActivity);
 
 router.get('/activity/:activity_id/confirm', authMiddleware.isAdmin, controller.post_ConfirmActivity);
-// router.post('/activity/:activity_id/confirm', authMiddleware.isAdmin, controller.post_RejectActivity);
+router.get('/activity/:activity_id/reject', authMiddleware.isAdmin, controller.post_RejectActivity);
+
+router.get('/:user_id/edit',controller.Get_EditUser);
+// router.post('/:user_id/edit',controller.Post_Edit);
 
 // router.get('/list', authMiddleware.isOrganizationOrAdmin, controller.getList);
 // router.get('/:activity_id/view', controller.getView);

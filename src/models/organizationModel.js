@@ -17,7 +17,7 @@ organizationModel.getByEmail = async (email) => {
 
 organizationModel.GetProfileById = async (id) => {
   const query = `
-  SELECT U.username, O.description, O.address, O.email, O.phone, O.avt
+  SELECT user_id,U.username, O.description, O.address, O.email, O.phone, O.avt
   FROM organizations O
   INNER JOIN users U ON O.user_id = U.id
   WHERE U.id = ?

@@ -52,7 +52,7 @@ studentModel.GetAvtByMasv = async (masv) => {
 
 studentModel.GetProfileById = async (user_id) =>
 {
-  const query = `SELECT masv, class, email, F.name as faculty, F.idFaculty , phone, S.avt, U.username
+  const query = `SELECT user_id, masv, class, email, F.name as faculty, F.idFaculty , phone, S.avt, U.username
   FROM students S 
   INNER JOIN users U ON U.id = S.user_id
   INNER JOIN faculty F ON F.idFaculty = S.faculty
