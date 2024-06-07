@@ -1,8 +1,6 @@
 const qrcode = require("qrcode");
 const fs = require("fs");
 
-const registrationModel = require("../models/registrationModel");
-
 const organizationModel = require("../models/organizationModel");
 const ExcelJS = require("exceljs");
 const activityModel = require("../models/activityModel");
@@ -150,6 +148,37 @@ activityController.registration = async (req, res) => {
     listmember: list,
     userss: userss,
     announc: req.flash("announc"),
+  });
+};
+
+activityController.qrcode_attendance = async (req, res) => {
+  const activity = await activityModel.GetById(req.params.activity_id);
+
+  if (!activity) {
+    req.flash("error", "Hoạt động không tồn tại");
+    res.redirect("/activity/list");
+    return;
+  }
+
+  const qrcodeContent = `${public_domain}/activity/${req.params.activity_id}/attendance`;
+  const filePath = `public/qrcodes/${req.params.activity_id}.png`;
+
+  if (!fs.existsSync("public/qrcodes")) {
+    fs.mkdirSync("public/qrcodes", { recursive: true });
+  }
+
+  await qrcode.toFile(filePath, qrcodeContent);
+
+  res.render("activity/qrcode_attendance", {
+    success: req.flash("success"),
+    error: req.flash("error"),
+    user: req.session.user,
+    student: req.session.student,
+    admin: req.session.admin,
+    organization: req.session.organization,
+    activity,
+    filePath,
+    pathUtils,
   });
 };
 
@@ -493,7 +522,7 @@ activityController.post_edit = async (req, res) => {
 
 activityController.verify = async (req, res) => {
   try {
-    const activity = await activityModel.GetById(req.params.activity_id);
+    const activity = await activityModel.getById(req.params.activity_id);
 
     if (!activity) {
       throw new Error("Hoạt động không tồn tại");
@@ -518,7 +547,7 @@ activityController.verify = async (req, res) => {
 
 activityController.unverify = async (req, res) => {
   try {
-    const activity = await activityModel.GetById(req.params.activity_id);
+    const activity = await activityModel.getById(req.params.activity_id);
 
     if (!activity) {
       throw new Error("Hoạt động không tồn tại");
@@ -738,40 +767,9 @@ activityController.search = async (req, res) => {
   });
 };
 
-activityController.qrcode_attendance = async (req, res) => {
-  const activity = await activityModel.GetById(req.params.activity_id);
-
-  if (!activity) {
-    req.flash("error", "Hoạt động không tồn tại");
-    res.redirect("/activity/list");
-    return;
-  }
-
-  const qrcodeContent = `${public_domain}/activity/${req.params.activity_id}/attendance`;
-  const filePath = `public/qrcodes/${req.params.activity_id}.png`;
-
-  if (!fs.existsSync("public/qrcodes")) {
-    fs.mkdirSync("public/qrcodes", { recursive: true });
-  }
-
-  await qrcode.toFile(filePath, qrcodeContent);
-
-  res.render("activity/qrcode_attendance", {
-    success: req.flash("success"),
-    error: req.flash("error"),
-    userss: req.session.user,
-    student: req.session.student,
-    admin: req.session.admin,
-    organization: req.session.organization,
-    activity,
-    filePath,
-    pathUtils,
-  });
-};
-
 activityController.attendance = async (req, res) => {
   try {
-    const activity = await activityModel.GetById(req.params.activity_id);
+    const activity = await activityModel.getById(req.params.activity_id);
 
     if (!activity) {
       throw new Error("Hoạt động không tồn tại");
@@ -786,9 +784,27 @@ activityController.attendance = async (req, res) => {
       throw new Error("Đã hết thời gian điểm danh");
     }
 
-    const result = await registrationModel.attendent(
+    const registered = await activityModel.isRegistered(
       req.params.activity_id,
-      req.session.user.id
+      req.session.student.id
+    );
+
+    if (!registered) {
+      throw new Error("Bạn chưa đăng ký hoạt động này");
+    }
+
+    const attendanced = await activityModel.isAttendanced(
+      req.params.activity_id,
+      req.session.student.id
+    );
+
+    if (attendanced) {
+      throw new Error("Bạn đã điểm danh rồi");
+    }
+
+    const result = await activityModel.attendance(
+      req.params.activity_id,
+      req.session.student.id
     );
 
     if (!result) {

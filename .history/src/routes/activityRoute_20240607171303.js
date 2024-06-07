@@ -51,7 +51,6 @@ router.get(
   authMiddleware.isOrganization,
   controller.qrcode_attendance
 );
-
 router.get(
   "/:activity_id/attendance",
   authMiddleware.isStudent,

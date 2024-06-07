@@ -1,7 +1,7 @@
 const qrcode = require("qrcode");
 const fs = require("fs");
 
-const registrationModel = require("../models/registrationModel");
+const studentModel = require("../models/studentModel");
 
 const organizationModel = require("../models/organizationModel");
 const ExcelJS = require("exceljs");
@@ -785,11 +785,6 @@ activityController.attendance = async (req, res) => {
     ) {
       throw new Error("Đã hết thời gian điểm danh");
     }
-
-    const result = await registrationModel.attendent(
-      req.params.activity_id,
-      req.session.user.id
-    );
 
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");

@@ -32,10 +32,10 @@ registrationModel.updateStudent = async (old_id, new_id) => {
   return false;
 };
 
-registrationModel.attendent = async (activity_id, studentId) => {
+registrationModel.attendent = async (registrationId, studentId) => {
   const [result] = await pool.query(
     "UPDATE registrations SET isAttendance = 1 WHERE student_id = ? AND activity_id = ?",
-    [studentId, activity_id]
+    [studentId, registrationId]
   );
 
   if (result.affectedRows) {
