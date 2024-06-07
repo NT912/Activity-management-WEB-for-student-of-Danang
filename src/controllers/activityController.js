@@ -646,12 +646,7 @@ activityController.search = async (req, res) => {
   const activities = await activityModel.search(req.query.q);
 
   res.render('homeole', {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    userss: req.session.userss,
-    student: req.session.student,
-    admin: req.session.admin,
-    organization: req.session.organization,
+    userss: req.session.user,
     activities,
     datetimeUtils,
     pathUtils
@@ -750,6 +745,10 @@ activityController.delete = async (req, res) => {
 
     if (!userss){
       return res.redirect('/auth/login');
+    }
+
+    if (userss.role != roles.ADMIN && userss.id != activity_id){
+      throw new Error('Ban khong duoc phep xoa hoat dong nay');
     }
 
     const activity = await activityModel.GetById(activity_id);

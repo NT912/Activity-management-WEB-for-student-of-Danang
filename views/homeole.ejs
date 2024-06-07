@@ -1,4 +1,18 @@
-<%- include('./components/header'); %>
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('includes/head.ejs',{title: 'Search...'}) %>
+
+    <body class="color-theme-blue mont-font">
+        <div class="main-wrapper">
+            <!-- navigation top-->
+            <%- include('includes/header.ejs', { role: userss }) %>
+            <!-- navigation top -->
+    
+            <!-- navigation left -->
+            <%- include('includes/nav.ejs') %>
+            <!-- navigation left -->
+    
+            <!-- main content -->
 
 <div class="main-content d-flex" style="margin-right: 0;">
     <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
@@ -8,14 +22,20 @@
                     <h3>Không có hoạt động này</h3>
                 <% } else { %>
                     <% activities.forEach(activity => { %>
-                        <div class="col-md-4 px-2 py-2">
+                        <div class=" px-2 py-2" style="width: 450px;">
                             <div class="col-md-12 rounded border px-3 py-3">
-                                <div class="col-md-12 justify-content-lg-center mb-3" style="height: 200px; overflow: hidden;">
+                                <div class="col-md-12 justify-content-lg-center mb-3" style="height: 200px; overflow: hidden; ">
                                     <img src="<%= activity.image %>" class="img-fluid rounded">
                                 </div>
-                                <h5 class="card-title"><%- activity.name %></h5>
-                                <p class="card-text"><%- activity.description %></p>
-                                <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">Chi tiết</a>
+                                <h5 class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block" style="height: 30px; overflow: hidden; ">
+                                    <%- activity.name %>
+                                </h5>
+                                <p class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block" style="height: 50px; overflow: hidden; ">
+                                    <%- activity.description %>
+                                </p>
+                                <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">
+                                    Chi tiết
+                                </a>
                             </div>
                         </div>
                     <% }) %>
@@ -33,5 +53,11 @@
         margin-top: 20px;
     }
 </style>
+    <!-- main content --><script src="/js/action.js"></script>
+    <script src="/js/plugin.js"></script>
+    <script src="/js/lightbox.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        </div></body></html>
 
-<%- include('./components/footer'); %>
+
