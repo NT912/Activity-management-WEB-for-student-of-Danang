@@ -40,7 +40,7 @@
     <div class="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
         <% if (userss != null) { %>
             <a class="p-0 ms-3 menu-icon border-radius">
-                <img src="<%= userss.avt %>" alt="user" class="w40 mt--1">
+                <img src="<%= userss.avt %>" alt="user" class="w60 h60 mt--1 rounded-circle">
             </a>
             <div class="dropdown-menu-settings switchcolor-wrap">
                 <h4 class="fw-700 font-sm mb-4">Tài khoản</h4>
@@ -61,4 +61,11 @@
             </a>
         <% } %>
     </div>
+    
+    <style>
+        .rounded-circle {
+            border-radius: 50%;
+        }
+        
+    </style>
 </div>

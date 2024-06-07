@@ -3,6 +3,7 @@ const fs = require('fs');
 
 const organizationModel = require('../models/organizationModel');
 const ExcelJS = require('exceljs');
+const facultyModel = require('../models/facultyModel');
 const activityModel = require('../models/activityModel');
 const datetimeUtils = require('../utils/datetime');
 const pathUtils = require('../utils/path');
@@ -43,12 +44,31 @@ class Activity {
 
 adminController.Get_Home = async (req, res) => {
     try {
-        let activities = await activityModel.GetAll(10);
+        const mod = req.query.mod;
+        let activities;
+        var state = '';
+        var student_users;
+        var organization_users;
+        if (mod == 'wait'){
+            activities = await activityModel.GetAllWaitConfirm(0);
+            state = 'wait';
+        } 
+        if (mod == 'account'){
+            student_users = await userModel.getByRole(roles.STUDENT);
+            organization_users = await userModel.getByRole(roles.ORGANIZATION);
+            state = 'account';
+        } else {
+            activities = await activityModel.GetAll(0);
+        }
+
         const userss = req.session.user;
         res.render('admin/home', {
         activities: activities,
         userss: userss,
         announc: req.flash('announc'),
+        state: state,
+        student_users,
+        organization_users
         });
     } catch (err){
         console.log(err);
@@ -120,5 +140,86 @@ adminController.post_ConfirmActivity = async (req, res) => {
         req.flash('announc',err.message);
         res.redirect(`/admin/activity/${req.params.activity_id}/view`);
     }
-    
 }
+
+adminController.post_RejectActivity = async (req, res) => {
+    try{
+        const userss = req.session.user;
+        const activity_id = req.params.activity_id;
+
+        const activity = await activityModel.GetById(activity_id);
+        
+        if (!activity) {
+            req.flash('announc', 'Hoạt động không tồn tại');
+            res.redirect('/admin/');
+            return;
+        }
+
+        const stateact = activity.Confirm.toString();
+        var result = false;
+        if (stateact == 'yet'){
+            result = await activityModel.ChangeState('reject',activity_id);
+        } else 
+        if (stateact == 'confirm') {
+            result = await activityModel.ChangeState('yet',activity_id);
+        } else 
+        if (stateact == 'update') {
+            const activity_backup = await activityModel.GetBackupActivity(activity_id);
+
+            if (activity_backup){
+                const result_backup = activityModel.update(activity_id,activity_backup);
+                if (!result_backup){
+                    throw Error('Loi backup');
+                }
+            }
+        }
+
+        if (!result){
+            throw Error('Sai sai roi');
+        }
+        req.flash('announc','Ban da tu choi hoat dong');
+        res.redirect(`/admin/activity/${activity_id}/view`);
+    } catch (err){
+        console.log(err);
+        req.flash('announc',err.message);
+        res.redirect(`/admin/activity/${req.params.activity_id}/view`);
+    }
+}
+
+adminController.Get_EditUser = async (req, res) => {
+    try {
+        const userss = req.session.user;
+      const user_id = req.params.user_id;
+
+        const user = await userModel.getById(user_id);
+        if (user.role == roles.STUDENT){
+          const user = await studentModel.GetProfileById(user_id);
+          const faculty = await facultyModel.getAllFaculty();
+          user.role = 'student';
+          console.log(user);
+          return res.render('admin/editUser', {
+            userss: userss,
+            user: user,
+            error: req.flash('error'),
+            faculties: faculty,
+          });
+        } 
+        else 
+        if (user.role == roles.ORGANIZATION){
+          const user = await organizationModel.GetProfileById(user_id);
+          user.role = 'organization';
+          console.log(user);
+          return res.render('admin/editUser', {
+            userss: userss,
+            error: '',
+            user: user,
+          });
+        }
+      return res.redirect('/admin/?mod=account');
+    } catch (error) {
+      console.log(error);
+      req.flash('error', error.message);
+      res.redirect('/user/profile');
+    }
+  }
+

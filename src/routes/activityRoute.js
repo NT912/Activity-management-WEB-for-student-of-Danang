@@ -43,7 +43,7 @@ router.get('/:activity_id/attendance', authMiddleware.isStudent, controller.atte
 
 router.get('/:activity_id/delete', controller.delete);
 
-router.get('/:activity_id/confirm', controller.delete);
+router.get('/:activity_id/confirm', controller.confirm);
 
 module.exports = router;
 

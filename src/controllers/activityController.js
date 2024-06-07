@@ -298,11 +298,19 @@ activityController.getEdit = async (req, res) => {
       req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
       return res.redirect(`/activity/${activity_id}/view`);
     }
+
+    const now = new Date();
+    if (now > Date(activity.start_date)){
+      req.flash('announc','Hoat dong da het thoi han sua');
+      return res.redirect(`/activity/${activity_id}/view`);
+    }
+
     activity.end_date = new Date(activity.end_date).toISOString().split('T')[0];
     activity.start_date = new Date(activity.start_date).toISOString().split('T')[0];
     activity.registration_start_date = new Date(activity.registration_start_date).toISOString().split('T')[0];
     activity.registration_end_date = new Date(activity.registration_end_date).toISOString().split('T')[0];
-    console.log(activity);
+
+    
     res.render('activity/editpost', {
       activity: activity,
       error: req.flash('announc'),
@@ -340,7 +348,7 @@ activityController.post_edit = async (req, res) => {
       req.flash('announc','Ban khong phai nha to chuc cua hoat dong nay');
       return res.redirect(`/activity/${activity_id}/view`);
     }
-    console.log('');
+    
 
     var url;
     // Kiểm tra nếu có tệp mới được tải lên
@@ -359,7 +367,37 @@ activityController.post_edit = async (req, res) => {
     if (!name || !desc || !date_start || !date_end || !date_start_regis || !date_end_regis || !location ){
       throw Error('Vui long nhap du thong tin');
     }
-    console.log("here");
+    // if (activity.name == name 
+    //   && activity.description == desc 
+    //   && activity.date_start == date_start 
+    //   && activity.date_end == date_end 
+    //   && activity.date_start_regis == date_start_regis 
+    //   && activity.date_end_regis == date_end_regis 
+    //   && activity.location == location) {
+    //     req.flash('announc', 'Thong tin hoat dong khong thay doi');
+    //     res.redirect(`/activity/${req.params.activity_id}/edit`);
+    // }
+
+    const backup_acticity = {
+      activity_id: activity.id,
+      name: activity.name,
+      description: activity.description,
+      start_date: activity.start_date,
+      end_date: activity.end_date,
+      registration_start_date: activity.registration_start_date,
+      registration_end_date: activity.registration_end_date,
+      location: activity.location,
+      number: activity.maxnumber,
+      image: activity.image,
+      confirm: activity.Confirm,
+    }
+
+    const result_backup = await activityModel.backup(backup_acticity);
+
+    if (!result_backup){
+      throw Error('Loi backup');
+    }
+
     const updatedActivity = {
         name: name,
         description: desc,
@@ -370,8 +408,9 @@ activityController.post_edit = async (req, res) => {
         location: location, 
         image: url,
     };
+
     const result = await activityModel.update(activity_id, updatedActivity);
-    if (!updatedActivity){
+    if (!result){
       throw Error('loi khi sua hoat dong');
     }
 
@@ -707,12 +746,12 @@ activityController.delete = async (req, res) => {
     }
 
     const activity = await activityModel.GetById(activity_id);
-    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
-      throw Error('Ban khong duoc phep xoa hoat dong nay')
-    }
-
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
+    }
+
+    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
+      throw Error('Ban khong duoc phep xoa hoat dong nay')
     }
 
     const result = await activityModel.delete(activity_id);
@@ -741,21 +780,21 @@ activityController.confirm = async (req, res) => {
     }
 
     const activity = await activityModel.GetById(activity_id);
-    if (userss.role != roles.ADMIN && userss.id != activity.organization_id){
-      throw Error('Ban khong duoc phep xoa hoat dong nay')
-    }
-
     if (!activity) {
       throw new Error('Hoạt động không tồn tại');
     }
 
-    const result = await activityModel.delete(activity_id);
+    if (userss.id != activity.organization_id){
+      throw Error('Ban khong phai nha to chuc hoat dong nay')
+    }
+
+    const result = await activityModel.ChangeState('done',activity_id);
 
     if (!result) {
       throw new Error('Có lỗi xảy ra khi xóa hoạt động');
     }
 
-    req.flash('announc', `Xóa hoạt động ${activity.name} thành công`);
+    req.flash('announc', `Hoat dong ${activity.name} da duoc cong khai`);
     res.redirect('/');
   } catch (error) {
     console.log(error);
