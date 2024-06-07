@@ -796,8 +796,9 @@ activityController.attendance = async (req, res) => {
     }
   } catch (error) {
     req.flash("error", error.message);
-    res.redirect(`/activity/${req.params.activity_id}/view`);
   }
+
+  res.redirect(`/activity/${req.params.activity_id}/view`);
 };
 
 activityController.my_activity = async (req, res) => {

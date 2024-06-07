@@ -789,15 +789,19 @@ activityController.attendance = async (req, res) => {
     const result = await registrationModel.attendent(
       req.params.activity_id,
       req.session.user.id
+      req.flash("success", `Điểm danh hoạt động ${activity.name} thành công`);
     );
 
     if (!result) {
       throw new Error("Có lỗi xảy ra khi điểm danh");
     }
+
+
   } catch (error) {
     req.flash("error", error.message);
-    res.redirect(`/activity/${req.params.activity_id}/view`);
   }
+
+  res.redirect(`/activity/${req.params.activity_id}/view`);
 };
 
 activityController.my_activity = async (req, res) => {
