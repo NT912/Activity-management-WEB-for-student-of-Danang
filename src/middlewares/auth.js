@@ -47,10 +47,8 @@ authMiddleware.isOrganization = (req, res, next) => {
 
 authMiddleware.isOrganizationOrAdmin = (req, res, next) => {
   if (req.session.idUser && (req.session.role === roles.ORGANIZATION || req.session.role === roles.ADMIN)) {
-    console.log("hereee");
     return next();
   }
-  console.log("hereesssse");
 
   req.flash('error', 'Bạn không có quyền truy cập vào trang này');
   return res.redirect('/');

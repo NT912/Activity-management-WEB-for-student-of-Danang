@@ -810,3 +810,37 @@ activityController.confirm = async (req, res) => {
   }
 
 }
+
+activityController.saveActivity = async (req, res) => {
+  try {
+    const userss = req.session.user;
+
+    if (!userss){
+      res.redirect('/auth/login');
+    }
+    const activity_id = req.params.activity_id;
+    
+    const activity = await activityModel.GetById(activity_id);
+
+    if (!activity) {
+      throw new Error('Hoạt động không tồn tại');
+    }
+
+    const isSaved = await activityModel.isSaved(activity_id,userss.id, );
+
+    if (isSaved.length>0) {
+      return res.status(400).json({ message: 'Bạn đã lưu hoạt động này rồi' });
+    }
+    const result = await activityModel.save(userss.id, activity_id);
+    if (!result) {
+      throw new Error('Có lỗi xảy ra khi lưu hoạt động');
+    }
+
+    return res.status(200).json({ message: `Hoạt động ${activity.name} đã được lưu` });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+
+}

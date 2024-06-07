@@ -45,7 +45,7 @@
             <div class="dropdown-menu-settings switchcolor-wrap">
                 <h4 class="fw-700 font-sm mb-4">Tài khoản</h4>
                 <div class="card bg-transparent-card border-0 d-block mt-3">
-                    <a class="d-inline font-xssss mont-font fw-700" href="/user/profile">Tài khoản</a>
+                    <a class="d-inline font-xssss mont-font fw-700" href="<%- userss.role == 'admin' ? '/admin/profile' : '/user/profile'%>">Tài khoản</a>
                     <div class="d-inline float-right mt-1"></div>
                 </div>
                 <div class="card bg-transparent-card border-0 d-block mt-3">
