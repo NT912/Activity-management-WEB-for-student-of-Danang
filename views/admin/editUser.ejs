@@ -19,7 +19,10 @@
                 <div class="col-md-6 bg-white">
                     <% if (user.role === 'student') { %>
                         <h2>Chỉnh sửa thông tin sinh vien %></h2>
-                        <form action="/user/edit" method="post">
+                        <script>
+                            alert('<%=user.user_id%>')
+                        </script>
+                        <form action="/admin/<%= user.user_id %>/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
@@ -76,7 +79,7 @@
                         </form>
                     <%}else if (user.role == 'organization') { %>
                         <h2>Chỉnh sửa thông tin nhà tổ chức</h2>
-                        <form action="/user/edit" method="post">
+                        <form action="/admin/<%=user.user_id%>/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">

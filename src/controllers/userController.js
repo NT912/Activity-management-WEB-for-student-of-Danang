@@ -198,8 +198,10 @@ userController.Get_Profile = async (req, res) => {
 userController.Get_ViewUser = async (req, res) => {
   const userss = req.session.user;
   const user_id = req.params.user_id;
+  console.log("   ",user_id);
 
   const user = await userModel.getById(user_id);
+  console.log(user);
   if (user.role == roles.STUDENT){
     try {
       const userInf = await studentModel.GetProfileById(user_id);

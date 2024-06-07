@@ -6,7 +6,7 @@ const organizationModel = require('../models/organizationModel');
 const adminModel = require('../models/adminModel');
 const facultyModel = require('../models/facultyModel');
 const { roles } = require('../constants');
-
+const { sendEmail, createResetToken } = require('../utils/emailer');
 
 const authController = module.exports;
 
@@ -204,7 +204,83 @@ authController.registerOrganization = async (req, res) => {
 }
 
 authController.logout = async (req, res) => {
-  console.log("here");
   req.session.destroy();
   res.redirect('/auth/login');
 }
+
+authController.Get_forgot = async (req, res) => {
+  req.session.destroy();
+  res.render('auth/fogot');
+}
+
+authController.Post_forgot = async (req, res) => {
+  const { email } = req.body;
+  let user = await userModel.GetSvByEmail(email);
+  if (!user){
+      user = await userModel.GetOrganiAcByEmail(email); 
+  }
+
+  if (!user) {
+      req.flash('error', 'Email không tồn tại trong hệ thống');
+      return res.redirect('/forgot-password');
+  }
+
+  // Tạo token đặt lại mật khẩu và lưu vào cơ sở dữ liệu
+  const token = createResetToken();
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = new Date(Date.now() + 3600000);
+  console.log(user);
+  await userModel.updateToken(user);
+  console.log("here");
+
+  // Gửi email với đường dẫn đặt lại mật khẩu
+  const resetLink = `http://127.0.0.1:3200/auth/resetpassword/${token}`;
+  const message = `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+  Please click on the following link, or paste this into your browser to complete the process:\n\n
+  ${resetLink}\n\n
+  If you did not request this, please ignore this email and your password will remain unchanged.\n`;
+
+  try {
+    console.log('herer');
+      await sendEmail({ email: user.email, subject: 'Password Reset', message });
+      req.flash('info', 'Email đã được gửi đến địa chỉ của bạn với hướng dẫn đặt lại mật khẩu.');
+  } catch (error) {
+      console.error('There was an error: ', error);
+      req.flash('error', 'Có lỗi xảy ra khi gửi email.');
+  }
+
+  res.redirect('/');
+};
+
+authController.Get_ResetPass = async (req, res) => {
+  const user = await userModel.getUserByResetToken(req.params.token);
+    if (!user) {
+        req.flash('error', 'Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.');
+        return res.redirect('/auth/fogot');
+    }
+
+  res.render('auth/resetpass', { token: req.params.token });
+};
+
+authController.Post_ResetPass = async (req, res) => {
+  const user = await userModel.getUserByResetToken({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+      req.flash('error', 'Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.');
+      return res.redirect('/auth/forgot');
+  }
+
+  // Cập nhật mật khẩu mới
+  user.password = req.body.password; // Hash mật khẩu trước khi lưu vào cơ sở dữ liệu
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  await userModel.updatePass(req.body.password, user.id);
+ 
+
+  req.flash('success', 'Mật khẩu của bạn đã được cập nhật thành công.');
+  res.redirect('/auth/login');
+};
