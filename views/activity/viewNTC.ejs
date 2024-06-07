@@ -100,9 +100,12 @@
                     <div class="feedback-section">
                         <h4 class="font-xssss fw-600 text-center">Phản hồi từ admin</h4>
                         <div class="col-xl-12 mb-3">
-                            <textarea id="adminFeedback" name="adminFeedback" class="style2-input ps-5 form-control text-grey-900 fw-60" readonly>
-                                <%= activity.comment != null ? activity.comment : 'Chưa có phản hồi từ admin' %>
-                            </textarea>
+                            <div class="col-xl-12 mb-3">
+                                <textarea id="adminFeedback" name="adminFeedback"class="col-xl-12" placeholder="Nội dung hoạt động" 
+                                style="height: 400px" readonly>
+                                    <%= activity.comment%>
+                                </textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">

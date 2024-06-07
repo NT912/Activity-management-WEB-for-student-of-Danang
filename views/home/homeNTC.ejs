@@ -39,9 +39,11 @@
                                 <h5 class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block" style="height: 30px; overflow: hidden; ">
                                     <%- activity.name %>
                                 </h5>
-                                <p class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block" style="height: 50px; overflow: hidden; ">
-                                    <%- activity.description %>
-                                </p>
+                                <div style="height: 50px; overflow: hidden; ">
+                                    <p class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block" >
+                                        <%- activity.description %>
+                                    </p>
+                                </div>
                                 <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">
                                     Chi tiết
                                 </a>
