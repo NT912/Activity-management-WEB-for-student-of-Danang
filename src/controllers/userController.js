@@ -518,22 +518,24 @@ userController.Post_avt = async (req, res) => {
 
 userController.delete = async (req, res) => {
   try {
-    const user = await userModel.getById(req.params.user_id);
+    const user_id = req.params.user_id;
+    const user = await userModel.getById(user_id);
 
     if (!user) {
       throw new Error(`Tài khoản với ID ${req.params.user_id} không tồn tại`);
     }
 
-    if (user.role === roles.STUDENT) {
-      const student = await studentModel.getByUserId(user.id);
+    if (user.role == roles.STUDENT) {
+      const student = await studentModel.getByUserId(user_id);
 
       if (!student) {
         throw new Error(`Sinh viên với ID ${req.params.user_id} không tồn tại`);
       }
 
-      await registrationModel.deleteByStudentId(student.id);
-      await attendanceModel.deleteByStudentId(student.id);
-      await studentModel.delete(student.id);
+      const result_dst = await studentModel.delete(user_id);
+      const result_dus = await userModel.delete(user_id);
+      console.log(result_dst,"   ",result_dus);
+
     } else if (user.role === roles.ORGANIZATION) {
       const organization = await organizationModel.getByUserId(user.id);
 
@@ -546,11 +548,12 @@ userController.delete = async (req, res) => {
 
     await userModel.delete(user.id);
 
-    req.flash('success', `Tài khoản ${user.username} đã được xóa`);
+    req.flash('announc', `Tài khoản ${user.username} đã được xóa`);
 
-    res.redirect('/user/list');
+    res.redirect('/admin/?mod=account');
   } catch (error) {
-    req.flash('error', error.message);
-    res.redirect('/user/list');
+    console.log(error);
+    req.flash('announc', error.message);
+    res.redirect('/admin/?mod=account');
   }
 }

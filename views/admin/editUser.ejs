@@ -19,7 +19,7 @@
                 <div class="col-md-6 bg-white">
                     <% if (user.role === 'student') { %>
                         <h2>Chỉnh sửa thông tin sinh vien %></h2>
-                        <form action="/user/edit" method="post">
+                        <form action="/admin/<%= user.user_id %>/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
@@ -61,13 +61,6 @@
                                         value="<%= user.phone %>" required>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-6">
-                                        <label for="id_email">password</label>
-                                        <input type="email" name="password" id="id_email" class="form-control"  placeholder="Nhập email của bạn"
-                                        value="<%= user.email %>" required>
-                                    </div>
-                                </div>
                             </div>
                             <span style="color:red;"><%= error%></span>
                             <div class="d-grid gap-2 col-12 mx-auto">
@@ -76,7 +69,7 @@
                         </form>
                     <%}else if (user.role == 'organization') { %>
                         <h2>Chỉnh sửa thông tin nhà tổ chức</h2>
-                        <form action="/user/edit" method="post">
+                        <form action="/admin/<%=user.user_id%>/edit" method="post">
                             <div class="form-group mb-3">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
@@ -124,4 +117,3 @@
     </div>
 </body>
 </html>
-
