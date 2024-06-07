@@ -1,118 +1,80 @@
-<!DOCTYPE html>
-<html>
+<%- include('../includes/head.ejs',{title: 'BK Volunteer'}) %>
 
-<head>
-    <title>Activity management WEB</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
-    <link rel="shortcut icon" type="images" href="/images/icon.png">
-    <link rel="stylesheet" type="text/css" href="/old/css/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+<body class="color-theme-blue mont-font">
+    <div class="main-wrapper">
+        <!-- navigation top-->
+        <%- include('../includes/header.ejs',{
+            userss: userss,
+        })
+        %>
+        <!-- navigation top -->
 
-<body>
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Activity management WEB</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- navigation left -->
+        <%- include('../includes/nav.ejs',{
+            userss: userss,
+        }) %>
+        <!-- navigation left -->
+<div class="nav-header bg-white shadow-xs border-0">
+    <div class="nav-top">
+        <a href="/"> <img src="https://firebasestorage.googleapis.com/v0/b/web-doan-44696.appspot.com/o/defaut%2FLOGO.png?alt=media&token=07eed475-fe8f-42fe-9bb7-b674b26cd77d" alt="Logopage" class="logo-img"> </a>
+    </div>
+<!-- Search -->
+<form action="/activity/search" method="GET" class="float-left header-search">
+    <div class="form-group mb-0 icon-input">
+      <i class="feather-search font-sm text-grey-400"></i>
+      <input type="text" name="q" placeholder="Tìm kiếm ..." class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
+    </div>
+  </form>
+    <!-- Notification -->
+    <a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false"><span class="dot-count bg-warning"></span><i class="feather-bell font-xl text-current"></i></a>
+    <div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
+        <h4 class="fw-700 font-xss mb-4">Thông báo</h4>
+        <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+            <img src="images/user-8.png" alt="user" class="w40 position-absolute left-0">
+            <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Liên Chi Đoàn Khoa Fast - Đại học Bách Khoa <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 3 tháng</span></h5>
+            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Sự kiện sắp diễn ra hay dô hay dô</h6>
+        </div>
+        <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+            <img src="images/user-4.png" alt="user" class="w40 position-absolute left-0">
+            <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Hệ thống<span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 2 phút</span></h5>
+            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Sự kiện của bạn sẽ diễn ra trong 2 ngày nữa</h6>
+        </div>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <% if (user && user.role == 'admin') { %>
-                        <li class="nav-item me-3">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Quản lý tài khoản
-                                </button>
-                                <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="/user/list">Danh sách tài khoản</a></li>
-                                  <li><a class="dropdown-item" href="/user/add">Thêm mới tài khoản</a></li>
-                                </ul>
-                              </div>
-                        </li>
-                    <% } %>
-                    <% if (user && (user.role == 'admin' || user.role == 'organization')) { %>
-                        <li class="nav-item me-3">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Quản lý hoạt động
-                                </button>
-                                <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="/activity/list">Danh sách hoạt động</a></li>
-                                  <li><a class="dropdown-item" href="/activity/add">Thêm mới hoạt động</a></li>
-                                </ul>
-                              </div>
-                        </li>
-                    <% } %>
-                </ul>
-                <div class="navbar-nav mb-2 mb-lg-0 me-0">
-                    <li class="nav-item me-3 align-middle">
-                        <form class="d-flex" role="search" action="/activity/search" method="get">
-                            <input class="form-control me-2" style="width: auto;" type="search" placeholder="Tìm kiếm hoạt động" aria-label="Search" name="q">
-                            <button class="btn btn-outline-info" type="submit">Tìm kiếm</button>
-                        </form>
-                    </li>
+        <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+            <img src="images/user-7.png" alt="user" class="w40 position-absolute left-0">
+            <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Hội Sinh viên <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 1 tiếng</span></h5>
+            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Bạn đã tham gia hoạt động "Yés sir"</h6>
+        </div>
+        <div class="card bg-transparent-card w-100 border-0 ps-5">
+            <img src="images/user-6.png" alt="user" class="w40 position-absolute left-0">
+            <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Thanh niên Đà Nẵng <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 1 ngày</span></h5>
+            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Bạn đã biết chưa</h6>
+        </div>
+    </div>
+    <!-- Setting -->
+    <a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="feather-message-square font-xl text-current"></i></a>
+    <div class="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
+        <% if (userss != null) { %>
+            <a class="p-0 ms-3 menu-icon border-radius">
+                <img src="<%= userss.avt %>" alt="user" class="w40 mt--1">
+            </a>
+            <div class="dropdown-menu-settings switchcolor-wrap">
+                <h4 class="fw-700 font-sm mb-4">Tài khoản</h4>
+                <div class="card bg-transparent-card border-0 d-block mt-3">
+                    <a class="d-inline font-xssss mont-font fw-700" href="/user/profile">Tài khoản</a>
+                    <div class="d-inline float-right mt-1"></div>
                 </div>
-                &nbsp;
-                &nbsp;
-                <% if (!user) { %>
-                <div class="row row-cols-lg-auto g-3 align-items-center">
-                    <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
-                    &nbsp;
-                    <a href="/auth/register" class="btn btn-primary">Đăng ký tài khoản</a>
-                    &nbsp;
+                <div class="card bg-transparent-card border-0 d-block mt-3">
+                    <a class="d-inline font-xssss mont-font fw-700" href="/auth/logout">Đăng xuất</a>
                 </div>
-                <% } else { %>
-                <div class="navbar-nav mb-2 mb-lg-0 me-0">
-                    <!-- &nbsp;
-                    <a href="/me" class="btn btn-primary">Cài đặt</a>
-                    &nbsp;
-                    <a href="/auth/logout" class="btn btn-primary">Đăng xuất</a>
-                    &nbsp; -->
-                    <li class="nav-item me-3 align-middle">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <% if (user.role == 'admin') { %>
-                                    <span class="text-white me-3"><%= user.username %> (Quản trị viên)</span>
-                                <% } %>
-                                <% if (user.role == 'organization') { %>
-                                    <span class="text-white me-3"><%= user.username %> (Tổ chức)</span>
-                                <% } %>
-                                <% if (user.role == 'student') { %>
-                                    <span class="text-white me-3"><%= user.username %> (Sinh viên)</span>
-                                <% } %>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/user/me">Thông tin cá nhân</a></li>
-                                <% if (user.role == 'student') { %>
-                                    <li><a class="dropdown-item" href="/activity/my_activity">Hoạt động của tôi</a></li>
-                                <% } %>
-                                <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
-                            </ul>
-                          </div>
-                    </li>
-                </div>
-                <% } %>
             </div>
-        </div>
-    </nav>
-
-    <div class="container mt-3">
-        <div class="alert-area">
-            <% if (success) { %>
-                <% success.forEach(message => { %>
-                    <div class="alert alert-success">
-                        <%= message %>
-                    </div>
-                <% }) %>
-            <% } %>
-            <% if (error) { %>
-                <% error.forEach(message => { %>
-                    <div class="alert alert-danger">
-                        <%= message %>
-                    </div>
-                <% }) %>
-            <% } %>
-        </div>
+        <% } else { %> 
+            <!-- <a href="/auth/register" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                Đăng ký
+            </a>
+            <a href="/auth/login" class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                Đăng nhập
+            </a> -->
+        <% } %>
+    </div>
+</div>
