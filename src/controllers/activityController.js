@@ -599,10 +599,10 @@ activityController.ConfirmRegisterSV = async (req, res) => {
 activityController.search = async (req, res) => {
   const activities = await activityModel.search(req.query.q);
 
-  res.render('home', {
+  res.render('homeole', {
     success: req.flash('success'),
     error: req.flash('error'),
-    user: req.session.user,
+    userss: req.session.userss,
     student: req.session.student,
     admin: req.session.admin,
     organization: req.session.organization,

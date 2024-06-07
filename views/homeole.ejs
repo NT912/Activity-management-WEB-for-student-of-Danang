@@ -1,22 +1,37 @@
 <%- include('./components/header'); %>
 
-<div class="row">
-    <% if (activities.length == 0) { %>
-        <h2>Hiện tại không có hoạt động nào đang diễn ra</h2>
-    <% } else { %>
-        <h2>Các hoạt động đang diễn ra</h2>
-        <% activities.forEach(activity => { %>
-            <div class="col-md-4 px-2 py-2">
-                <div class="col-md-12 rounded border px-3 py-3">
-                    <div class="col-md-12 justify-content-lg-center mb-3" style="height: 200px; overflow: hidden;">
-                        <img src="<%= `/${activity.image}` %>" class="img-fluid rounded">
-                    </div>
-                    <h5 class="card-title"><%- activity.name %></h5>
-                    <p class="card-text"><%- activity.description %></p>
-                    <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">Chi tiết</a>
-                </div>
+<div class="main-content d-flex" style="margin-right: 0;">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+        <div style="display: flex;">
+            <div class="col-xl-12" style="display: flex; flex-wrap: wrap;">
+                <% if (activities.length == 0) { %>
+                    <h3>Không có hoạt động này</h3>
+                <% } else { %>
+                    <% activities.forEach(activity => { %>
+                        <div class="col-md-4 px-2 py-2">
+                            <div class="col-md-12 rounded border px-3 py-3">
+                                <div class="col-md-12 justify-content-lg-center mb-3" style="height: 200px; overflow: hidden;">
+                                    <img src="<%= activity.image %>" class="img-fluid rounded">
+                                </div>
+                                <h5 class="card-title"><%- activity.name %></h5>
+                                <p class="card-text"><%- activity.description %></p>
+                                <a href="/activity/<%- activity.id %>/view" class="btn btn-primary">Chi tiết</a>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } %>
             </div>
-        <% }) %>
-    <% } %>
+        </div>
+    </div>
 </div>
+
+<style>
+    h3 {
+        text-align: center;
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+    }
+</style>
+
 <%- include('./components/footer'); %>
