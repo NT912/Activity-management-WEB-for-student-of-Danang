@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../includes/head.ejs', { title: 'ADMIN' }) %>
+        <link rel="stylesheet" href="/css/admin.css">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+        <style>
+            /* CSS tùy chỉnh để tạo kiểu cho hộp tìm kiếm và bộ lọc */
+            .search-box input.form-control {
+                border-radius: 25px;
+                padding: 10px 20px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .filter-box {
+                margin-left: 10px;
+                position: relative;
+            }
+
+            .filter-box select.form-control {
+                border-radius: 25px;
+                padding: 10px 20px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                appearance: none;
+                /* Ẩn mũi tên mặc định */
+            }
+
+            /* Mũi tên tùy chỉnh cho hộp chọn */
+            .filter-box::after {
+                content: '\25BC';
+                /* Unicode cho mũi tên xuống */
+                position: absolute;
+                top: 50%;
+                right: 20px;
+                transform: translateY(-50%);
+                pointer-events: none;
+                font-size: 12px;
+                color: #555;
+            }
+
+            .d-flex {
+                display: flex;
+                align-items: center;
+            }
+
+            .d-flex .filter-box {
+                flex: 1;
+            }
+
+            /* CSS tùy chỉnh cho các hộp */
+            .boxes {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .box {
+                flex: 1;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: #fff;
+                transition: transform 0.2s ease-in-out;
+            }
+
+            .box:hover {
+                transform: scale(1.05);
+            }
+
+            .box1 {
+                background-color: #ff6b6b;
+            }
+
+            .box2 {
+                background-color: #4caf50;
+            }
+
+            .box3 {
+                background-color: #2196f3;
+            }
+
+            .box4 {
+                background-color: #ff9800;
+            }
+
+            .box .icon {
+                font-size: 2em;
+            }
+
+            .box .text {
+                font-size: 1.2em;
+            }
+
+            .box .number {
+                font-size: 1.5em;
+            }
+        </style>
+</head>
+
+<body class="color-theme-blue mont-font">
+    <div class="main-wrapper">
+        <!-- điều hướng trên cùng -->
+        <%- include('../includes/header.ejs', { isLogin: true }) %>
+            <!-- điều hướng trên cùng -->
+
+            <!-- điều hướng bên trái -->
+            <%- include('../includes/nav.ejs') %>
+                <!-- điều hướng bên trái -->
+
+                <!-- nội dung chính -->
+                <div class="main-content right-chat-active">
+                    <div class="middle-sidebar-left">
+                        <div class="row">
+                            <div class="dash-content">
+                                <div class="title">
+                                    <i class="uil uil-tachometer-fast-alt"></i>
+                                    <span class="text">Thống kê</span>
+                                </div>
+
+                                <div class="boxes">
+                                    <div class="box box1">
+                                        <i class="uil uil-user icon"></i>
+                                        <span class="text">Sinh viên</span>
+                                        <span class="number">...</span>
+                                    </div>
+                                    <div class="box box2">
+                                        <i class="uil uil-file-alt icon"></i>
+                                        <span class="text">Bài viết chưa duyệt</span>
+                                        <span class="number">0</span>
+                                    </div>
+                                    <div class="box box3">
+                                        <i class="uil uil-file-alt icon"></i>
+                                        <span class="text">Bài viết sắp diễn ra</span>
+                                        <span class="number">0</span>
+                                    </div>
+                                    <div class="box box4">
+                                        <i class="uil uil-building icon"></i>
+                                        <span class="text">Nhà tổ chức</span>
+                                        <span class="number">...</span>
+                                    </div>
+                                </div>
+                                <div class="activity">
+                                    <div class="title">
+                                        <i class="uil uil-clock-three"></i>
+                                        <span class="text">Hoạt động gần đây</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hộp tìm kiếm và bộ lọc -->
+                                <div class="d-flex mb-4">
+                                    <div class="search-box">
+                                        <input type="text" class="form-control" id="searchInput"
+                                            placeholder="Tìm kiếm...">
+                                    </div>
+                                    <div class="filter-box">
+                                        <select class="form-control" id="filterType">
+                                            <option value="">Loại tài khoản</option>
+                                            <option value="student">Sinh viên</option>
+                                            <option value="organization">Tổ chức</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-box">
+                                        <select class="form-control" id="filterStatus">
+                                            <option value="">Trạng thái</option>
+                                            <option value="approved">Đã duyệt</option>
+                                            <option value="pending">Chưa duyệt</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                            data-bs-target="#student">Danh sách sinh viên</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab"
+                                            data-bs-target="#organization">Danh sách tổ chức</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approved">Danh
+                                            sách bài viết đã duyệt</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pending">Danh
+                                            sách bài viết chưa duyệt</button>
+                                    </li>
+                                </ul>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10">
+                                        <ul class="nav nav-tabs mb-4">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" data-bs-toggle="tab"
+                                                    data-bs-target="#student">Danh sách tài khoản sinh viên</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" data-bs-toggle="tab"
+                                                    data-bs-target="#organization">Danh sách tài khoản tổ chức</button>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="student">
+                                                <table class="table table-striped mt-5 align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Tài khoản</th>
+                                                            <th scope="col">Tạo lúc</th>
+                                                            <th scope="col">Công cụ</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% student_users.forEach(user=> { %>
+                                                            <tr>
+                                                                <th scope="row"><%- user.id %></th>
+                                                                <td><%- user.username %></td>
+                                                                <td><%- user.created_at %></td>
+                                                                <td>
+                                                                    <a href="/user/<%- user.id %>/view"
+                                                                        class="btn btn-info">Xem</a>
+                                                                    <a href="/admin/<%- user.id %>/edit"
+                                                                        class="btn btn-primary">Sửa</a>
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#modal_student_<%- user.id %>">
+                                                                        Xóa
+                                                                    </button>
+                                                                    <div class="modal fade"
+                                                                        id="modal_student_<%- user.id %>" tabindex="-1"
+                                                                        aria-labelledby="modal_student_<%- user.id %>_label"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5"
+                                                                                        id="modal_student_<%- user.id %>_label">
+                                                                                        Cảnh báo</h1>
+                                                                                    <button type="button"
+                                                                                        class="btn-close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Hủy"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Xác nhận xóa tài khoản sinh viên
+                                                                                    <strong><%- user.username
+                                                                                            %></strong>?
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">Hủy</button>
+                                                                                    <a href="/user/<%- user.id %>/delete"
+                                                                                        class="btn btn-primary">Xác
+                                                                                        nhận</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tab-pane fade" id="organization">
+                                                <table class="table table-striped mt-5 align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Tài khoản</th>
+                                                            <th scope="col">Tạo lúc</th>
+                                                            <th scope="col">Công cụ</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% organization_users.forEach(user=> { %>
+                                                            <tr>
+                                                                <th scope="row"><%- user.id %></th>
+                                                                <td><%- user.username %></td>
+                                                                <td><%- user.created_at %></td>
+                                                                <td>
+                                                                    <a href="/user/<%- user.id %>/view"
+                                                                        class="btn btn-info">Xem</a>
+                                                                    <a href="/admin/<%- user.id %>/edit"
+                                                                        class="btn btn-primary">Sửa</a>
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#modal_organization_<%- user.id %>">
+                                                                        Xóa
+                                                                    </button>
+                                                                    <div class="modal fade"
+                                                                        id="modal_organization_<%- user.id %>"
+                                                                        tabindex=""
+                                                                        aria-labelledby="modal_organization_<%- user.id %>_label"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5"
+                                                                                        id="modal_organization_<%- user.id %>_label">
+                                                                                        Cảnh báo</h1>
+                                                                                    <button type="button"
+                                                                                        class="btn-close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Hủy"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Xác nhận xóa tài khoản tổ chức
+                                                                                    <strong><%- user.username
+                                                                                            %></strong>?
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">Hủy</button>
+                                                                                    <a href="/user/<%- user.id %>/delete"
+                                                                                        class="btn btn-primary">Xác
+                                                                                        nhận</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%}%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- nội dung chính -->
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- đếm số lượng sinh viên -->
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/admin/api/student-count',
+                method: 'GET',
+                success: function (response) {
+                    $('.box1 .number').text(response.count); // Cập nhật số lượng sinh viên trong box1
+                },
+                error: function (err) {
+                    console.log('Error fetching student count:', err);
+                }
+            });
+        });
+    </script>
+
+    <!-- đếm số lượng bài viết chưa duyệt -->
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/admin/api/unapproved-posts-count',
+                method: 'GET',
+                success: function (response) {
+                    $('.box2 .number').text(response.count); // Cập nhật số lượng bài viết chưa duyệt trong box2
+                },
+                error: function (err) {
+                    console.log('Error fetching unapproved posts count:', err);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/admin/api/upcoming-activities-count',
+                method: 'GET',
+                success: function (response) {
+                    $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
+                },
+                error: function (err) {
+                    console.log('Error fetching upcoming activities count:', err);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/admin/api/organization-count',
+                method: 'GET',
+                success: function (response) {
+                    $('.box4 .number').text(response.count);
+                },
+                error: function (err) {
+                    console.log('Error fetching organization count:', err);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
