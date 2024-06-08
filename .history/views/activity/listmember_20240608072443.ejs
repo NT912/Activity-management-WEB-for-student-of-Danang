@@ -131,9 +131,7 @@
                                             <li>
                                                 <a href="/user/<%-member.id%>/view"
                                                     class="rounded-3 bg-lightblue theme-light-bg">
-
                                                     <div class="email-user">
-                                                        <!-- neu sinh vien huy dang ky thi la bg-warning, khong thi la bg-success -->
                                                         <span class="btn-round-xss ms-0 me-2"></span>
                                                         <h6
                                                             class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">
@@ -162,36 +160,20 @@
                                                         userss.id==activity.organization_id) { %>
                                                         <div class="col-member-100">
                                                             <input class="" type="checkbox"
-                                                                id="checkbox_<%= member.student_id %>" value="option1"
-                                                                aria-label="" <% if (member.isComfirm==true) {%>
-                                                            checked
-                                                            onchange="ConfirmStudentRegister(<%= activity.id %>, <%=
-                                                                    member.student_id %>, false, 'checkbox_<%=
-                                                                        member.student_id %>')"
-                                                                        <%} else {%>
-                                                                            onchange="ConfirmStudentRegister(<%=
-                                                                                activity.id %>, <%= member.student_id %>
-                                                                                    , true, 'checkbox_<%=
-                                                                                        member.student_id %>')"
-                                                                                        <%}%>
-                                                                                            >
+                                                                id="checkbox_<%= member.student_id %>"
+                                                                value="<%= member.email %>" aria-label="" <% if
+                                                                (member.isComfirm==true) {%> checked <%} %>>
                                                         </div>
-
                                                         <div class="col-member-100">
-                                                            <!--tich vo la sinh vien da diem danh, cap nhat tren database-->
                                                             <input class="" type="checkbox" value="option1"
                                                                 aria-label="" <% if (member.isAttendance==true) {%>
-                                                            checked
-                                                            <%}%> disabled>
+                                                            checked <%}%> disabled>
                                                         </div>
-
                                                         <div
                                                             class="email-subject text-grey-900 text-dark fw-600 font-xssss">
                                                             <%= member.wish %>
                                                         </div>
                                                         <%}}%>
-
-                                                            <!-- <div class="email-time text-grey-500 fw-600">12:48PM</div> -->
                                                 </a>
                                             </li>
                                             <%})%>
