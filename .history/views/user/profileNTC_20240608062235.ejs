@@ -154,22 +154,20 @@
                                                                             <img src="<%= activity.image %>"
                                                                                 class="img-fluid rounded">
                                                                         </div>
+                                                                        <h5
+                                                                            class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block">
+                                                                            <%- activity.name %>
+                                                                        </h5>
+                                                                        <p
+                                                                            class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block">
+                                                                            <%- activity.description %>
+                                                                        </p>
                                                                         <div style="height: 50px; overflow: hidden;">
-                                                                            <h5
-                                                                                class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block">
-                                                                                <%- activity.name %>
-                                                                            </h5>
+                                                                            <a href="/activity/<%- activity.id %>/view"
+                                                                                class="btn btn-primary">
+                                                                                Chi tiết
+                                                                            </a>
                                                                         </div>
-                                                                        <div style="height: 50px; overflow: hidden;">
-                                                                            <p
-                                                                                class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block">
-                                                                                <%- activity.description %>
-                                                                            </p>
-                                                                        </div>
-                                                                        <a href="/activity/<%- activity.id %>/view"
-                                                                            class="btn btn-primary">
-                                                                            Chi tiết
-                                                                        </a>
 
                                                                     </div>
                                                                 </div>
