@@ -413,7 +413,7 @@ activityModel.getStudentActivities = async (student_id) => {
     SELECT activities.*, organizations.name as organization_name, attendances.id AS attendance_id
     FROM activities
     JOIN registrations ON activities.id = registrations.activity_id
-    JOIN organizations ON activities.organization_id = organizations.id
+    JOIN organizations ON activities.organization_id = organizations.user_id
     LEFT JOIN attendances ON activities.id = attendances.activity_id AND attendances.student_id = registrations.student_id
     WHERE registrations.student_id = ?
   `;
@@ -449,3 +449,29 @@ activityModel.save = async (user_id, activity_id) => {
   const [result] = await pool.query(queryText, [user_id, activity_id]);
   return result.affectedRows || null;
 };
+
+activityModel.Get_EmailByACtConfirm = async (activity) =>{
+  const queryText = `
+  SELECT registrations.email
+  FROM activities
+  JOIN registrations ON activities.id = registrations.activity_id
+  JOIN organizations ON activities.organization_id = organizations.user_id
+  WHERE activities.id = ? AND registrations.isComfirm = true
+  `;
+
+  const [result] = await pool.query(queryText, activity);
+  return result;
+}
+
+activityModel.Get_EmailByACtAttendance = async (activity) =>{
+  const queryText = `
+  SELECT registrations.email
+  FROM activities
+  JOIN registrations ON activities.id = registrations.activity_id
+  JOIN organizations ON activities.organization_id = organizations.user_id
+  WHERE activities.id = ? AND registrations.isAttendance = true
+  `;
+
+  const [result] = await pool.query(queryText, activity);
+  return result;
+}

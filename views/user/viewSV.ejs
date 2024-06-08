@@ -3,7 +3,7 @@
     <%- include('../includes/head.ejs',{title: User.username}) %>
 
     <body class="color-theme-blue mont-font">
-        <div class="main-wrapper">
+        <div class="main-wrapperr">
             <!-- navigation top-->
             <%- include('../includes/header.ejs', { role: 'student' }) %>
             <!-- navigation top -->
@@ -31,11 +31,28 @@
 
                                     <% if (userss && userss.role == 'admin') { %>
                                         <div class="col-xl-8 d-flex justify-content-center">
-                                            <a href="/user/<%=User.user_id%>/delete" 
-                                            class="p-2 lh-20 w100 bg-red me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                                                xoa
-                                            </a>
-                                            <a href="/user/<%=User.user_id%>/delete" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal_organization_<%- User.user_id %>">
+                                                Xóa
+                                            </button>
+                                            <div class="modal fade" id="modal_organization_<%- User.user_id %>" aria-labelledby="modal_organization_<%- User.user_id %>_label" 
+                                                aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="modal_organization_<%- User.user_id %>_label">Cảnh báo</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Xác nhận xóa tài khoản tổ chức <strong><%- User.username %></strong>?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                            <a href="/user/<%- User.user_id %>/delete" class="btn btn-primary">Xác nhận</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a href="/admin/<%=User.user_id%>/edit" class="p-2 lh-20 w100 bg-warning me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
                                                 sua 
                                             </a>
                                         </div>
