@@ -182,6 +182,8 @@ adminController.post_RejectActivity = async (req, res) => {
           throw Error("Lỗi backup");
         }
       }
+    } else {
+      result = await activityModel.ChangeState("reject", activity_id);
     }
 
     if (!result) {
@@ -338,7 +340,7 @@ adminController.Post_editacaount = async (req, res) => {
   } catch (error) {
     console.log(error);
     req.flash("error", error.message);
-    res.redirect(`/admin/${req.params / user_id}/edit`);
+    res.redirect(`/admin/${req.params.user_id}/edit`);
   }
 };
 
