@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../includes/head.ejs', { title: 'BK Volunteer' }) %>
+        <link rel="stylesheet" href="/css/admin.css">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+        <style>
+
+        </style>
+</head>
+
+<body class="mont-font">
+    <div class="main-wrapperr">
+        <!-- navigation top-->
+        <%- include('../includes/header.ejs', { userss: userss }) %>
+            <!-- navigation top -->
+
+            <!-- navigation left -->
+            <%- include('../includes/nav.ejs', { userss: userss }) %>
+                <!-- navigation left -->
+
+                <!-- main content -->
+                <div class="main-content justify-content-center">
+                    <% if (state !='account' ) { %>
+                        <div class="row">
+                            <div class="col-12 d-flex flex-wrap">
+                                <% activities.forEach(activity=> { %>
+                                    <div class=" px-2 py-2" style="width: 450px;">
+                                        <div class="col-md-12 rounded border px-3 py-3">
+                                            <div class="col-md-12 justify-content-lg-center mb-3"
+                                                style="height: 200px; overflow: hidden; ">
+                                                <img src="<%= activity.image %>" class="img-fluid rounded">
+                                            </div>
+                                            <h5 class="fw-500 font-xsss text-grey-500 mt-1 mb-3 d-block"
+                                                style="height: 30px; overflow: hidden; ">
+                                                <%- activity.name %>
+                                            </h5>
+                                            <div style="height: 50px; overflow: hidden; ">
+                                                <p class="fw-500 font-xssss text-grey-400 mt-1 mb-3 d-block">
+                                                    <%- activity.description %>
+                                                </p>
+                                            </div>
+                                            <a href="/admin/activity/<%- activity.id %>/view" class="btn btn-primary">
+                                                Chi tiết
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                            </div>
+                        </div>
+                        <%} else {%>
+                </div>
+                <div class="main-content d-flex justify-content-center">
+                    <div class="row" style="width: 90%;">
+                        <div class="dash-content">
+                            <div class="title">
+                                <i class="uil uil-tachometer-fast-alt"></i>
+                                <span class="text">Thống kê</span>
+                            </div>
+
+                            <div class="boxes">
+                                <div class="box box1">
+                                    <i class="uil uil-user icon"></i>
+                                    <span class="text">Sinh viên</span>
+                                    <span class="number">...</span>
+                                </div>
+                                <div class="box box2">
+                                    <i class="uil uil-file-alt icon"></i>
+                                    <span class="text">Bài viết chưa duyệt</span>
+                                    <span class="number">0</span>
+                                </div>
+                                <div class="box box3">
+                                    <i class="uil uil-file-alt icon"></i>
+                                    <span class="text">Bài viết sắp diễn ra</span>
+                                    <span class="number">0</span>
+                                </div>
+                                <div class="box box4">
+                                    <i class="uil uil-building icon"></i>
+                                    <span class="text">Nhà tổ chức</span>
+                                    <span class="number">...</span>
+                                </div>
+                            </div>
+                            <div class="activity">
+                                <div class="title">
+                                    <i class="uil uil-clock-three"></i>
+                                    <span class="text">Danh sách chi tiết</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <ul class="nav nav-tabs mb-4">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#student">Danh
+                                        sách tài khoản sinh viên</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#organization">Danh
+                                        sách tài khoản tổ chức</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="search-bar col-xl-8">
+                                    <input type="text" id="searchStudent" placeholder="Tìm kiếm tên sinh viên"
+                                        class="form-control">
+                                    <button type="button" onclick="searchTablee()" class="btn btn-primary mt-2">Tìm
+                                        kiếm</button>
+                                </div>
+                                <div class="tab-pane fade show active" id="student">
+                                    <table class="table table-striped mt-5 align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Tài khoản</th>
+                                                <th scope="col">Tạo lúc</th>
+                                                <th scope="col">Công cụ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% student_users.forEach(user=> { %>
+                                                <tr>
+                                                    <th scope="row"><%- user.id %></th>
+                                                    <td><%- user.username %></td>
+                                                    <td><%- user.created_at %></td>
+                                                    <td>
+                                                        <a href="/user/<%- user.id %>/view" class="btn btn-info">Xem</a>
+                                                        <a href="/admin/<%- user.id %>/edit"
+                                                            class="btn btn-primary">Sửa</a>
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modal_student_<%- user.id %>">Xóa</button>
+                                                        <div class="modal fade" id="modal_student_<%- user.id %>"
+                                                            tabindex="-1"
+                                                            aria-labelledby="modal_student_<%- user.id %>_label"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5"
+                                                                            id="modal_student_<%- user.id %>_label">Cảnh
+                                                                            báo
+                                                                        </h1>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Hủy"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Xác nhận xóa tài khoản sinh viên <strong><%-
+                                                                                user.username %></strong>?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Hủy</button>
+                                                                        <a href="/user/<%- user.id %>/delete"
+                                                                            class="btn btn-primary">Xác nhận</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="tab-pane fade" id="organization">
+                                    <table class="table table-striped mt-5 align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Tài khoản</th>
+                                                <th scope="col">Tạo lúc</th>
+                                                <th scope="col">Công cụ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% organization_users.forEach(user=> { %>
+                                                <tr>
+                                                    <th scope="row"><%- user.id %></th>
+                                                    <td><%- user.username %></td>
+                                                    <td><%- user.created_at %></td>
+                                                    <td>
+                                                        <a href="/user/<%- user.id %>/view" class="btn btn-info">Xem</a>
+                                                        <a href="/admin/<%- user.id %>/edit"
+                                                            class="btn btn-primary">Sửa</a>
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modal_organization_<%- user.id %>">
+                                                            Xóa
+                                                        </button>
+                                                        <div class="modal fade" id="modal_organization_<%- user.id %>"
+                                                            tabindex=""
+                                                            aria-labelledby="modal_organization_<%- user.id %>_label"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5"
+                                                                            id="modal_organization_<%- user.id %>_label">
+                                                                            Cảnh báo</h1>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Hủy"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Xác nhận xóa tài khoản tổ chức
+                                                                        <strong><%- user.username %></strong>?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Hủy</button>
+                                                                        <a href="/user/<%- user.id %>/delete"
+                                                                            class="btn btn-primary">Xác
+                                                                            nhận</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
+    </div>
+
+    <script src="/js/action.js"></script>
+    <script src="/js/plugin.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <% if (announc !='' ) { %>
+        <script>
+            $(function () {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                toastr.info('<%- announc %>');
+            })
+        </script>
+        <% } %>
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        url: '/admin/api/student-count',
+                        method: 'GET',
+                        success: function (response) {
+                            $('.box1 .number').text(response.count); // Cập nhật số lượng sinh viên trong box1
+                        },
+                        error: function (err) {
+                            console.log('Error fetching student count:', err);
+                        }
+                    });
+                });
+            </script>
+
+            <!-- đếm số lượng bài viết chưa duyệt -->
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        url: '/admin/api/unapproved-posts-count',
+                        method: 'GET',
+                        success: function (response) {
+                            $('.box2 .number').text(response.count); // Cập nhật số lượng bài viết chưa duyệt trong box2
+                        },
+                        error: function (err) {
+                            console.log('Error fetching unapproved posts count:', err);
+                        }
+                    });
+                });
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        url: '/admin/api/upcoming-activities-count',
+                        method: 'GET',
+                        success: function (response) {
+                            $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
+                        },
+                        error: function (err) {
+                            console.log('Error fetching upcoming activities count:', err);
+                        }
+                    });
+                });
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        url: '/admin/api/organization-count',
+                        method: 'GET',
+                        success: function (response) {
+                            $('.box4 .number').text(response.count);
+                        },
+                        error: function (err) {
+                            console.log('Error fetching organization count:', err);
+                        }
+                    });
+                });
+            </script>
+
+
+
+</body>
+
+
+</html>

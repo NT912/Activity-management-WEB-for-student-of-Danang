@@ -1,0 +1,65 @@
+<%- include('../components/header'); %>
+
+    <div class="row justify-content-lg-center">
+        <div class="col-md-12 mb-3">
+            <h2>Hoạt động <strong><%- activity.name %></strong> | ID: #<%- activity.id %></h2>
+        </div>
+        <div class="col-md-6">
+            <img src="" class="img-fluid rounded img-thumbnail">
+        </div>
+        <div class="col-md-6">
+            <form>
+                <div class="form-group mb-3">
+                    <!-- Phần thông tin hoạt động -->
+                </div>
+                <% if (user.role=='student' ) { %>
+                    <% if (allowRegister) { %>
+                        <% if (activity.registered) { %>
+                            <button type="button" class="btn btn-warning" id="unregisterBtn"
+                                data-activityid="<%= activity.id %>">Hủy đăng ký</button>
+                            <% } else { %>
+                                <button type="button" class="btn btn-primary" id="registerBtn"
+                                    data-activityid="<%= activity.id %>">Đăng ký</button>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Đăng ký hoạt động</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="registerModalBody">
+                    <!-- Nội dung modal sẽ được điền ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../components/footer'); %>
+
+        <script>
+            $(document).ready(function () {
+                $("#registerBtn, #unregisterBtn").click(function () {
+                    var activityId = $(this).data("activityid");
+                    var action = $(this).attr("id") === "registerBtn" ? "register" : "unregister";
+                    $.ajax({
+                        type: "POST",
+                        url: "/activity/" + activityId + "/" + action,
+                        success: function (response) {
+                            $("#registerModalBody").html(response);
+                            $("#registerModal").modal("show");
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX request failed: ", status, error);
+                        }
+                    });
+                });
+            });
+        </script>

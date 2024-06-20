@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../includes/head.ejs',{title: activity.name}) %>
+
+
+    <body class="color-theme-blue mont-font">
+
+        <!-- <div class="preloader"></div> -->
+
+
+        <div class="main-wrapper">
+
+            <!-- navigation top-->
+            <%- include('../includes/header.ejs',{ userss: userss, }) %>
+                <!-- navigation top -->
+
+                <!-- navigation left -->
+                <%- include('../includes/nav.ejs',{ userss: userss, }) %>
+                    <!-- navigation left -->
+                    <!-- main content -->
+                    <div class="main-content">
+
+                        <div class="row">
+                            <div class="col-xl-12 col-xxl-9 col-lg-9" style="max-width: 900px;">
+                                <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+                                    <div class="card-body p-0 d-flex">
+                                        <figure class="avatar me-3"><img src="<%=activity.avt%>" alt="image"
+                                                class="shadow-sm rounded-circle w45"></figure>
+                                        <h4>
+                                            <a href="" class="fw-700 text-grey-900 font-xssss mt-1">
+                                                <%= activity.username %>
+                                            </a>
+                                            <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
+                                                <%= activity.created_at %>
+                                            </span>
+                                        </h4>
+                                        <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"
+                                            aria-expanded="false"><i
+                                                class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                                        <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg"
+                                            aria-labelledby="dropdownMenu2">
+                                            <div class="card-body p-0 d-flex">
+                                                <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
+                                                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">
+                                                    <a href="">
+                                                        Luu lai hoat dong
+                                                    </a>
+                                                    <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">
+                                                        Thêm bài này vào mục đã lưu của bạn
+                                                    </span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0 me-lg-5">
+                                        <p class="fw-500 text-grey-500 lh-26 font-xs w-100">
+                                            <%= `${activity.name}` %>
+                                        </p>
+                                        <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                            <%= `Thời gian diễn ra hoạt động:
+                                                ${activity.start_date.toLocaleDateString()}-${activity.end_date.toLocaleDateString()}`
+                                                %>
+                                        </p>
+                                        <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                            <%= `Thời gian cho phép đăng ký :
+                                                ${activity.registration_start_date.toLocaleDateString()}-${activity.registration_end_date.toLocaleDateString()}`
+                                                %>
+                                        </p>
+                                        <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                            <%= `Địa điểm: ${activity.location}` %>
+                                        </p>
+                                        <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                            Số lượng đăng ký tối đa: <%= activity.maxnumber %>
+                                        </p>
+                                    </div>
+                                    <div class="card-body d-block p-0"
+                                        style="max-height: 500px; overflow: hidden; margin-bottom: 30px;">
+                                        <div class="row ps-2 pe-2">
+                                            <!-- href = link anh, src = link -->
+                                            <div class="col-xs-4 col-sm-12 p-1">
+                                                <a href="<%= activity.image %>"><img src="<%= activity.image %>"
+                                                        class="rounded-3 w-100" alt="image"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0 me-lg-5">
+                                        <p id="additionalContent_<%=activity.Id_activity%>"
+                                            class="fw-500 text-grey-500 lh-26 font-xsss w-100">
+                                            <%= activity.description %>
+                                        </p>
+                                    </div>
+
+                                    <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
+                                        <!-- Click Hien thi ra trang danh sach sinh vien dang ky -->
+                                        <a href="/activity/<%= activity.id %>/registration/"
+                                            class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                                            Danh sách
+                                        </a>
+                                        <% if (allowRegister){ if (!registered) { %>
+                                            <a href="/activity/<%= activity.id %>/register"
+                                                class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                                                Đăng ký
+                                            </a>
+                                            <%} else { %>
+                                                <a href="/activity/<%= activity.id %>/unregister"
+                                                    class="p-2 lh-20 w100  me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl"
+                                                    style="background-color: rgb(134, 0, 0);">
+                                                    Hủy đăng ký
+                                                </a>
+                                                <%}%>
+                                                    <%}%>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+
+
+    </body>
+
+</html>
+<% if (announc !='' ) { %>
+    <script>
+        alert('<%= announc %>')
+    </script>
+    <%}%>

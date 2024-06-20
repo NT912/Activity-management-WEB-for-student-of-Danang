@@ -1,0 +1,267 @@
+<%- include('../components/header'); %>
+
+    <div class="row justify-content-lg-center">
+        <div class="col-md-12 mb-3">
+            <h2>Hoạt động <strong><%- activity.name %></strong> | ID: #<%- activity.id %></h2>
+        </div>
+        <div class="col-md-6">
+            <img src="" class="img-fluid rounded img-thumbnail">
+        </div>
+        <div class="col-md-6">
+            <form>
+                <div class="form-group mb-3">
+                    <% if (user.role=='admin' ) { %>
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label for="id_code">Đơn vị tổ chức</label>
+                            </div>
+                        </div>
+                        <% } else if (user.role=='organization' ) { %>
+                            <% if (organization.id==activity.organization_id) { %>
+                                <input type="hidden" name="organization_id" value="<%- organization.id %>" readonly>
+                                <% } else { %>
+                                    <div class="row mb-3">
+                                        <div class="col-lg-12">
+                                            <label for="id_code">Đơn vị tổ chức</label>
+                                            <select class="form-select" name="organization_id" disabled>
+                                                <% organizations.forEach(organization=> { %>
+                                                    <option value="<%- organization.id %>" <% if
+                                                        (activity.organization_id==organization.id) { %>selected<% } %>
+                                                            ><%- organization.name %></option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% } else { %>
+                                            <div class="row mb-3">
+                                                <div class="col-lg-12">
+                                                    <label for="id_code">Đơn vị tổ chức</label>
+                                                    <select class="form-select" name="organization_id" disabled>
+                                                        <% organizations.forEach(organization=> { %>
+                                                            <option value="<%- organization.id %>" <% if
+                                                                (activity.organization_id==organization.id) { %>selected
+                                                                <% } %>><%- organization.name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <label for="id_name">Tên hoạt động</label>
+                                                        <input type="text" name="name" id="id_name" class="form-control"
+                                                            value="<%- activity.name %>" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <label for="id_description">Mô tả</label>
+                                                        <textarea name="description" id="id_description"
+                                                            class="form-control" readonly
+                                                            rows="3"><%- activity.description %></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-6">
+                                                        <label for="id_start_date">Ngày bắt đầu</label>
+                                                        <input type="date" name="start_date" id="id_start_date"
+                                                            class="form-control"
+                                                            value="<%- datetimeUtils.formatDate(activity.start_date) %>"
+                                                            readonly>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <label for="id_end_date">Ngày kết thúc</label>
+                                                        <input type="date" name="end_date" id="id_end_date"
+                                                            class="form-control"
+                                                            value="<%- datetimeUtils.formatDate(activity.end_date) %>"
+                                                            readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-6">
+                                                        <label for="id_registration_start_date">Ngày mở đăng ký</label>
+                                                        <input type="date" name="registration_start_date"
+                                                            id="id_registration_start_date" class="form-control"
+                                                            value="<%- datetimeUtils.formatDate(activity.registration_start_date) %>"
+                                                            readonly>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <label for="id_registration_end_date">Ngày kết thúc đăng
+                                                            ký</label>
+                                                        <input type="date" name="registration_end_date"
+                                                            id="id_registration_end_date" class="form-control"
+                                                            value="<%- datetimeUtils.formatDate(activity.registration_end_date) %>"
+                                                            readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <label for="id_location">Địa điểm</label>
+                                                        <input type="text" name="location" id="id_location"
+                                                            class="form-control" value="<%- activity.location %>"
+                                                            readonly>
+                                                    </div>
+                                                </div>
+                                                <% if (user.role !='student' ) { %>
+                                                    <div class="row mb-3">
+                                                        <div class="col-lg-12">
+                                                            <label for="id_comment">Phản hồi của quản trị viên</label>
+                                                            <textarea name="comment" id="id_comment"
+                                                                class="form-control" rows="3"
+                                                                readonly><%- activity.comment %></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                        <% if (user.role=='student' ) { %>
+                                                            <% if (allowRegister) { %>
+                                                                <% if (activity.registered) { %>
+                                                                    <div class="row mb-3">
+                                                                        <div class="col-lg-12">
+                                                                            <button type="button"
+                                                                                class="btn btn-warning"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#modal_activity_unregister_<%- activity.id %>">Hủy
+                                                                                đăng ký</button>
+                                                                            <div class="modal fade"
+                                                                                id="modal_activity_unregister_<%- activity.id %>"
+                                                                                tabindex="-1"
+                                                                                aria-labelledby="modal_activity_unregister_<%- activity.id %>_label"
+                                                                                aria-hidden="true">
+                                                                                <div class="modal-dialog">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h1 class="modal-title fs-5"
+                                                                                                id="modal_activity_unregister_<%- activity.id %>_label">
+                                                                                            </h1>
+                                                                                            <button type="button"
+                                                                                                class="btn-close"
+                                                                                                data-bs-dismiss="modal"
+                                                                                                aria-label="Hủy"></button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            Xác nhận <strong>HỦY ĐĂNG
+                                                                                                KÝ</strong>
+                                                                                            hoạt động
+                                                                                            <strong><%- activity.name
+                                                                                                    %></strong>?
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="button"
+                                                                                                class="btn btn-secondary"
+                                                                                                data-bs-dismiss="modal">Hủy</button>
+                                                                                            <button type="button"
+                                                                                                class="btn btn-primary"
+                                                                                                onclick="handleUnregister('<%- activity.id %>')">Xác
+                                                                                                nhận</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-lg-12">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#modal_activity_register_<%- activity.id %>">Đăng
+                                                                                    ký</button>
+                                                                                <div class="modal fade"
+                                                                                    id="modal_activity_register_<%- activity.id %>"
+                                                                                    tabindex="-1"
+                                                                                    aria-labelledby="modal_activity_register_<%- activity.id %>_label"
+                                                                                    aria-hidden="true">
+                                                                                    <div class="modal-dialog">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                                <h1 class="modal-title fs-5"
+                                                                                                    id="modal_activity_register_<%- activity.id %>_label">
+                                                                                                </h1>
+                                                                                                <button type="button"
+                                                                                                    class="btn-close"
+                                                                                                    data-bs-dismiss="modal"
+                                                                                                    aria-label="Hủy"></button>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                Xác nhận <strong>ĐĂNG
+                                                                                                    KÝ</strong> hoạt
+                                                                                                động <strong><%-
+                                                                                                        activity.name
+                                                                                                        %></strong>?
+                                                                                            </div>
+                                                                                            <div class="modal-footer">
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-secondary"
+                                                                                                    data-bs-dismiss="modal">Hủy</button>
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-primary"
+                                                                                                    onclick="handleRegister('<%- activity.id %>')">Xác
+                                                                                                    nhận</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <% } %>
+                                                                            <% } %>
+                                                                                <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../components/footer'); %>
+
+        <script>
+            function handleRegister(activityId) {
+                fetch(`/activity/${activityId}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '<%= csrfToken %>' // Chèn token CSRF nếu có
+                    },
+                    body: JSON.stringify({})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Đăng ký thành công');
+                            location.reload();
+                        } else {
+                            alert('Đăng ký thất bại');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra');
+                    });
+            }
+
+            function handleUnregister(activityId) {
+                fetch(`/activity/${activityId}/unregister`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '<%= csrfToken %>' // Chèn token CSRF nếu có
+                    },
+                    body: JSON.stringify({})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Hủy đăng ký thành công');
+                            location.reload();
+                        } else {
+                            alert('Hủy đăng ký thất bại');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra');
+                    });
+            }
+        </script>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/head.ejs', { title: 'Danh sách đăng ký' }) %>
+
+    <body class="color-theme-blue mont-font">
+        <!-- navigation top-->
+        <%- include('../includes/header.ejs', { userss: userss }) %>
+            <!-- navigation top -->
+
+            <!-- navigation left -->
+            <%- include('../includes/nav.ejs', { userss: userss }) %>
+                <!-- navigation left -->
+
+                <!-- main content -->
+                <div class="main-content" style="padding-top: 105px">
+                    <!-- Khuc ni la mot cai hoat dong ni -->
+                    <div class="row">
+                        <div class="col-xl-12 col-xxl-9 col-lg-9" style="max-width: 900px;">
+                            <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+                                <div class="card-body p-0 d-flex">
+                                    <figure class="avatar me-3"><img src="<%= activity.avt %>" alt="image"
+                                            class="shadow-sm rounded-circle w45"></figure>
+                                    <h4 class="fw-700 text-grey-900 font-xssss mt-1">
+                                        <a href="/user/<%-activity.username%>/view">
+                                        </a>
+                                        <%= activity.username %>
+                                            <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
+                                                1 giờ trước
+                                            </span>
+                                    </h4>
+                                </div>
+                                <div class="card-body p-0 me-lg-5">
+                                    <p class="fw-500 text-grey-500 lh-26 font-xs w-100">
+                                        <%= `${activity.name}` %>
+                                    </p>
+                                    <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                        <%= `Thời gian diễn ra hoạt động :
+                                            ${activity.start_date.toLocaleDateString()}-${activity.end_date.toLocaleDateString()}`
+                                            %>
+                                    </p>
+                                    <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                        <%= `Thời gian cho phép đăng ký :
+                                            ${activity.registration_start_date.toLocaleDateString()}-${activity.registration_end_date.toLocaleDateString()}`
+                                            %>
+                                    </p>
+                                    <p class="fw-600 text-grey-500 lh-26 font-xsss w-100">
+                                        <%= `Địa điểm : ${activity.location}` %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex col-xl-8 justify-content-between align-items-center">
+                        <div>
+                            <h5>DANH SÁCH ĐĂNG KÝ THAM GIA HOẠT ĐỘNG</h5>
+                        </div>
+                        <% if (userss && activity.organization_id==userss.id) { %>
+                            <a href="/activity/<%= activity.id %>/download-excel" class="btn btn-success">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </a>
+                            <% } %>
+                                <% if (userss && activity.organization_id==userss.id) { %>
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                                        data-bs-target="#modal_activity_attendance_<%- activity.id %>">
+                                        Tạo QR Code điểm danh
+                                    </button>
+                                    <div class="modal fade" id="modal_activity_attendance_<%- activity.id %>"
+                                        tabindex="-1"
+                                        aria-labelledby="modal_activity_attendance_<%- activity.id %>_label"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5"
+                                                        id="modal_activity_attendance_<%- activity.id %>_label">Cảnh báo
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Hủy"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Xác nhận <strong>TẠO QR CODE ĐIỂM DANH</strong> hoạt động
+                                                    <strong><%- activity.name %></strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
+                                                    <a href="/activity/<%- activity.id %>/qrcode_attendance"
+                                                        target="_blank" class="btn btn-primary">Xác nhận</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                    </div>
+                    <div class="<% if (userss != null) {
+            if (userss.role == 'admin' || userss.id == activity.organization_id) { %> col-xl-12 <%}}%> pt-3"
+                        style="min-width: 600px;">
+                        <div class="middle-sidebar-left pe-0 ms-0 me-0" style="max-width: 100%;">
+                            <div class="col-lg-12">
+                                <div class="chat-wrapper w-100 position-relative scroll-bar bg-white theme-dark-bg">
+                                    <ul class="email-message">
+                                        <li>
+                                            <a href="" class="rounded-3 bg-lightblue theme-light-bg">
+                                                <div class="email-user">
+                                                    <h6 class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">
+                                                        Họ và tên</h6>
+                                                </div>
+                                                <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">Mã
+                                                    SV</div>
+                                                <div class="email-text text-grey-500 fw-700 font-xssss">Khoa</div>
+                                                <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">Lớp
+                                                </div>
+                                                <div class="email-text text-grey-500 fw-700 font-xssss">Email</div>
+                                                <div class="email-subject text-grey-900 text-dark fw-700 font-xssss">Số
+                                                    điện thoại</div>
+                                                <% if (userss !=null) { if (userss.role=='admin' ||
+                                                    userss.id==activity.organization_id) { %>
+                                                    <div
+                                                        class="text-grey-900 text-dark fw-700 font-xssss col-member-100">
+                                                        Xác nhận</div>
+                                                    <div
+                                                        class="text-grey-900 text-dark fw-700 font-xssss col-member-100">
+                                                        Điểm danh</div>
+                                                    <div
+                                                        class="text-grey-900 text-dark fw-700 font-xssss col-member-100">
+                                                        Mong muốn</div>
+                                                    <%}}%>
+                                            </a>
+                                        </li>
+                                        <% listmember.forEach(function(member){ %>
+                                            <li>
+                                                <a href="/user/<%-member.id%>/view"
+                                                    class="rounded-3 bg-lightblue theme-light-bg">
+
+                                                    <div class="email-user">
+                                                        <!-- neu sinh vien huy dang ky thi la bg-warning, khong thi la bg-success -->
+                                                        <span class="btn-round-xss ms-0 me-2"></span>
+                                                        <h6
+                                                            class="font-xssss text-grey-900 text-grey-900 mb-0 mt-0 fw-700">
+                                                            <%= member.username %>
+                                                        </h6>
+                                                    </div>
+                                                    <div
+                                                        class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                                        <%= member.masv %>
+                                                    </div>
+                                                    <div class="email-text text-grey-500 fw-600 font-xssss">
+                                                        <%= member.faculty %>
+                                                    </div>
+                                                    <div
+                                                        class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                                        <%= member.class %>
+                                                    </div>
+                                                    <div class="email-text text-grey-500 fw-600 font-xssss">
+                                                        <%= member.email %>
+                                                    </div>
+                                                    <div
+                                                        class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                                        <%= member.phone_number %>
+                                                    </div>
+                                                    <% if (userss !=null) { if (userss.role=='admin' ||
+                                                        userss.id==activity.organization_id) { %>
+                                                        <div class="col-member-100">
+                                                            <input class="" type="checkbox"
+                                                                id="checkbox_<%= member.student_id %>" value="option1"
+                                                                aria-label="" <% if (member.isComfirm==true) {%>
+                                                            checked
+                                                            onchange="ConfirmStudentRegister(<%= activity.id %>, <%=
+                                                                    member.student_id %>, false, 'checkbox_<%=
+                                                                        member.student_id %>')"
+                                                                        <%} else {%>
+                                                                            onchange="ConfirmStudentRegister(<%=
+                                                                                activity.id %>, <%= member.student_id %>
+                                                                                    , true, 'checkbox_<%=
+                                                                                        member.student_id %>')"
+                                                                                        <%}%>
+                                                                                            >
+                                                        </div>
+
+                                                        <div class="col-member-100">
+                                                            <!--tich vo la sinh vien da diem danh, cap nhat tren database-->
+                                                            <input class="" type="checkbox" value="option1"
+                                                                aria-label="" <% if (member.isAttendance==true) {%>
+                                                            checked
+                                                            <%}%> disabled>
+                                                        </div>
+
+                                                        <div
+                                                            class="email-subject text-grey-900 text-dark fw-600 font-xssss">
+                                                            <%= member.wish %>
+                                                        </div>
+                                                        <%}}%>
+
+                                                            <!-- <div class="email-time text-grey-500 fw-600">12:48PM</div> -->
+                                                </a>
+                                            </li>
+                                            <%})%>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Soạn email -->
+                    <% if (userss !=null) { if (userss.id==activity.organization_id) { %>
+                        <div class="middle-sidebar-left pe-0 ps-lg-3 ms-0 me-0" style="max-width: 100%;">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div
+                                                class="chat-wrapper p-0 w-100 position-relative scroll-bar bg-white theme-dark-bg">
+                                                <div class="chat-body p-lg-4 p-3 mt-lg-3 mt-0">
+                                                    <div
+                                                        class="card dark-bg-transparent border-0 w-100 p-0 mb-3 shadow-none">
+                                                        <div class="card-body p-0">
+                                                            <h6 class="fw-600 text-grey-500 font-xsssss">Soạn Email</h6>
+                                                        </div>
+                                                    </div>
+                                                    <form id="emailForm" action="/activity/<%-activity.id%>/sendemail"
+                                                        method="POST" enctype="multipart/form-data">
+                                                        <div class="panel-group" id="accordion" role="tablist"
+                                                            aria-multiselectable="true">
+                                                            <div
+                                                                class="panel panel-default p-0 bg-transparent border-bottom rounded-0">
+                                                                <div class="panel-heading pb-2" role="tab"
+                                                                    id="headingOne">
+                                                                    <span
+                                                                        class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Chủ
+                                                                        đề</span>
+                                                                </div>
+                                                                <div id="collapseOne"
+                                                                    class="panel-collapse collapse show" role="tabpanel"
+                                                                    aria-labelledby="headingOne">
+                                                                    <input type="text" name="subject"
+                                                                        class="form-control mb-3 border-0"
+                                                                        placeholder="Nhập chủ đề" required>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="panel panel-default p-0 bg-transparent rounded-0">
+                                                                <div class="panel-heading pb-2" role="tab"
+                                                                    id="headingSender">
+                                                                    <span
+                                                                        class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Chọn
+                                                                        người gửi</span>
+                                                                </div>
+                                                                <div id="collapseSender"
+                                                                    class="panel-collapse collapse show" role="tabpanel"
+                                                                    aria-labelledby="headingSender">
+                                                                    <select name="senderType"
+                                                                        class="form-control mb-3 border-0">
+                                                                        <option value="confirm">Confirm</option>
+                                                                        <option value="attendance">Attendance</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="panel panel-default p-0 bg-transparent rounded-0">
+                                                                <div class="panel-heading pb-2" role="tab"
+                                                                    id="headingThree">
+                                                                    <span
+                                                                        class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">Nội
+                                                                        dung</span>
+                                                                </div>
+                                                                <div id="collapseFour"
+                                                                    class="panel-collapse collapse show" role="tabpanel"
+                                                                    aria-labelledby="headingFour">
+                                                                    <textarea id="emailContent" name="content"
+                                                                        class="form-control mb-5 p-3 h100 bg-greylight lh-16 border-0"
+                                                                        rows="5" placeholder="Nhập nội dung email"
+                                                                        required></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="panel panel-default p-0 bg-transparent rounded-0 me-2 d-flex">
+                                                                <div class="d-flex">
+                                                                    <label
+                                                                        class="btn bg-dark border-0 btn-round-md ms-1 float-left">
+                                                                        <i class="ti-clip text-white lh-4 font-xs"></i>
+                                                                        <input type="file" name="attachment"
+                                                                            class="d-none">
+                                                                    </label>
+                                                                </div>
+                                                                <div class="d-flex">
+                                                                    <label
+                                                                        class="btn bg-dark border-0 btn-round-md ms-1 float-left">
+                                                                        <i
+                                                                            class="ti-image text-white lh-4 font-xs lh-4 font-xs"></i>
+                                                                        <input type="file" name="attachment"
+                                                                            class="d-none">
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="" style="width: 98%; height: 50px;">
+                                                                <button type="submit"
+                                                                    class="btn bg-current">Send</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+
+                <style>
+                    .form-check .form-check-input {
+                        float: left;
+                        margin-left: 1em;
+                        width: 1.5em;
+                        height: 1.5em;
+                    }
+                </style>
+                <!-- main content -->
+
+                <script src="/js/action.js"></script>
+                <script src="/js/plugin.js"></script>
+                <script src="/js/lightbox.js"></script>
+                <script src="/js/scripts.js"></script>
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css"
+                    rel="stylesheet">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
+
+    </body>
+
+</html>
