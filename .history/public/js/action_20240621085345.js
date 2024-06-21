@@ -89,6 +89,7 @@ async function SavePost(activityId) {
       toastr.error('Đã xảy ra lỗi khi lưu hoạt động!');
     }
   }
+}
 
 async function searchTablee() {
     const query = document.getElementById('searchStudent').value;

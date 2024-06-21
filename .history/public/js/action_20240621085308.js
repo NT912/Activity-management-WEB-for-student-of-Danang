@@ -90,7 +90,7 @@ async function SavePost(activityId) {
     }
   }
 
-async function searchTablee() {
+  async function searchTablee() {
     const query = document.getElementById('searchStudent').value;
     if (query.trim() === '') {
         return;
