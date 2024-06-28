@@ -1,0 +1,61 @@
+<div class="nav-header bg-white shadow-xs border-0">
+    <div class="nav-top">
+        <a href="/"> <img
+                src="https://firebasestorage.googleapis.com/v0/b/web-doan-44696.appspot.com/o/defaut%2FLOGO.png?alt=media&token=07eed475-fe8f-42fe-9bb7-b674b26cd77d"
+                alt="Logopage" class="logo-img"> </a>
+    </div>
+    <!-- Search -->
+    <form action="/activity/search" method="GET" class="float-left header-search">
+        <div class="form-group mb-0 icon-input">
+            <i class="feather-search font-sm text-grey-400"></i>
+            <input type="text" name="q" placeholder="Tìm kiếm ..."
+                class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
+        </div>
+    </form>
+    <!-- Notification -->
+    <a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown"
+        aria-expanded="false"><span class="dot-count bg-warning"></span><i
+            class="feather-bell font-xl text-current"></i></a>
+    <div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
+        <h4 class="fw-700 font-xss mb-4">Thông báo</h4>
+        <div id="notificationsContainer"></div>
+    </div>
+    <!-- Setting -->
+    <a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i
+            class="feather-message-square font-xl text-current"></i></a>
+    <div class="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
+        <% if (userss !=null) { %>
+            <a class="p-0 ms-3 menu-icon border-radius">
+                <img src="<%= userss.avt %>" alt="user" class="w60 h60 mt--1 rounded-circle">
+            </a>
+            <div class="dropdown-menu-settings switchcolor-wrap">
+                <%if (userss.role!='admin' ) {%>
+                    <h4 class="fw-700 font-sm mb-4">Tài khoản</h4>
+                    <div class="card bg-transparent-card border-0 d-block mt-3">
+                        <a class="d-inline font-xssss mont-font fw-700"
+                            href="<%- userss.role == 'admin' ? '/admin/profile' : '/user/profile'%>">Tài khoản</a>
+                        <div class="d-inline float-right mt-1"></div>
+                    </div>
+                    <%}%>
+                        <div class="card bg-transparent-card border-0 d-block mt-3">
+                            <a class="d-inline font-xssss mont-font fw-700" href="/auth/logout">Đăng xuất</a>
+                        </div>
+            </div>
+            <% } else { %>
+                <a href="/auth/register"
+                    class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                    Đăng ký
+                </a>
+                <a href="/auth/login"
+                    class="p-2 lh-20 w100 bg-primary-gradiant me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                    Đăng nhập
+                </a>
+                <% } %>
+    </div>
+
+    <style>
+        .rounded-circle {
+            border-radius: 50%;
+        }
+    </style>
+</div>

@@ -1,92 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('../includes/head.ejs', { title: 'Tạo hoạt động mới' }) %>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css">
 </head>
+
 <body class="color-theme-blue mont-font">
     <div class="main-wrapper">
         <!-- navigation top-->
         <%- include('../includes/header.ejs', { isLogin: true }) %>
-        <!-- navigation top -->
+            <!-- navigation top -->
 
-        <!-- navigation left -->
-        <%- include('../includes/nav.ejs') %>
-        <!-- navigation left -->
+            <!-- navigation left -->
+            <%- include('../includes/nav.ejs') %>
+                <!-- navigation left -->
 
-        <!-- main content -->
-        <div class="main-content">
-            <div class="container mt-3 bg-white" style="width: 50%; min-width: 700px;">
-                <div class="d-flex justify-content-center">
-                    <h5>Tạo một hoạt động mới</h5>
+                <!-- main content -->
+                <div class="main-content">
+                    <div class="container mt-3 bg-white" style="width: 50%; min-width: 700px;">
+                        <div class="d-flex justify-content-center">
+                            <h5>Tạo một hoạt động mới</h5>
+                        </div>
+                        <form id="activityForm" action="" method="post" enctype="multipart/form-data">
+                            <div class="form-group mb-3">
+                                <label for="name" class="form-label">Tên hoạt động</label>
+                                <input type="text" id="name" name="name" class="form-control"
+                                    placeholder="Tên hoạt động" maxlength="200" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date_start" class="form-label">Thời gian diễn ra sự kiện</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="date_start" class="form-label">Ngày bắt đầu</label>
+                                        <input type="date" id="date_start" name="date_start" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="date_end" class="form-label">Ngày kết thúc</label>
+                                        <input type="date" id="date_end" name="date_end" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date_start_regis" class="form-label">Thời gian cho phép sinh viên đăng ký
+                                    tham gia</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="date_start_regis" class="form-label">Ngày bắt đầu</label>
+                                        <input type="date" id="date_start_regis" name="date_start_regis"
+                                            class="form-control" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="date_end_regis" class="form-label">Ngày kết thúc</label>
+                                        <input type="date" id="date_end_regis" name="date_end_regis"
+                                            class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="location" class="form-label">Địa điểm</label>
+                                <input type="text" id="location" name="location" class="form-control"
+                                    placeholder="Địa điểm" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="number" class="form-label">Số lượng đăng ký tối đa</label>
+                                <input type="text" id="number" name="number" class="form-control"
+                                    placeholder="Số lượng sinh viên" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="desc" class="form-label">Nội dung hoạt động</label>
+                                <textarea id="desc" name="desc" class="form-control" placeholder="Nội dung hoạt động"
+                                    style="height: 400px" required></textarea>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="poster" class="form-label">Chọn tệp</label>
+                                <input type="file" id="poster" name="poster" accept=".jpg, .jpeg, .png"
+                                    class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <span id="error" style="color: red;">
+                                    <%= error %>
+                                </span>
+                            </div>
+
+                            <button type="submit" name="submit" class="btn btn-primary w-100 mt-2">Đăng ký</button>
+                        </form>
+                    </div>
                 </div>
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div class="form-group mb-3">
-                        <label for="name" class="form-label">Tên hoạt động</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Tên hoạt động" maxlength="200" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="date_start" class="form-label">Thời gian diễn ra sự kiện</label>
-                        <div class="row">
-                            <div class="col">
-                                <label for="date_start" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" id="date_start" name="date_start" class="form-control" required>
-                            </div>
-                            <div class="col">
-                                <label for="date_end" class="form-label">Ngày kết thúc</label>
-                                <input type="date" id="date_end" name="date_end" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="date_start_regis" class="form-label">Thời gian cho phép sinh viên đăng ký tham gia</label>
-                        <div class="row">
-                            <div class="col">
-                                <label for="date_start_regis" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" id="date_start_regis" name="date_start_regis" class="form-control" required>
-                            </div>
-                            <div class="col">
-                                <label for="date_end_regis" class="form-label">Ngày kết thúc</label>
-                                <input type="date" id="date_end_regis" name="date_end_regis" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="location" class="form-label">Địa điểm</label>
-                        <input type="text" id="location" name="location" class="form-control" placeholder="Địa điểm" required>
-                    </div>
+                <!-- main content -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+                <script>
+                    document.getElementById("activityForm").addEventListener("submit", function (event) {
+                        const name = document.getElementById("name").value;
+                        const date_start = document.getElementById("date_start").value;
+                        const date_end = document.getElementById("date_end").value;
+                        const date_start_regis = document.getElementById("date_start_regis").value;
+                        const date_end_regis = document.getElementById("date_end_regis").value;
+                        const location = document.getElementById("location").value;
+                        const number = document.getElementById("number").value;
+                        const desc = document.getElementById("desc").value;
+                        const errorElement = document.getElementById("error");
 
-                    <div class="form-group mb-3">
-                        <label for="number" class="form-label">Số lượng đăng ký tối đa</label>
-                        <input type="text" id="number" name="number" class="form-control" placeholder="Số lượng sinh viên" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="desc" class="form-label">Nội dung hoạt động</label>
-                        <textarea id="desc" name="desc" class="form-control" placeholder="Nội dung hoạt động" style="height: 400px" required></textarea>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="poster" class="form-label">Chọn tệp</label>
-                        <input type="file" id="poster" name="poster" accept=".jpg, .jpeg, .png" class="form-control">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <span style="color: red;"><%= error %></span>
-                    </div>
-                    
-                    <button type="submit" name="submit" class="btn btn-primary w-100 mt-2">Đăng ký</button>
-                </form>
-            </div>
-        </div>
-        <!-- main content -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+                        let errorMessage = "";
+
+                        if (!name || !date_start || !date_end || !date_start_regis || !date_end_regis || !location || !number || !desc) {
+                            errorMessage = "Vui lòng nhập đủ các trường";
+                        }
+
+                        const now = new Date();
+                        const startRegisterDate = new Date(date_start_regis);
+                        const endRegisterDate = new Date(date_end_regis);
+                        const startDate = new Date(date_start);
+                        const endDate = new Date(date_end);
+
+                        function resetTime(date) {
+                            date.setHours(0, 0, 0, 0);
+                            return date;
+                        }
+
+                        resetTime(now);
+                        resetTime(startRegisterDate);
+                        resetTime(endRegisterDate);
+                        resetTime(startDate);
+                        resetTime(endDate);
+
+                        if (
+                            now >= startRegisterDate ||
+                            startRegisterDate >= endRegisterDate ||
+                            endRegisterDate >= startDate ||
+                            startDate > endDate
+                        ) {
+                            errorMessage = "Nhập ngày phù hợp";
+                        }
+
+                        if (errorMessage) {
+                            errorElement.textContent = errorMessage;
+                            event.preventDefault();
+                        }
+                    });
+                </script>
     </div>
 </body>
+
 </html>

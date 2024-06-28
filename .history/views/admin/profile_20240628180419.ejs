@@ -237,7 +237,7 @@
                 url: '/admin/api/upcoming-activities-count',
                 method: 'GET',
                 success: function (response) {
-                    $('.box3 .number').text(response.count); // Cập nhật số lượng bài viết sắp diễn ra trong box3
+                    $('.box3 .number').text(response.count);
                 },
                 error: function (err) {
                     console.log('Error fetching upcoming activities count:', err);

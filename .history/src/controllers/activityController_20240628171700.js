@@ -171,6 +171,109 @@ activityController.Get_AddActivity = async (req, res) => {
   });
 };
 
+activityController.Post_AddActivity = async (req, res) => {
+  const {
+    name,
+    date_start,
+    date_end,
+    date_start_regis,
+    date_end_regis,
+    location,
+    number,
+    desc,
+    poster,
+  } = req.body;
+  const userss = req.session.user;
+
+  if (
+    !name ||
+    !date_start ||
+    !date_end ||
+    !date_start_regis ||
+    !date_end_regis ||
+    !location ||
+    !number ||
+    !desc
+  ) {
+    req.flash("announc", "Tất cả các trường đều là bắt buộc.");
+    return res.redirect("/activity/createpost");
+  }
+
+  if (new Date(date_end) < new Date(date_start)) {
+    req.flash("announc", "Ngày kết thúc phải sau ngày bắt đầu.");
+    return res.redirect("/activity/createpost");
+  }
+
+  if (new Date(date_end_regis) < new Date(date_start_regis)) {
+    req.flash(
+      "announc",
+      "Ngày kết thúc đăng ký phải sau ngày bắt đầu đăng ký."
+    );
+    return res.redirect("/activity/createpost");
+  }
+
+  try {
+    await activityModel.AddActivity({
+      idOrganization: userss.organization_id,
+      name,
+      desc,
+      date_start,
+      date_end,
+      date_start_regis,
+      date_end_regis,
+      location,
+      number,
+      poster,
+    });
+    res.redirect("/activity");
+  } catch (err) {
+    console.error(err);
+    req.flash("announc", "Có lỗi xảy ra khi tạo hoạt động.");
+    res.redirect("/activity/createpost");
+  }
+};
+
+activityController.DownloadExcel = async (req, res) => {
+  const activity_id = req.params.activity_id;
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Members");
+  worksheet.columns = [
+    { header: "Ho van ten", key: "username", width: 30 },
+    { header: "Ma SV", key: "masv", width: 15 },
+    { header: "Khoa", key: "faculty", width: 35 },
+    { header: "Lop", key: "class", width: 15 },
+    { header: "Email", key: "email", width: 30 },
+    { header: "So dien thoai", key: "phone_number", width: 20 },
+    { header: "Xac nhan", key: "isComfirm", width: 10 },
+    { header: "Diem danh", key: "isAttendance", width: 10 },
+  ];
+  const members = await activityModel.GetListRegistationOfActivity(activity_id);
+
+  const transformedMembers = members.map((member) => ({
+    ...member,
+    isComfirm: member.isComfirm ? "Yes" : "No",
+    isAttendance: member.isAttendance ? "Yes" : "No",
+    ...member,
+  }));
+
+  transformedMembers.forEach((member) => {
+    worksheet.addRow(member);
+  });
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader("Content-Disposition", "attachment; filename=members.xlsx");
+  workbook.xlsx
+    .write(res)
+    .then(() => {
+      res.end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
 activityController.add = async (req, res) => {
   try {
     const userss = req.session.user;
@@ -271,48 +374,6 @@ activityController.add = async (req, res) => {
     res.redirect("/activity/create");
   }
 };
-
-activityController.DownloadExcel = async (req, res) => {
-  const activity_id = req.params.activity_id;
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Members");
-  worksheet.columns = [
-    { header: "Ho van ten", key: "username", width: 30 },
-    { header: "Ma SV", key: "masv", width: 15 },
-    { header: "Khoa", key: "faculty", width: 35 },
-    { header: "Lop", key: "class", width: 15 },
-    { header: "Email", key: "email", width: 30 },
-    { header: "So dien thoai", key: "phone_number", width: 20 },
-    { header: "Xac nhan", key: "isComfirm", width: 10 },
-    { header: "Diem danh", key: "isAttendance", width: 10 },
-  ];
-  const members = await activityModel.GetListRegistationOfActivity(activity_id);
-
-  const transformedMembers = members.map((member) => ({
-    ...member,
-    isComfirm: member.isComfirm ? "Yes" : "No",
-    isAttendance: member.isAttendance ? "Yes" : "No",
-    ...member,
-  }));
-
-  transformedMembers.forEach((member) => {
-    worksheet.addRow(member);
-  });
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  );
-  res.setHeader("Content-Disposition", "attachment; filename=members.xlsx");
-  workbook.xlsx
-    .write(res)
-    .then(() => {
-      res.end();
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
-};
-
 activityController.getEdit = async (req, res) => {
   try {
     const userss = req.session.user;

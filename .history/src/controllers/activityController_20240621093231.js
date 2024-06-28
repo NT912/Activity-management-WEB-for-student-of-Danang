@@ -171,6 +171,47 @@ activityController.Get_AddActivity = async (req, res) => {
   });
 };
 
+activityController.DownloadExcel = async (req, res) => {
+  const activity_id = req.params.activity_id;
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Members");
+  worksheet.columns = [
+    { header: "Ho van ten", key: "username", width: 30 },
+    { header: "Ma SV", key: "masv", width: 15 },
+    { header: "Khoa", key: "faculty", width: 35 },
+    { header: "Lop", key: "class", width: 15 },
+    { header: "Email", key: "email", width: 30 },
+    { header: "So dien thoai", key: "phone_number", width: 20 },
+    { header: "Xac nhan", key: "isComfirm", width: 10 },
+    { header: "Diem danh", key: "isAttendance", width: 10 },
+  ];
+  const members = await activityModel.GetListRegistationOfActivity(activity_id);
+
+  const transformedMembers = members.map((member) => ({
+    ...member,
+    isComfirm: member.isComfirm ? "Yes" : "No",
+    isAttendance: member.isAttendance ? "Yes" : "No",
+    ...member,
+  }));
+
+  transformedMembers.forEach((member) => {
+    worksheet.addRow(member);
+  });
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader("Content-Disposition", "attachment; filename=members.xlsx");
+  workbook.xlsx
+    .write(res)
+    .then(() => {
+      res.end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
 activityController.add = async (req, res) => {
   try {
     const userss = req.session.user;
@@ -271,48 +312,6 @@ activityController.add = async (req, res) => {
     res.redirect("/activity/create");
   }
 };
-
-activityController.DownloadExcel = async (req, res) => {
-  const activity_id = req.params.activity_id;
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Members");
-  worksheet.columns = [
-    { header: "Ho van ten", key: "username", width: 30 },
-    { header: "Ma SV", key: "masv", width: 15 },
-    { header: "Khoa", key: "faculty", width: 35 },
-    { header: "Lop", key: "class", width: 15 },
-    { header: "Email", key: "email", width: 30 },
-    { header: "So dien thoai", key: "phone_number", width: 20 },
-    { header: "Xac nhan", key: "isComfirm", width: 10 },
-    { header: "Diem danh", key: "isAttendance", width: 10 },
-  ];
-  const members = await activityModel.GetListRegistationOfActivity(activity_id);
-
-  const transformedMembers = members.map((member) => ({
-    ...member,
-    isComfirm: member.isComfirm ? "Yes" : "No",
-    isAttendance: member.isAttendance ? "Yes" : "No",
-    ...member,
-  }));
-
-  transformedMembers.forEach((member) => {
-    worksheet.addRow(member);
-  });
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  );
-  res.setHeader("Content-Disposition", "attachment; filename=members.xlsx");
-  workbook.xlsx
-    .write(res)
-    .then(() => {
-      res.end();
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
-};
-
 activityController.getEdit = async (req, res) => {
   try {
     const userss = req.session.user;

@@ -69,6 +69,14 @@
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#organization">Danh
                                         sách tài khoản tổ chức</button>
                                 </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#unapprovedPosts">Bài
+                                        viết chưa duyệt</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#upcomingPosts">Bài
+                                        viết sắp diễn ra</button>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="student">
@@ -76,8 +84,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Họ và tên</th>
-                                                <th scope="col">Khoa</th>
+                                                <th scope="col">Tài khoản</th>
                                                 <th scope="col">Tạo lúc</th>
                                                 <th scope="col">Công cụ</th>
                                             </tr>
@@ -87,7 +94,6 @@
                                                 <tr>
                                                     <th scope="row"><%- user.id %></th>
                                                     <td><%- user.username %></td>
-                                                    <td><%- user.msjor %></td>
                                                     <td><%- user.created_at %></td>
                                                     <td>
                                                         <a href="/user/<%- user.id %>/view" class="btn btn-info">Xem</a>
@@ -136,7 +142,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Tài khoản</th>
+                                                <th scope="col">Họ và tên</th>
                                                 <th scope="col">Tạo lúc</th>
                                                 <th scope="col">Công cụ</th>
                                             </tr>
